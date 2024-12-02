@@ -26,7 +26,7 @@
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-blue-900 mb-2 sm:mb-3">Surat Keterangan Domisili</h3>
                         <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Surat yang menerangkan tempat tinggal/domisili seseorang</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
+                        <a href="{{ url('suratketerangan/domisili') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
                             <span>Ajukan Surat</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -39,7 +39,7 @@
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-blue-900 mb-2 sm:mb-3">Surat Keterangan Tidak Mampu</h3>
                         <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Surat keterangan untuk keluarga dengan ekonomi kurang mampu</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
+                        <a href="{{ url('suratketerangan/tidakmampu') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
                             <span>Ajukan Surat</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>

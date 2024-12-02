@@ -44,7 +44,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-blue-900 mb-3">Informasi Desa</h3>
                         <p class="text-gray-600 mb-4">Akses informasi terkini seputar kegiatan dan program desa</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
+                        <a href="{{ url('/informasidesa') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
                             <span>Selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -57,7 +57,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-blue-900 mb-3">Data Kependudukan</h3>
                         <p class="text-gray-600 mb-4">Pengelolaan data penduduk desa secara digital dan terintegrasi</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
+                        <a href="{{ url('/datakependudukan') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
                             <span>Selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -70,7 +70,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-blue-900 mb-3">Bantuan Sosial</h3>
                         <p class="text-gray-600 mb-4">Informasi dan pendaftaran program bantuan sosial untuk masyarakat</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
+                        <a href="{{ url('/bantuansosial') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
                             <span>Selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -81,9 +81,9 @@
                         <div class="text-yellow-500 text-3xl mb-4">
                             <i class="fas fa-chart-line"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-blue-900 mb-3">Potensi Desa</h3>
+                        <h3 class="text-xl font-semibold text-blue-900 mb-3">Dana Desa</h3>
                         <p class="text-gray-600 mb-4">Informasi potensi dan peluang pengembangan ekonomi desa</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
+                        <a href="{{ url('/danadesa') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
                             <span>Selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>

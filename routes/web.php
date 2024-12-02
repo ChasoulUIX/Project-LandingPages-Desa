@@ -27,3 +27,23 @@ Route::get('/keterangan', function () {
 Route::get('/pengaduan', function () {
     return view('pages.layanan.pengaduan');
 });
+Route::get('/informasidesa', function () {
+    return view('pages.layanan.informasidesa');
+});
+Route::get('/datakependudukan', function () {
+    return view('pages.layanan.datakependudukan');
+});
+Route::get('/bantuansosial', function () {
+    return view('pages.layanan.bantuansosial');
+});
+Route::get('/danadesa', function () {
+    return view('pages.layanan.danadesa');
+});
+
+//layanan surat keterangan
+Route::get('/suratketerangan/domisili', function () {
+    return view('pages.layanan.suratketerangan.domisili');
+});
+Route::get('/suratketerangan/tidakmampu', function () {
+    return view('pages.layanan.suratketerangan.tidakmampu');
+});
