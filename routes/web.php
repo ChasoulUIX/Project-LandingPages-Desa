@@ -47,3 +47,15 @@ Route::get('/suratketerangan/domisili', function () {
 Route::get('/suratketerangan/tidakmampu', function () {
     return view('pages.layanan.suratketerangan.tidakmampu');
 });
+Route::get('/suratketerangan/usaha', function () {
+    return view('pages.layanan.suratketerangan.usaha');
+});
+Route::get('/suratketerangan/ktp', function () {
+    return view('pages.layanan.suratketerangan.ktp');
+});
+Route::get('/suratketerangan/kelahiran', function () {
+    return view('pages.layanan.suratketerangan.kelahiran');
+});
+Route::get('/suratketerangan/kematian', function () {
+    return view('pages.layanan.suratketerangan.kematian');
+});

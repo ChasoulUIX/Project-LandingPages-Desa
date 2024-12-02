@@ -52,7 +52,7 @@
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-blue-900 mb-2 sm:mb-3">Surat Keterangan Usaha</h3>
                         <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Surat keterangan untuk kepemilikan usaha di wilayah desa</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
+                        <a href="{{ url('suratketerangan/usaha') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
                             <span>Ajukan Surat</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -65,7 +65,7 @@
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-blue-900 mb-2 sm:mb-3">Surat Pengantar KTP</h3>
                         <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Surat pengantar untuk pembuatan atau perpanjangan KTP</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
+                        <a href="{{ url('suratketerangan/ktp') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
                             <span>Ajukan Surat</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -78,7 +78,7 @@
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-blue-900 mb-2 sm:mb-3">Surat Keterangan Kelahiran</h3>
                         <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Surat keterangan untuk pencatatan kelahiran</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
+                        <a href="{{ url('suratketerangan/kelahiran') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
                             <span>Ajukan Surat</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -91,7 +91,7 @@
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-blue-900 mb-2 sm:mb-3">Surat Keterangan Kematian</h3>
                         <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Surat keterangan untuk pencatatan kematian</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
+                        <a href="{{ url('suratketerangan/kematian') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 text-sm sm:text-base">
                             <span>Ajukan Surat</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
