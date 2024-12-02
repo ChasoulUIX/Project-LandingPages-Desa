@@ -22,7 +22,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-medium text-gray-900">Alamat</h3>
-                                    <p class="text-gray-600">Jl. Desa No. 123, Kecamatan Example<br>Kabupaten Sample, 12345</p>
+                                    <p class="text-gray-600">Desa Secang, Kecamatan Sumberasih<br>Kabupaten Probolinggo, Jawa Timur</p>
                                 </div>
                             </div>
 
@@ -32,7 +32,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-medium text-gray-900">Telepon</h3>
-                                    <p class="text-gray-600">+62 123 4567 8900</p>
+                                    <p class="text-gray-600">(0335) 123456</p>
                                 </div>
                             </div>
 
@@ -42,7 +42,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-medium text-gray-900">Email</h3>
-                                    <p class="text-gray-600">info@portaldesa.com</p>
+                                    <p class="text-gray-600">desa.secang@probolinggokab.go.id</p>
                                 </div>
                             </div>
 
@@ -93,7 +93,7 @@
                 <!-- Map -->
                 <div class="mt-12">
                     <div class="bg-white rounded-xl shadow-lg p-4">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.952912260219!2d3.375295414770757!3d6.5276316452784755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMzEnMzkuNSJOIDPCsDIyJzMxLjEiRQ!5e0!3m2!1sen!2sid!4v1620120750945!5m2!1sen!2sid" 
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15817.910271006167!2d113.18016547325416!3d-7.753361621820441!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7b3e87caa1be9%3A0x9c403e0eba0bb80!2sSecang%2C%20Sumberasih%2C%20Probolinggo%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1707150547736!5m2!1sen!2sid"
                                 class="w-full h-96 rounded-lg" 
                                 style="border:0;" 
                                 allowfullscreen="" 

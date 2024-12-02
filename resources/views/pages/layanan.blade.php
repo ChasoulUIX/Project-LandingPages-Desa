@@ -18,7 +18,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-blue-900 mb-3">Surat Keterangan</h3>
                         <p class="text-gray-600 mb-4">Pembuatan berbagai surat keterangan untuk keperluan administratif</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
+                        <a href="{{ url('/keterangan') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
                             <span>Selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -31,7 +31,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-blue-900 mb-3">Pengaduan</h3>
                         <p class="text-gray-600 mb-4">Layanan pengaduan masyarakat untuk peningkatan pelayanan desa</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
+                        <a href="{{ url('/pengaduan') }}" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
                             <span>Selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
