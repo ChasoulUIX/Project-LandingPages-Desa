@@ -58,9 +58,9 @@
             <div class="flex justify-between h-16 sm:h-20">
                 <div class="flex items-center">
                     <div class="flex items-center space-x-2">
-                        <img src="https://dummyimage.com/50x50/blue/white&text=PD" alt="Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg shadow-lg">
-                        <div>
-                            <div class="text-white text-base sm:text-xl font-bold tracking-wider">PORTAL DESA</div>
+                        <img src="{{ asset('images/Logo_kab_probolinggo.png') }}" alt="Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg shadow-lg object-contain">
+                        <div class="flex flex-col">
+                            <div class="text-white text-base sm:text-xl font-bold tracking-wider">Desa Sumber Secang</div>
                             <div class="text-blue-200 text-xs">Sistem Informasi Desa Digital</div>
                         </div>
                     </div>
@@ -134,11 +134,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center space-x-3 mb-4">
-                        <img src="https://dummyimage.com/50x50/blue/white&text=PD" alt="Logo" class="h-8 w-8 rounded-lg">
-                        <div class="text-lg font-bold">PORTAL DESA</div>
+                        <img src="{{ asset('images/Logo_kab_probolinggo.png') }}" alt="Logo" class="h-14 w-12 rounded-lg">
+                        <div class="text-lg font-bold">Desa Sumber Secang</div>
                     </div>
                     <p class="text-blue-200 text-sm leading-relaxed">
-                        Portal Desa adalah sistem informasi terintegrasi untuk meningkatkan pelayanan pemerintah desa kepada masyarakat dengan teknologi digital modern.
+                        Desa Sumber Secang adalah desa yang terletak di Kecamatan Krejengan, Kabupaten Probolinggo, Provinsi Jawa Timur. Website ini merupakan portal informasi dan layanan digital untuk masyarakat Desa Sumber Secang.
                     </p>
                     <div class="flex space-x-4 mt-4">
                         <a href="#" class="text-blue-200 hover:text-yellow-400 transition duration-300">
@@ -164,7 +164,7 @@
                     <ul class="space-y-3 text-blue-200 text-sm">
                         <li class="flex items-center space-x-3">
                             <i class="fas fa-envelope"></i>
-                            <span>info@portaldesa.id</span>
+                            <span>desasecang@gmail.com</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fas fa-phone-alt"></i>
@@ -176,7 +176,7 @@
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Jl. Desa No. 123, Kec. Example</span>
+                            <span>Jl. Desa Sumber Secang, Kec. Krejengan, Kab. Probolinggo</span>
                         </li>
                     </ul>
                 </div>
