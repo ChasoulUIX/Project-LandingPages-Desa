@@ -24,7 +24,7 @@
                                Desa Cerdas, Desa Kuat, Desa Maju!
                             </p>
                             <div class="flex flex-row justify-center md:justify-start space-x-3 md:space-x-4">
-                                <a href="#" class="bg-blue-500 text-white px-4 sm:px-8 py-2 sm:py-4 rounded-lg hover:bg-blue-400 transition duration-300 font-bold text-xs sm:text-base flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                                <a href="{{ url('/layanan') }}" class="bg-blue-500 text-white px-4 sm:px-8 py-2 sm:py-4 rounded-lg hover:bg-blue-400 transition duration-300 font-bold text-xs sm:text-base flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                                     <span>Mulai Sekarang</span>
                                     <i class="fas fa-arrow-right"></i>
                                 </a>
@@ -194,7 +194,7 @@
                             </ul>
                         </div>
                         <div class="px-6 sm:px-8 pb-6 sm:pb-8">
-                            <a href="#" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
+                            <a href="{{ url('/layanan') }}" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
                                 <span>Pelajari Selengkapnya</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
@@ -225,7 +225,7 @@
                             </ul>
                         </div>
                         <div class="px-6 sm:px-8 pb-6 sm:pb-8">
-                            <a href="#" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
+                            <a href="{{ url('/informasidesa') }}" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
                                 <span>Pelajari Selengkapnya</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
@@ -256,7 +256,7 @@
                             </ul>
                         </div>
                         <div class="px-6 sm:px-8 pb-6 sm:pb-8">
-                            <a href="#" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
+                            <a href="{{ url('/pengaduan') }}" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
                                 <span>Pelajari Selengkapnya</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
