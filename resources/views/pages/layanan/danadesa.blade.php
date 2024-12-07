@@ -12,10 +12,38 @@
                         <span>Kembali</span>
                     </a>
                     <div class="text-center">
-                        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">Dana Desa</h1>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">APBDES</h1>
                         <p class="text-sm text-blue-100">Transparansi Penggunaan Dana Desa</p>
                     </div>
                     <div class="hidden sm:block w-24"></div>
+                </div>
+
+                <!-- Filter Options -->
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <div class="flex-1 min-w-[200px]">
+                        <select class="w-full bg-white/90 backdrop-blur rounded-lg px-4 py-2.5 text-gray-700 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                            <option value="">Pilih Tahun</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[200px]">
+                        <select class="w-full bg-white/90 backdrop-blur rounded-lg px-4 py-2.5 text-gray-700 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                            <option value="">Pilih Kategori</option>
+                            <option value="infrastruktur">Infrastruktur</option>
+                            <option value="pemberdayaan">Pemberdayaan Masyarakat</option>
+                            <option value="kesehatan">Kesehatan</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[200px]">
+                        <select class="w-full bg-white/90 backdrop-blur rounded-lg px-4 py-2.5 text-gray-700 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                            <option value="">Status Program</option>
+                            <option value="selesai">Selesai</option>
+                            <option value="berjalan">Sedang Berjalan</option>
+                            <option value="rencana">Dalam Perencanaan</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Overview Cards -->

@@ -68,21 +68,111 @@
                 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex items-center space-x-6">
-                    <a href="/" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-1 text-sm">
-                        <i class="fas fa-home"></i><span>Beranda</span>
-                    </a>
-                    <a href="{{ url('/layanan') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-1 text-sm">
-                        <i class="fas fa-hands-helping"></i><span>Layanan</span>
-                    </a>
-                    <a href="{{ url('/berita') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-1 text-sm">
-                        <i class="fas fa-newspaper"></i><span>Berita</span>
-                    </a>
-                    <a href="{{ url('/galery') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-1 text-sm">
-                        <i class="fas fa-images"></i><span>Galeri</span>
-                    </a>
-                    <a href="{{ url('/kontak') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-1 text-sm">
+                    <div class="relative" id="berandaDropdown">
+                        <button onclick="toggleDropdown('berandaMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                            <i class="fas fa-home w-5"></i>
+                            <span>Beranda</span>
+                            <i class="fas fa-chevron-down ml-1" id="berandaArrow"></i>
+                        </button>
+                        <div id="berandaMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
+                                <a href="{{ url('/aboutdesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile Desa</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Infografis Dropdown -->
+                    <div class="relative" id="infografisDropdown">
+                        <button onclick="toggleDropdown('infografisMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                            <i class="fas fa-chart-pie w-5"></i>
+                            <span>Infografis</span>
+                            <i class="fas fa-chevron-down ml-1" id="infografisArrow"></i>
+                        </button>
+                        <div id="infografisMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="{{ url('/danadesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">APBDES</a>
+                                </div>
+                        </div>
+                    </div>
+
+                    <!-- Struktural Dropdown -->
+                    <div class="relative" id="strukturalDropdown">
+                        <button onclick="toggleDropdown('strukturalMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                            <i class="fas fa-sitemap w-5"></i>
+                            <span>Struktural</span>
+                            <i class="fas fa-chevron-down ml-1" id="strukturalArrow"></i>
+                        </button>
+                        <div id="strukturalMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="{{ url('/pamongdesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pamong Desa</a>
+                                <a href="{{ url('/struktural/bpd') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">BPD</a>
+                                <a href="{{ url('/struktural/pkk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">PKK</a>
+                                <a href="{{ url('/struktural/posyandu') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Posyandu</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function toggleDropdown(menuId) {
+                            const menu = document.getElementById(menuId);
+                            const arrow = document.getElementById('strukturalArrow');
+                            
+                            menu.classList.toggle('hidden');
+                            arrow.classList.toggle('transform');
+                            arrow.classList.toggle('rotate-180');
+                        }
+
+                        // Close dropdown when clicking outside
+                        document.addEventListener('click', function(event) {
+                            const dropdown = document.getElementById('strukturalDropdown');
+                            const menu = document.getElementById('strukturalMenu');
+                            const arrow = document.getElementById('strukturalArrow');
+                            
+                            if (!dropdown.contains(event.target)) {
+                                menu.classList.add('hidden');
+                                arrow.classList.remove('rotate-180');
+                            }
+                        });
+                    </script>
+
+                    <div class="relative" id="layananDropdown">
+                        <button onclick="toggleDropdown('layananMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                            <i class="fas fa-hands-helping w-5"></i>
+                            <span>Layanan</span>
+                            <i class="fas fa-chevron-down ml-1" id="layananArrow"></i>
+                        </button>
+                        <div id="layananMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="{{ url('/keterangan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Surat Keterangan</a>
+                                <a href="{{ url('/pengaduan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengaduan</a>
+                                <a href="{{ url('/informasidesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Desa</a>
+                                <a href="{{ url('/datakependudukan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Data Kependudukan</a>
+                                <a href="{{ url('/bantuansosial') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Bantuan Sosial</a>
+                                <!-- <a href="{{ url('/danadesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dana Desa</a> -->
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <!-- Galeri Dropdown -->
+                    <div class="relative" id="galeriDropdown">
+                        <button onclick="toggleDropdown('galeriMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                            <i class="fas fa-images w-5"></i>
+                            <span>Galeri</span>
+                            <i class="fas fa-chevron-down ml-1" id="galeriArrow"></i>
+                        </button>
+                        <div id="galeriMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="{{ url('/galery') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kegiatan</a>
+                                <a href="{{ url('/berita') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Berita</a>
+                                <a href="{{ url('/produk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Produk Desa</a>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <!-- <a href="{{ url('/kontak') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-1 text-sm">
                         <i class="fas fa-phone"></i><span>Kontak</span>
-                    </a>
+                    </a> -->
                     <div class="flex items-center">
                         <a href="{{ url('/login') }}" class="bg-yellow-500 text-blue-900 px-4 py-2 rounded-lg hover:bg-yellow-400 transition duration-300 font-medium flex items-center space-x-2 text-sm">
                             <i class="fas fa-sign-in-alt"></i>
@@ -105,15 +195,17 @@
                     <a href="/" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
                         <i class="fas fa-home w-5"></i><span>Beranda</span>
                     </a>
+                    <a href="{{ url('/struktural') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                        <i class="fas fa-sitemap w-5"></i><span>Struktural</span>
+                    </a>
                     <a href="{{ url('/layanan') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
                         <i class="fas fa-hands-helping w-5"></i><span>Layanan</span>
                     </a>
-                    <a href="{{ url('/berita') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                        <i class="fas fa-newspaper w-5"></i><span>Berita</span>
-                    </a>
+
                     <a href="{{ url('/galery') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
                         <i class="fas fa-images w-5"></i><span>Galeri</span>
                     </a>
+                   
                     <a href="{{ url('/kontak') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
                         <i class="fas fa-phone w-5"></i><span>Kontak</span>
                     </a>

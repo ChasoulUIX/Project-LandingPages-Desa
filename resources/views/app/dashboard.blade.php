@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Main Content -->
-    <main class="pt-10">
+    <main class="pt-10 overflow-x-hidden">
         <!-- Hero Section -->
         <div class="relative bg-gradient-to-b from-blue-900 to-blue-800 min-h-screen" style="background-image: url('{{ asset('images/background_sawah.jpg') }}'); background-size: cover; background-position: center;">
             <div class="absolute inset-0 bg-black opacity-60"></div>
@@ -117,7 +117,7 @@
                                     <p class="text-gray-600">Pengajian Rutin</p>
                                 </div>
                             </div>
-                            <a href="{{ url('/kegiatan') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
+                            <a href="{{ url('/galery') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
                                 <span>Lihat Semua Kegiatan</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>

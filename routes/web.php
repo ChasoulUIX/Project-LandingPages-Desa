@@ -27,7 +27,17 @@ Route::get('/galery', function () {
 Route::get('/kontak', function () {
     return view('pages.kontak');
 });
+Route::get('/produk', function () {
+    return view('pages.produk');
+});
+Route::get('/aboutdesa', function () {
+    return view('pages.aboutdesa');
+});
 
+// Struktural
+Route::get('/pamongdesa', function () {
+    return view('pages.pamongdesa');
+});
 
 // Layanan
 Route::get('/keterangan', function () {
