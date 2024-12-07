@@ -78,3 +78,12 @@ Route::get('/suratketerangan/kelahiran', function () {
 Route::get('/suratketerangan/kematian', function () {
     return view('pages.layanan.suratketerangan.kematian');
 });
+
+// Route untuk mengambil gambar dari public/images
+Route::get('/images/{filename}', function ($filename) {
+    $path = public_path('images/' . $filename);
+    if (file_exists($path)) {
+        return response()->file($path);
+    }
+    abort(404);
+});

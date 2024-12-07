@@ -192,23 +192,81 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="hidden lg:hidden pb-4">
                 <div class="flex flex-col space-y-3">
-                    <a href="/" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                        <i class="fas fa-home w-5"></i><span>Beranda</span>
-                    </a>
-                    <a href="{{ url('/struktural') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                        <i class="fas fa-sitemap w-5"></i><span>Struktural</span>
-                    </a>
-                    <a href="{{ url('/layanan') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                        <i class="fas fa-hands-helping w-5"></i><span>Layanan</span>
-                    </a>
+                    <!-- Beranda Dropdown Mobile -->
+                    <div class="relative">
+                        <button onclick="toggleMobileDropdown('mobileBeranda')" class="w-full text-white hover:text-yellow-300 transition duration-300 flex items-center justify-between text-sm">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-home w-5"></i><span>Beranda</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="mobileBeranda" class="hidden pl-7 mt-2 space-y-2">
+                            <a href="/" class="block text-blue-200 hover:text-yellow-300">Home</a>
+                            <a href="{{ url('/aboutdesa') }}" class="block text-blue-200 hover:text-yellow-300">Profile Desa</a>
+                        </div>
+                    </div>
 
-                    <a href="{{ url('/galery') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                        <i class="fas fa-images w-5"></i><span>Galeri</span>
-                    </a>
-                   
-                    <a href="{{ url('/kontak') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                        <i class="fas fa-phone w-5"></i><span>Kontak</span>
-                    </a>
+                    <!-- Infografis Dropdown Mobile -->
+                    <div class="relative">
+                        <button onclick="toggleMobileDropdown('mobileInfografis')" class="w-full text-white hover:text-yellow-300 transition duration-300 flex items-center justify-between text-sm">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-chart-pie w-5"></i><span>Infografis</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="mobileInfografis" class="hidden pl-7 mt-2 space-y-2">
+                            <a href="{{ url('/danadesa') }}" class="block text-blue-200 hover:text-yellow-300">APBDES</a>
+                        </div>
+                    </div>
+
+                    <!-- Struktural Dropdown Mobile -->
+                    <div class="relative">
+                        <button onclick="toggleMobileDropdown('mobileStruktural')" class="w-full text-white hover:text-yellow-300 transition duration-300 flex items-center justify-between text-sm">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-sitemap w-5"></i><span>Struktural</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="mobileStruktural" class="hidden pl-7 mt-2 space-y-2">
+                            <a href="{{ url('/pamongdesa') }}" class="block text-blue-200 hover:text-yellow-300">Pamong Desa</a>
+                            <a href="{{ url('/struktural/bpd') }}" class="block text-blue-200 hover:text-yellow-300">BPD</a>
+                            <a href="{{ url('/struktural/pkk') }}" class="block text-blue-200 hover:text-yellow-300">PKK</a>
+                            <a href="{{ url('/struktural/posyandu') }}" class="block text-blue-200 hover:text-yellow-300">Posyandu</a>
+                        </div>
+                    </div>
+
+                    <!-- Layanan Dropdown Mobile -->
+                    <div class="relative">
+                        <button onclick="toggleMobileDropdown('mobileLayanan')" class="w-full text-white hover:text-yellow-300 transition duration-300 flex items-center justify-between text-sm">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-hands-helping w-5"></i><span>Layanan</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="mobileLayanan" class="hidden pl-7 mt-2 space-y-2">
+                            <a href="{{ url('/keterangan') }}" class="block text-blue-200 hover:text-yellow-300">Surat Keterangan</a>
+                            <a href="{{ url('/pengaduan') }}" class="block text-blue-200 hover:text-yellow-300">Pengaduan</a>
+                            <a href="{{ url('/informasidesa') }}" class="block text-blue-200 hover:text-yellow-300">Informasi Desa</a>
+                            <a href="{{ url('/datakependudukan') }}" class="block text-blue-200 hover:text-yellow-300">Data Kependudukan</a>
+                            <a href="{{ url('/bantuansosial') }}" class="block text-blue-200 hover:text-yellow-300">Bantuan Sosial</a>
+                        </div>
+                    </div>
+
+                    <!-- Galeri Dropdown Mobile -->
+                    <div class="relative">
+                        <button onclick="toggleMobileDropdown('mobileGaleri')" class="w-full text-white hover:text-yellow-300 transition duration-300 flex items-center justify-between text-sm">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-images w-5"></i><span>Galeri</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="mobileGaleri" class="hidden pl-7 mt-2 space-y-2">
+                            <a href="{{ url('/galery') }}" class="block text-blue-200 hover:text-yellow-300">Kegiatan</a>
+                            <a href="{{ url('/berita') }}" class="block text-blue-200 hover:text-yellow-300">Berita</a>
+                            <a href="{{ url('/produk') }}" class="block text-blue-200 hover:text-yellow-300">Produk Desa</a>
+                        </div>
+                    </div>
+
                     <a href="{{ url('/login') }}" class="bg-yellow-500 text-blue-900 px-4 py-2 rounded-lg hover:bg-yellow-400 transition duration-300 font-medium flex items-center justify-center space-x-2 text-sm">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Masuk</span>
@@ -345,6 +403,21 @@
             const menu = document.getElementById('mobileMenu');
             menu.classList.toggle('hidden');
         }
+
+        function toggleMobileDropdown(id) {
+            const dropdown = document.getElementById(id);
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close mobile menu when clicking outside, but ignore clicks inside the menu
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = document.querySelector('button[onclick="toggleMobileMenu()"]');
+            
+            if (!mobileMenu.contains(event.target) && !menuButton.contains(event.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
