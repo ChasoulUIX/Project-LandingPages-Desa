@@ -4,40 +4,122 @@
     <!-- Main Content -->
     <main class="pt-10 overflow-x-hidden">
         <!-- Hero Section -->
-        <div class="relative bg-gradient-to-b from-blue-900 to-blue-800 min-h-screen" style="background-image: url('{{ asset('images/background_sawah.jpg') }}'); background-size: cover; background-position: center;">
-            <div class="absolute inset-0 bg-black opacity-60"></div>
-            <div class="absolute inset-0 hero-pattern opacity-10"></div>
-            <div class="relative h-screen flex items-center">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div class="grid md:grid-cols-2 gap-4 md:gap-16 items-center">
-                        <div class="block md:block">
-                            <img src="{{ asset('images/Logo_kab_probolinggo.png') }}" alt="Logo Kabupaten Probolinggo" class="w-1/3 md:w-1/2 h-1/3 md:h-1/2 mx-auto object-contain rounded-3xl shadow-2xl transform hover:scale-105 transition duration-500 backdrop-blur-sm bg-white/10 p-3">
-                        </div>
-                        <div class="text-center md:text-left space-y-4 md:space-y-8">
-                            <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                                Selamat Datang di<br>
-                                <span class="text-xl sm:text-2xl md:text-4xl lg:text-5xl text-blue-400">Desa Sumber Secang</span>
-                            </h1>
-                            <p class="text-sm sm:text-base md:text-xl text-white max-w-2xl leading-relaxed">
-                               Bangga dengan Desa tercinta kita
-                               <br>
-                               Desa Cerdas, Desa Kuat, Desa Maju!
-                            </p>
-                            <div class="flex flex-row justify-center md:justify-start space-x-3 md:space-x-4">
-                                <a href="{{ url('/layanan') }}" class="bg-blue-500 text-white px-4 sm:px-8 py-2 sm:py-4 rounded-lg hover:bg-blue-400 transition duration-300 font-bold text-xs sm:text-base flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                                    <span>Mulai Sekarang</span>
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                                <a href="{{ url('/kontak') }}" class="bg-white/10 backdrop-blur-sm border-2 border-white text-white px-4 sm:px-8 py-2 sm:py-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300 font-semibold text-xs sm:text-base flex items-center justify-center space-x-2">
-                                    <i class="fas fa-phone text-lg md:text-xl"></i>
-                                    <span>Hubungi Kami</span>
-                                </a>
+        <div class="relative min-h-screen">
+            <!-- Slideshow container -->
+            <div class="relative h-screen">
+                <!-- Slide 1 -->
+                <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                    <div class="relative h-full" style="background-image: url('{{ asset('images/background_sawah.jpg') }}'); background-size: cover; background-position: center;">
+                        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+                        <div class="relative h-full flex items-center">
+                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                                <div class="text-center space-y-8">
+                                    <div class="animate-fade-in-down">
+                                        <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                            Selamat Datang di
+                                            <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                                                Desa Sumber Secang
+                                            </span>
+                                        </h1>
+                                        <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+                                            Bangga dengan Desa tercinta kita
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Slide 2 -->
+                <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                    <div class="relative h-full" style="background-image: url('{{ asset('images/gunungsawah.jpg') }}'); background-size: cover; background-position: center;">
+                        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+                        <div class="relative h-full flex items-center">
+                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                                <div class="text-center space-y-8">
+                                    <div class="animate-fade-in-down">
+                                        <h2 class="text-5xl sm:text-7xl font-extrabold text-white tracking-tight">
+                                            Kabupaten Probolinggo
+                                        </h2>
+                                        <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto font-light">
+                                            Desa Cerdas, Desa Kuat, Desa Maju!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation buttons -->
+                <div class="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between items-center px-4 sm:px-8">
+                    <button class="group p-3 rounded-full bg-black/30 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 focus:outline-none" onclick="moveSlide(-1)">
+                        <i class="fas fa-chevron-left text-white text-xl group-hover:scale-110 transition-transform"></i>
+                    </button>
+                    <button class="group p-3 rounded-full bg-black/30 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 focus:outline-none" onclick="moveSlide(1)">
+                        <i class="fas fa-chevron-right text-white text-xl group-hover:scale-110 transition-transform"></i>
+                    </button>
+                </div>
+
+                <!-- Dots/circles -->
+                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-4">
+                    <span class="dot w-4 h-4 rounded-full bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
+                    <span class="dot w-4 h-4 rounded-full bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="absolute bottom-24 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-4 sm:gap-6 w-full max-w-lg px-4">
+                <a href="{{ url('/layanan') }}" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-xl hover:from-blue-500 hover:to-blue-400 transition duration-300 font-bold flex items-center justify-center space-x-3 shadow-lg hover:shadow-blue-500/30">
+                    <span>Mulai Sekarang</span>
+                    <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <a href="{{ url('/kontak') }}" class="w-full sm:w-auto bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-8 py-4 rounded-xl hover:bg-white hover:text-blue-900 transition duration-300 font-semibold flex items-center justify-center space-x-3">
+                    <i class="fas fa-phone text-xl"></i>
+                    <span>Hubungi Kami</span>
+                </a>
             </div>
         </div>
+
+        <script>
+            let slideIndex = 1;
+            showSlides(slideIndex);
+
+            function moveSlide(n) {
+                showSlides(slideIndex += n);
+            }
+
+            function currentSlide(n) {
+                showSlides(slideIndex = n);
+            }
+
+            function showSlides(n) {
+                let i;
+                let slides = document.getElementsByClassName("slide");
+                let dots = document.getElementsByClassName("dot");
+                
+                if (n > slides.length) {slideIndex = 1}
+                if (n < 1) {slideIndex = slides.length}
+                
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.opacity = "0";
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].classList.remove("bg-white");
+                    dots[i].classList.add("bg-white/30");
+                }
+                
+                slides[slideIndex-1].style.opacity = "1";
+                dots[slideIndex-1].classList.remove("bg-white/30");
+                dots[slideIndex-1].classList.add("bg-white");
+            }
+
+            // Auto slide with fade effect
+            setInterval(() => {
+                moveSlide(1);
+            }, 5000);
+        </script>
 
         <!-- Sambutan Kepala Desa Section -->
         <div class="bg-gray-50 py-20 sm:py-32">
@@ -70,17 +152,92 @@
                             <br><br>
                             Wassalamualaikum Wr. Wb.
                         </p>
-                        <div class="flex items-center space-x-4">
-                            <div class="h-16 w-1 bg-yellow-500"></div>
-                            <div>
-                                <p class="font-bold text-blue-900">H. Muhammad Sholeh</p>
-                                <p class="text-gray-600">Kepala Desa Sumber Secang</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="h-16 w-1 bg-yellow-500"></div>
+                                <div>
+                                    <p class="font-bold text-blue-900">H. Muhammad Sholeh</p>
+                                    <p class="text-gray-600">Kepala Desa Sumber Secang</p>
+                                </div>
                             </div>
+                            <a href="{{ url('/pamongdesa') }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition duration-300">
+                                <span>Profil Desa</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+         <!-- Visi Misi Section -->
+         <div class="bg-blue-900 py-20 sm:py-32">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">Visi & Misi</h2>
+                    <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
+                    <p class="text-gray-200 text-base sm:text-lg">Komitmen kami dalam membangun desa yang maju, mandiri dan sejahtera</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Visi Card -->
+                    <div class="bg-white/10 backdrop-blur-lg rounded-xl p-8 shadow-lg hover:shadow-xl hover:bg-white/20 transition-all duration-300 border border-white/20">
+                        <div class="flex items-center space-x-4 mb-8">
+                            <div class="p-3 bg-yellow-500 rounded-lg">
+                                <i class="fas fa-eye text-blue-900 text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Visi</h3>
+                        </div>
+                        <p class="text-gray-200 leading-relaxed">
+                            "Terwujudnya Desa yang Maju, Mandiri, dan Sejahtera Berbasis Pertanian dan Teknologi Digital dengan Tetap Menjaga Nilai-nilai Budaya dan Kearifan Lokal"
+                        </p>
+                    </div>
+
+                    <!-- Misi Card -->
+                    <div class="bg-white/10 backdrop-blur-lg rounded-xl p-8 shadow-lg hover:shadow-xl hover:bg-white/20 transition-all duration-300 border border-white/20">
+                        <div class="flex items-center space-x-4 mb-8">
+                            <div class="p-3 bg-yellow-500 rounded-lg">
+                                <i class="fas fa-bullseye text-blue-900 text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Misi</h3>
+                        </div>
+                        <ul class="space-y-4 text-gray-200">
+                            <li class="flex items-start space-x-4">
+                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                    <i class="fas fa-check text-green-400"></i>
+                                </div>
+                                <span>Meningkatkan kualitas pelayanan publik melalui digitalisasi administrasi desa</span>
+                            </li>
+                            <li class="flex items-start space-x-4">
+                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                    <i class="fas fa-check text-green-400"></i>
+                                </div>
+                                <span>Mengembangkan sektor pertanian dengan teknologi modern dan ramah lingkungan</span>
+                            </li>
+                            <li class="flex items-start space-x-4">
+                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                    <i class="fas fa-check text-green-400"></i>
+                                </div>
+                                <span>Memberdayakan UMKM dan potensi ekonomi lokal untuk kesejahteraan masyarakat</span>
+                            </li>
+                            <li class="flex items-start space-x-4">
+                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                    <i class="fas fa-check text-green-400"></i>
+                                </div>
+                                <span>Melestarikan dan mengembangkan nilai-nilai budaya serta kearifan lokal</span>
+                            </li>
+                            <li class="flex items-start space-x-4">
+                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                    <i class="fas fa-check text-green-400"></i>
+                                </div>
+                                <span>Meningkatkan kualitas sumber daya manusia melalui pendidikan dan pelatihan</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Gallery Section -->
         <div class="bg-white py-20 sm:py-32">
@@ -202,8 +359,8 @@
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     <!-- APBDES Card -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
-                        <div class="p-6 sm:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
+                        <div class="p-6 sm:p-8 flex-grow">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
                                 <i class="fas fa-chart-pie text-white text-xl sm:text-2xl"></i>
                             </div>
@@ -212,7 +369,9 @@
                                 <canvas id="apbdesChart" width="400" height="400"></canvas>
                             </div>
                             <div class="mt-6 space-y-3" id="apbdesLegend"></div>
-                            <a href="{{ url('/apbdes') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
+                        </div>
+                        <div class="p-6 sm:p-8">
+                            <a href="{{ url('/apbdes') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
                                 <span>Lihat Detail APBDES</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
@@ -220,8 +379,8 @@
                     </div>
 
                     <!-- Demografi Card -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
-                        <div class="p-6 sm:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
+                        <div class="p-6 sm:p-8 flex-grow">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
                                 <i class="fas fa-users text-white text-xl sm:text-2xl"></i>
                             </div>
@@ -230,7 +389,9 @@
                                 <canvas id="demografiChart" width="400" height="400"></canvas>
                             </div>
                             <div class="mt-6 space-y-3" id="demografiLegend"></div>
-                            <a href="{{ url('/demografi') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
+                        </div>
+                        <div class="p-6 sm:p-8">
+                            <a href="{{ url('/demografi') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
                                 <span>Lihat Detail Demografi</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
@@ -238,8 +399,8 @@
                     </div>
 
                     <!-- Bantuan Sosial Card -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
-                        <div class="p-6 sm:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
+                        <div class="p-6 sm:p-8 flex-grow">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
                                 <i class="fas fa-hands-helping text-white text-xl sm:text-2xl"></i>
                             </div>
@@ -248,7 +409,9 @@
                                 <canvas id="bantuanChart" width="400" height="400"></canvas>
                             </div>
                             <div class="mt-6 space-y-3" id="bantuanLegend"></div>
-                            <a href="{{ url('/bantuan-sosial') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
+                        </div>
+                        <div class="p-6 sm:p-8">
+                            <a href="{{ url('/bantuan-sosial') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
                                 <span>Lihat Detail Bantuan</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
@@ -424,200 +587,8 @@
             });
         </script>
 
-        <!-- Aparatur Desa Section -->
-        <div class="bg-gray-50 py-20 sm:py-32">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Aparatur Desa</h2>
-                    <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
-                    <p class="text-gray-600 text-base sm:text-lg">Kenali lebih dekat para aparatur yang melayani Desa Sumber Secang</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Sekretaris Desa -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/obama.jpg') }}" alt="Sekretaris Desa" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Ahmad Fauzi</h3>
-                                <p class="text-sm opacity-90">Sekretaris Desa</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kaur Keuangan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/joebiden.jpg') }}" alt="Kaur Keuangan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Siti Aminah</h3>
-                                <p class="text-sm opacity-90">Kaur Keuangan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kaur Umum -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/ronald.jpg') }}" alt="Kaur Umum" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Abdul Rahman</h3>
-                                <p class="text-sm opacity-90">Kaur Umum</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Pemerintahan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/trump.jpg') }}" alt="Kasi Pemerintahan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Muhammad Rizki</h3>
-                                <p class="text-sm opacity-90">Kasi Pemerintahan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Kesejahteraan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/prabowo.jpg') }}" alt="Kasi Kesejahteraan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Dewi Safitri</h3>
-                                <p class="text-sm opacity-90">Kasi Kesejahteraan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Pelayanan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/jokowi.jpg') }}" alt="Kasi Pelayanan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Hendra Wijaya</h3>
-                                <p class="text-sm opacity-90">Kasi Pelayanan</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Profile Desa Section -->
-        <div class="bg-white py-20 sm:py-32">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Kontak Kami</h2>
-                    <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
-                    <p class="text-gray-600 text-base sm:text-lg">Hubungi kami untuk informasi lebih lanjut tentang Desa Sumber Secang</p>
-                </div>
-
-                <div class="grid md:grid-cols-3 gap-6 mb-12">
-                    <!-- Email Card -->
-                    <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                            <i class="fas fa-envelope text-blue-900 text-xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Email</h3>
-                        <p class="text-gray-600 text-center">desa.sumbersecang@gmail.com</p>
-                    </div>
-
-                    <!-- Telepon Card -->
-                    <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                            <i class="fas fa-phone text-blue-900 text-xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Telepon</h3>
-                        <p class="text-gray-600 text-center">(0335) 123456</p>
-                    </div>
-
-                    <!-- Alamat Card -->
-                    <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                            <i class="fas fa-map-marker-alt text-blue-900 text-xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Alamat</h3>
-                        <p class="text-gray-600 text-center">Jl. Raya Sumber Secang No. 123, Kec. Sumber, Kab. Probolinggo</p>
-                    </div>
-                </div>
-
-                <!-- Google Maps -->
-                <div class="w-full rounded-xl overflow-hidden shadow-lg">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.1527553655745!2d113.2159863!3d-7.7516499!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7b75a9824fab1%3A0x4027a76e35319c0!2sSumber%20Secang%2C%20Sumber%2C%20Probolinggo%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1629789012345!5m2!1sen!2sid"
-                        width="100%" 
-                        height="450" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy"
-                        class="w-full">
-                    </iframe>
-                </div>
-            </div>
-        </div>
-
-        <!-- Visi Misi Section -->
-        <div class="bg-white py-20 sm:py-32">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Visi & Misi</h2>
-                    <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
-                    <p class="text-gray-600 text-base sm:text-lg">Komitmen kami dalam membangun desa yang maju, mandiri dan sejahtera</p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Visi Card -->
-                    <div class="bg-gray-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition duration-300">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-6 flex items-center">
-                            <i class="fas fa-eye text-yellow-500 mr-3"></i>
-                            Visi
-                        </h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            "Terwujudnya Desa yang Maju, Mandiri, dan Sejahtera Berbasis Pertanian dan Teknologi Digital dengan Tetap Menjaga Nilai-nilai Budaya dan Kearifan Lokal"
-                        </p>
-                    </div>
-
-                    <!-- Misi Card -->
-                    <div class="bg-gray-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition duration-300">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-6 flex items-center">
-                            <i class="fas fa-bullseye text-yellow-500 mr-3"></i>
-                            Misi
-                        </h3>
-                        <ul class="space-y-3 text-gray-600">
-                            <li class="flex items-start space-x-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <span>Meningkatkan kualitas pelayanan publik melalui digitalisasi administrasi desa</span>
-                            </li>
-                            <li class="flex items-start space-x-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <span>Mengembangkan sektor pertanian dengan teknologi modern dan ramah lingkungan</span>
-                            </li>
-                            <li class="flex items-start space-x-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <span>Memberdayakan UMKM dan potensi ekonomi lokal untuk kesejahteraan masyarakat</span>
-                            </li>
-                            <li class="flex items-start space-x-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <span>Melestarikan dan mengembangkan nilai-nilai budaya serta kearifan lokal</span>
-                            </li>
-                            <li class="flex items-start space-x-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <span>Meningkatkan kualitas sumber daya manusia melalui pendidikan dan pelatihan</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Features Section -->
-        <div class="bg-gray-50 pt-20 sm:pt-32 pb-16 sm:pb-20">
+         <!-- Features Section -->
+         <div class="bg-white pt-20 sm:pt-32 pb-16 sm:pb-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
                     <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Layanan Unggulan</h2>
@@ -721,5 +692,180 @@
                 </div>
             </div>
         </div>
-    </main>
+
+        <!-- Aparatur Desa Section -->
+        <div class="bg-gray-50 py-20 sm:py-32">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Aparatur Desa</h2>
+                    <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
+                    <p class="text-gray-600 text-base sm:text-lg">Kenali lebih dekat para aparatur yang melayani Desa Sumber Secang</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <!-- Sekretaris Desa -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/obama.jpg') }}" alt="Sekretaris Desa" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Ahmad Fauzi</h3>
+                                <p class="text-sm opacity-90">Sekretaris Desa</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kaur Keuangan -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/joebiden.jpg') }}" alt="Kaur Keuangan" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Siti Aminah</h3>
+                                <p class="text-sm opacity-90">Kaur Keuangan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kaur Umum -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/ronald.jpg') }}" alt="Kaur Umum" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Abdul Rahman</h3>
+                                <p class="text-sm opacity-90">Kaur Umum</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kasi Pemerintahan -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/trump.jpg') }}" alt="Kasi Pemerintahan" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Muhammad Rizki</h3>
+                                <p class="text-sm opacity-90">Kasi Pemerintahan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kasi Kesejahteraan -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/prabowo.jpg') }}" alt="Kasi Kesejahteraan" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Dewi Safitri</h3>
+                                <p class="text-sm opacity-90">Kasi Kesejahteraan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kasi Pelayanan -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/jokowi.jpg') }}" alt="Kasi Pelayanan" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Hendra Wijaya</h3>
+                                <p class="text-sm opacity-90">Kasi Pelayanan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kasi Pelayanan -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/jokowi.jpg') }}" alt="Kasi Pelayanan" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Hendra Wijaya</h3>
+                                <p class="text-sm opacity-90">Kasi Pelayanan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kasi Pelayanan -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                        <div class="relative h-80">
+                            <img src="{{ asset('images/jokowi.jpg') }}" alt="Kasi Pelayanan" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <h3 class="text-lg font-bold">Hendra Wijaya</h3>
+                                <p class="text-sm opacity-90">Kasi Pelayanan</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center items-center mt-8 w-full">
+                        <a href="{{ url('/pamongdesa') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
+                            <span>Lihat Semua Aparatur Desa</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Desa Section -->
+        <div class="bg-white py-20 sm:py-32">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Tentang Kami</h2>
+                    <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
+                    <p class="text-gray-600 text-base sm:text-lg">Hubungi kami untuk informasi lebih lanjut tentang Desa Sumber Secang</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <!-- Email Card -->
+                    <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-envelope text-blue-900 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Email</h3>
+                        <p class="text-gray-600 text-center">desa.sumbersecang@gmail.com</p>
+                    </div>
+
+                    <!-- Telepon Card -->
+                    <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-phone text-blue-900 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Telepon</h3>
+                        <p class="text-gray-600 text-center">(0335) 123456</p>
+                    </div>
+
+                    <!-- Alamat Card -->
+                    <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-map-marker-alt text-blue-900 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Alamat</h3>
+                        <p class="text-gray-600 text-center">Jl. Raya Sumber Secang No. 123, Kec. Sumber, Kab. Probolinggo</p>
+                    </div>
+                </div>
+
+                <!-- Google Maps -->
+                <div class="w-full rounded-xl overflow-hidden shadow-lg">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63219.84473250274!2d113.18702755820313!3d-7.756344699999991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7b31991c0589f%3A0x3027a76e352bdf0!2sProbolinggo%2C%20Probolinggo%20City%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1629789012345!5m2!1sen!2sid&t=k&markers=color:red|label:Probolinggo|-7.7563,113.2118&layer=boundary"
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy"
+                        class="w-full">
+                    </iframe>
+                    <div class="bg-white p-4">
+                        <p class="text-gray-600 text-sm">
+                            <i class="fas fa-map-marked-alt text-red-500 mr-2"></i>
+                            Batas wilayah Kota Probolinggo ditandai dengan garis merah pada peta. Total luas wilayah: ± 56.67 km²
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          </main>
 @endsection
