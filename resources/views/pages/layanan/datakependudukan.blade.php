@@ -4,7 +4,7 @@
     <!-- Main Content -->
     <main class="pt-10">
         <div class="bg-gradient-to-b from-blue-900 to-blue-800 py-8 sm:py-12">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Back Button and Title -->
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8">
                     <a href="{{ url('/layanan') }}" class="inline-flex items-center text-white hover:text-blue-200 transition duration-300 mb-4 sm:mb-0">

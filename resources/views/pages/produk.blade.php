@@ -15,9 +15,9 @@
 
         <!-- Products Grid -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="products-container">
                 <!-- Product Card 1 -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
                         <img src="{{ asset('images/madu.jpg') }}" alt="Madu Asli" class="w-full h-full object-cover">
                     </div>
@@ -35,7 +35,7 @@
                 </div>
 
                 <!-- Product Card 2 -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
                         <img src="{{ asset('images/keripik.jpg') }}" alt="Keripik Singkong" class="w-full h-full object-cover">
                     </div>
@@ -53,7 +53,7 @@
                 </div>
 
                 <!-- Product Card 3 -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
                         <img src="{{ asset('images/kopi.jpg') }}" alt="Kopi Robusta" class="w-full h-full object-cover">
                     </div>
@@ -71,7 +71,7 @@
                 </div>
 
                 <!-- Product Card 4 -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
                         <img src="{{ asset('images/batik.jpg') }}" alt="Batik Tulis" class="w-full h-full object-cover">
                     </div>
@@ -89,7 +89,7 @@
                 </div>
 
                 <!-- Product Card 5 -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
                         <img src="{{ asset('images/anyaman.jpg') }}" alt="Anyaman Bambu" class="w-full h-full object-cover">
                     </div>
@@ -107,7 +107,7 @@
                 </div>
 
                 <!-- Product Card 6 -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
                         <img src="{{ asset('images/tempe.jpg') }}" alt="Tempe" class="w-full h-full object-cover">
                     </div>
@@ -124,6 +124,92 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center mt-8 gap-2" id="pagination">
+                <!-- Pagination buttons will be inserted here by JavaScript -->
+            </div>
         </div>
+
+        <script>
+            // Configuration
+            const itemsPerPage = 6;
+            let currentPage = 1;
+
+            // Show specific page
+            function showPage(page) {
+                currentPage = page;
+                const items = document.querySelectorAll('.product-item');
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                items.forEach((item, index) => {
+                    if(index >= startIndex && index < endIndex) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                updatePaginationButtons();
+            }
+
+            // Update pagination
+            function updatePagination() {
+                const items = document.querySelectorAll('.product-item');
+                const pageCount = Math.ceil(items.length / itemsPerPage);
+                
+                const paginationContainer = document.getElementById('pagination');
+                paginationContainer.innerHTML = '';
+
+                // Previous button
+                const prevButton = createPaginationButton('Prev', () => {
+                    if(currentPage > 1) showPage(currentPage - 1);
+                });
+                paginationContainer.appendChild(prevButton);
+
+                // Page buttons
+                for(let i = 1; i <= pageCount; i++) {
+                    const pageButton = createPaginationButton(i, () => showPage(i));
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                // Next button
+                const nextButton = createPaginationButton('Next', () => {
+                    if(currentPage < pageCount) showPage(currentPage + 1);
+                });
+                paginationContainer.appendChild(nextButton);
+
+                updatePaginationButtons();
+            }
+
+            // Create pagination button
+            function createPaginationButton(text, onClick) {
+                const button = document.createElement('button');
+                button.textContent = text;
+                button.className = 'px-4 py-2 rounded-lg transition duration-300';
+                button.onclick = onClick;
+                return button;
+            }
+
+            // Update pagination buttons state
+            function updatePaginationButtons() {
+                const buttons = document.querySelectorAll('#pagination button');
+                buttons.forEach(button => {
+                    if(button.textContent == currentPage) {
+                        button.classList.add('bg-yellow-500', 'text-white');
+                    } else {
+                        button.classList.remove('bg-yellow-500', 'text-white');
+                        button.classList.add('bg-gray-100', 'hover:bg-gray-200');
+                    }
+                });
+            }
+
+            // Initialize pagination
+            document.addEventListener('DOMContentLoaded', () => {
+                updatePagination();
+                showPage(1);
+            });
+        </script>
     </main>
 @endsection

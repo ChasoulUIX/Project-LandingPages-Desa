@@ -92,7 +92,8 @@
                         <div id="infografisMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
                                 <a href="{{ url('/danadesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">APBDES</a>
-                                <a href="{{ url('/datakependudukan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Data Kependudukan</a>
+                                <a href="{{ url('/datakependudukan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kependudukan</a>
+                                <a href="{{ url('/informasidesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Desa</a>
                             </div>
                         </div>
                     </div>
@@ -173,7 +174,7 @@
                             <div class="py-1">
                                 <a href="{{ url('/keterangan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Surat Keterangan</a>
                                 <a href="{{ url('/pengaduan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengaduan</a>
-                                <a href="{{ url('/informasidesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Desa</a>
+                                <!-- <a href="{{ url('/informasidesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Desa</a> -->
                                 <a href="{{ url('/bantuansosial') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Bantuan Sosial</a>
                                 <!-- <a href="{{ url('/danadesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dana Desa</a> -->
                             </div>

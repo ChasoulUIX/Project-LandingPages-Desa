@@ -52,20 +52,10 @@
                     </div>
                 </div>
 
-                <!-- Navigation buttons -->
-                <div class="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between items-center px-4 sm:px-8">
-                    <button class="group p-3 rounded-full bg-black/30 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 focus:outline-none" onclick="moveSlide(-1)">
-                        <i class="fas fa-chevron-left text-white text-xl group-hover:scale-110 transition-transform"></i>
-                    </button>
-                    <button class="group p-3 rounded-full bg-black/30 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 focus:outline-none" onclick="moveSlide(1)">
-                        <i class="fas fa-chevron-right text-white text-xl group-hover:scale-110 transition-transform"></i>
-                    </button>
-                </div>
-
-                <!-- Dots/circles -->
-                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-4">
-                    <span class="dot w-4 h-4 rounded-full bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
-                    <span class="dot w-4 h-4 rounded-full bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
+                <!-- Slide indicators -->
+                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <span class="dot w-16 h-1 bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
+                    <span class="dot w-16 h-1 bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
                 </div>
             </div>
 
@@ -85,10 +75,6 @@
         <script>
             let slideIndex = 1;
             showSlides(slideIndex);
-
-            function moveSlide(n) {
-                showSlides(slideIndex += n);
-            }
 
             function currentSlide(n) {
                 showSlides(slideIndex = n);
@@ -117,7 +103,7 @@
 
             // Auto slide with fade effect
             setInterval(() => {
-                moveSlide(1);
+                currentSlide(slideIndex + 1);
             }, 5000);
         </script>
 
@@ -849,7 +835,7 @@
                 <!-- Google Maps -->
                 <div class="w-full rounded-xl overflow-hidden shadow-lg">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63219.84473250274!2d113.18702755820313!3d-7.756344699999991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7b31991c0589f%3A0x3027a76e352bdf0!2sProbolinggo%2C%20Probolinggo%20City%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1629789012345!5m2!1sen!2sid&t=k&markers=color:red|label:Probolinggo|-7.7563,113.2118&layer=boundary"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15810.927876840095!2d113.37544673476563!3d-7.837782099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6ff7e322d8fe3%3A0x761642564682d2ab!2sSumbersecang%2C%20Kec.%20Gading%2C%20Kabupaten%20Probolinggo%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1709799051099!5m2!1sid!2sid"
                         width="100%" 
                         height="450" 
                         style="border:0;" 
@@ -860,7 +846,7 @@
                     <div class="bg-white p-4">
                         <p class="text-gray-600 text-sm">
                             <i class="fas fa-map-marked-alt text-red-500 mr-2"></i>
-                            Batas wilayah Kota Probolinggo ditandai dengan garis merah pada peta. Total luas wilayah: ± 56.67 km²
+                            Luas wilayah Desa Sumber Secang adalah 486,2 hektar
                         </p>
                     </div>
                 </div>
