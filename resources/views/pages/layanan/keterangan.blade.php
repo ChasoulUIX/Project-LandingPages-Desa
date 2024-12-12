@@ -18,9 +18,22 @@
                     <div class="hidden sm:block w-24"></div>
                 </div>
 
+                <!-- Category Filters -->
+                <div class="flex justify-center space-x-4 mb-6">
+                    <button onclick="filterCategory('all')" class="filter-btn active px-6 py-2 bg-white text-blue-900 rounded-full font-medium hover:bg-blue-100 transition duration-300">
+                        Semua
+                    </button>
+                    <button onclick="filterCategory('umum')" class="filter-btn px-6 py-2 bg-white text-blue-900 rounded-full font-medium hover:bg-blue-100 transition duration-300">
+                        Umum
+                    </button>
+                    <button onclick="filterCategory('kependudukan')" class="filter-btn px-6 py-2 bg-white text-blue-900 rounded-full font-medium hover:bg-blue-100 transition duration-300">
+                        Kependudukan
+                    </button>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                     <!-- Surat Keterangan Domisili -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
+                    <div data-category="kependudukan" class="card bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
                         <div class="text-yellow-500 text-2xl sm:text-3xl mb-3 sm:mb-4">
                             <i class="fas fa-home"></i>
                         </div>
@@ -33,7 +46,7 @@
                     </div>
 
                     <!-- Surat Keterangan Tidak Mampu -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
+                    <div data-category="umum" class="card bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
                         <div class="text-yellow-500 text-2xl sm:text-3xl mb-3 sm:mb-4">
                             <i class="fas fa-hand-holding-heart"></i>
                         </div>
@@ -46,7 +59,7 @@
                     </div>
 
                     <!-- Surat Keterangan Usaha -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
+                    <div data-category="umum" class="card bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
                         <div class="text-yellow-500 text-2xl sm:text-3xl mb-3 sm:mb-4">
                             <i class="fas fa-store"></i>
                         </div>
@@ -59,7 +72,7 @@
                     </div>
 
                     <!-- Surat Pengantar KTP -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
+                    <div data-category="umum" class="card bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
                         <div class="text-yellow-500 text-2xl sm:text-3xl mb-3 sm:mb-4">
                             <i class="fas fa-id-card"></i>
                         </div>
@@ -72,7 +85,7 @@
                     </div>
 
                     <!-- Surat Keterangan Kelahiran -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
+                    <div data-category="kependudukan" class="card bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
                         <div class="text-yellow-500 text-2xl sm:text-3xl mb-3 sm:mb-4">
                             <i class="fas fa-baby"></i>
                         </div>
@@ -85,7 +98,7 @@
                     </div>
 
                     <!-- Surat Keterangan Kematian -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
+                    <div data-category="kependudukan" class="card bg-white rounded-xl shadow-lg p-4 sm:p-6 transform hover:-translate-y-2 transition duration-300">
                         <div class="text-yellow-500 text-2xl sm:text-3xl mb-3 sm:mb-4">
                             <i class="fas fa-scroll"></i>
                         </div>
@@ -108,6 +121,33 @@
                         <li>Dokumen pendukung lainnya sesuai jenis surat</li>
                     </ul>
                 </div>
+
+                <!-- Add this script before the closing main tag -->
+                <script>
+                    function filterCategory(category) {
+                        // Update active button state
+                        document.querySelectorAll('.filter-btn').forEach(btn => {
+                            btn.classList.remove('active', 'bg-blue-100');
+                        });
+                        event.target.classList.add('active', 'bg-blue-100');
+
+                        // Filter cards
+                        const cards = document.querySelectorAll('.card');
+                        cards.forEach(card => {
+                            if (category === 'all' || card.dataset.category === category) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    }
+                </script>
+
+                <style>
+                    .filter-btn.active {
+                        background-color: rgb(219 234 254);
+                    }
+                </style>
             </div>
         </div>
     </main>

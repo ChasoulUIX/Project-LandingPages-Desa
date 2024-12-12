@@ -13,7 +13,7 @@
             font-size: 14px;
         }
         .hero-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2V6h4V4H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         @media (max-width: 640px) {
             .text-4xl {
@@ -92,7 +92,8 @@
                         <div id="infografisMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
                                 <a href="{{ url('/danadesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">APBDES</a>
-                                </div>
+                                <a href="{{ url('/datakependudukan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Data Kependudukan</a>
+                            </div>
                         </div>
                     </div>
 
@@ -115,24 +116,50 @@
 
                     <script>
                         function toggleDropdown(menuId) {
+                            // Close all other dropdowns first
+                            const allDropdowns = ['berandaMenu', 'infografisMenu', 'strukturalMenu', 'layananMenu', 'galeriMenu'];
+                            const allArrows = ['berandaArrow', 'infografisArrow', 'strukturalArrow', 'layananArrow', 'galeriArrow'];
+                            
+                            allDropdowns.forEach((id) => {
+                                if (id !== menuId) {
+                                    document.getElementById(id).classList.add('hidden');
+                                }
+                            });
+                            
+                            allArrows.forEach((arrowId) => {
+                                const arrow = document.getElementById(arrowId);
+                                if (arrow) {
+                                    arrow.classList.remove('rotate-180');
+                                }
+                            });
+
+                            // Toggle the clicked dropdown
                             const menu = document.getElementById(menuId);
-                            const arrow = document.getElementById('strukturalArrow');
+                            const arrowId = menuId.replace('Menu', 'Arrow');
+                            const arrow = document.getElementById(arrowId);
                             
                             menu.classList.toggle('hidden');
-                            arrow.classList.toggle('transform');
-                            arrow.classList.toggle('rotate-180');
+                            if (arrow) {
+                                arrow.classList.toggle('rotate-180');
+                            }
                         }
 
                         // Close dropdown when clicking outside
                         document.addEventListener('click', function(event) {
-                            const dropdown = document.getElementById('strukturalDropdown');
-                            const menu = document.getElementById('strukturalMenu');
-                            const arrow = document.getElementById('strukturalArrow');
+                            const dropdowns = ['beranda', 'infografis', 'struktural', 'layanan', 'galeri'];
                             
-                            if (!dropdown.contains(event.target)) {
-                                menu.classList.add('hidden');
-                                arrow.classList.remove('rotate-180');
-                            }
+                            dropdowns.forEach((type) => {
+                                const dropdown = document.getElementById(`${type}Dropdown`);
+                                const menu = document.getElementById(`${type}Menu`);
+                                const arrow = document.getElementById(`${type}Arrow`);
+                                
+                                if (dropdown && menu && !dropdown.contains(event.target)) {
+                                    menu.classList.add('hidden');
+                                    if (arrow) {
+                                        arrow.classList.remove('rotate-180');
+                                    }
+                                }
+                            });
                         });
                     </script>
 
@@ -147,7 +174,6 @@
                                 <a href="{{ url('/keterangan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Surat Keterangan</a>
                                 <a href="{{ url('/pengaduan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengaduan</a>
                                 <a href="{{ url('/informasidesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Desa</a>
-                                <a href="{{ url('/datakependudukan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Data Kependudukan</a>
                                 <a href="{{ url('/bantuansosial') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Bantuan Sosial</a>
                                 <!-- <a href="{{ url('/danadesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dana Desa</a> -->
                             </div>
@@ -247,7 +273,6 @@
                             <a href="{{ url('/keterangan') }}" class="block text-blue-200 hover:text-yellow-300">Surat Keterangan</a>
                             <a href="{{ url('/pengaduan') }}" class="block text-blue-200 hover:text-yellow-300">Pengaduan</a>
                             <a href="{{ url('/informasidesa') }}" class="block text-blue-200 hover:text-yellow-300">Informasi Desa</a>
-                            <a href="{{ url('/datakependudukan') }}" class="block text-blue-200 hover:text-yellow-300">Data Kependudukan</a>
                             <a href="{{ url('/bantuansosial') }}" class="block text-blue-200 hover:text-yellow-300">Bantuan Sosial</a>
                         </div>
                     </div>
