@@ -37,7 +37,7 @@
                 <!-- Product Card 2 -->
                 <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
-                        <img src="{{ asset('images/keripik.jpg') }}" alt="Keripik Singkong" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/kripiksingkong.jpeg') }}" alt="Keripik Singkong" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-blue-900 mb-2">Keripik Singkong</h3>
@@ -55,7 +55,7 @@
                 <!-- Product Card 3 -->
                 <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
-                        <img src="{{ asset('images/kopi.jpg') }}" alt="Kopi Robusta" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/kopirobusta.jpg') }}" alt="Kopi Robusta" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-blue-900 mb-2">Kopi Robusta</h3>
@@ -73,7 +73,7 @@
                 <!-- Product Card 4 -->
                 <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
-                        <img src="{{ asset('images/batik.jpg') }}" alt="Batik Tulis" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/batik.jpeg') }}" alt="Batik Tulis" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-blue-900 mb-2">Batik Tulis</h3>
@@ -91,7 +91,7 @@
                 <!-- Product Card 5 -->
                 <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                     <div class="relative h-64">
-                        <img src="{{ asset('images/anyaman.jpg') }}" alt="Anyaman Bambu" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/bambu.jpg') }}" alt="Anyaman Bambu" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-blue-900 mb-2">Anyaman Bambu</h3>
