@@ -8,6 +8,7 @@ use App\Http\Controllers\Cms\CmsBeritaController;
 use App\Http\Controllers\Cms\CmsProdukController;
 use App\Http\Controllers\User\KeteranganDomisiliController;
 use App\Http\Controllers\User\TidakMampuController;
+use App\Http\Controllers\User\SuratKeteranganUsahaController;
 // Auth
 // ... existing code ...
 
@@ -89,6 +90,11 @@ Route::put('/surat-tidak-mampu/{id}/update-status', [TidakMampuController::class
 Route::get('/suratketerangan/usaha', function () {
     return view('user.pages.layanan.suratketerangan.usaha');
 });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/surat-usaha', [SuratKeteranganUsahaController::class, 'index'])->name('surat-usaha.index');
+    Route::post('/surat-usaha', [SuratKeteranganUsahaController::class, 'store'])->name('surat-usaha.store');
+});
+
 Route::get('/suratketerangan/ktp', function () {
     return view('user.pages.layanan.suratketerangan.ktp');
 });
@@ -113,11 +119,10 @@ Route::get('/cms/app/dashboard', function () {
     return view('cms.app.dashboard');
 });
 
+//pages
 Route::get('/cms/kegiatan', function () {
     return view('cms.pages.kegiatan');
 });
-
-//pages
 Route::resource('cms/kegiatan', CmsKegiatanController::class);
 
 Route::prefix('cms')->group(function () {
@@ -140,3 +145,12 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
         return view('cms.pages.suratketerangan.tidakmampu');
     });
 });
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/suratketerangan/usaha', function () {
+        return view('cms.pages.suratketerangan.usaha');
+    });
+    Route::get('/usaha', [SuratKeteranganUsahaController::class, 'indexAdmin'])->name('cms.usaha.index');
+    Route::put('/usaha/{id}/update-status', [SuratKeteranganUsahaController::class, 'updateStatus'])->name('cms.usaha.update-status');
+});
+
