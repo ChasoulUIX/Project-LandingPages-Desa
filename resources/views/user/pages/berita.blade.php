@@ -11,50 +11,21 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Berita Item 1 -->
+                    @foreach(App\Models\Berita::latest()->get() as $item)
                     <div class="bg-white rounded-xl shadow-lg p-6 transform hover:-translate-y-2 transition duration-300">
-                        <img src="{{ asset('images/covid.jpeg') }}" alt="Berita 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <img src="{{ asset('images/' . $item->image) }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover rounded-lg mb-4">
                         <div class="flex items-center text-gray-500 text-sm mb-2">
                             <i class="far fa-calendar-alt mr-2"></i>
-                            <span>22 Januari 2020</span>
+                            <span>{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}</span>
                         </div>
-                        <h3 class="text-xl font-semibold text-blue-900 mb-3">Covid-19 di Desa Secang</h3>
-                        <p class="text-gray-600 mb-4">Perkembangan kasus Covid-19 di Desa Secang menunjukkan tren penurunan. Tim kesehatan desa terus melakukan pemantauan...</p>
+                        <h3 class="text-xl font-semibold text-blue-900 mb-3">{{ $item->judul }}</h3>
+                        <p class="text-gray-600 mb-4">{{ Str::limit($item->konten, 150) }}</p>
                         <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
                             <span>Baca selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
-
-                    <!-- Berita Item 2 -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 transform hover:-translate-y-2 transition duration-300">
-                        <img src="{{ asset('images/perbaikan_jalan.jpg') }}" alt="Berita 2" class="w-full h-48 object-cover rounded-lg mb-4">
-                        <div class="flex items-center text-gray-500 text-sm mb-2">
-                            <i class="far fa-calendar-alt mr-2"></i>
-                            <span>20 Januari 2024</span>
-                        </div>
-                        <h3 class="text-xl font-semibold text-blue-900 mb-3">Perbaikan Jalan di Desa Secang</h3>
-                        <p class="text-gray-600 mb-4">Proyek perbaikan infrastruktur jalan desa telah dimulai untuk meningkatkan akses dan mobilitas warga Desa Secang...</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
-                            <span>Baca selengkapnya</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-
-                    <!-- Berita Item 3 -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 transform hover:-translate-y-2 transition duration-300">
-                        <img src="{{ asset('images/festival.jpg') }}" alt="Berita 3" class="w-full h-48 object-cover rounded-lg mb-4">
-                        <div class="flex items-center text-gray-500 text-sm mb-2">
-                            <i class="far fa-calendar-alt mr-2"></i>
-                            <span>18 Januari 2024</span>
-                        </div>
-                        <h3 class="text-xl font-semibold text-blue-900 mb-3">Festival Budaya Desa</h3>
-                        <p class="text-gray-600 mb-4">Festival budaya tahunan desa akan diselenggarakan pada bulan depan dengan menampilkan berbagai...</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2">
-                            <span>Baca selengkapnya</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
+                    @endforeach
                 </div>
 
                 <!-- Pagination -->

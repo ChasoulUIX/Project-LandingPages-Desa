@@ -1,16 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Cms\CmsKegiatanController;
+use App\Http\Controllers\Cms\CmsBeritaController;
+use App\Http\Controllers\Cms\CmsProdukController;
 
 // Auth
-Route::get('/login', function () {
-    return view('auth.login');
-});
-Route::get('/register', function () {
-    return view('auth.register');
-});
+// ... existing code ...
 
+// Authentication Routes
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// ... existing code ...
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])
+    ->name('register')
+    ->middleware('guest');
+Route::post('/register', [RegisterController::class, 'register'])
+    ->middleware('guest');
+
+//ladningpages
 // Pages
 Route::get('/', function () {
     return view('user.app.dashboard');
@@ -87,3 +99,21 @@ Route::get('/images/{filename}', function ($filename) {
     }
     abort(404);
 });
+
+//cms
+Route::get('/cms/app/dashboard', function () {
+    return view('cms.app.dashboard');
+});
+
+Route::get('/cms/kegiatan', function () {
+    return view('cms.pages.kegiatan');
+});
+
+//pages
+Route::resource('cms/kegiatan', CmsKegiatanController::class);
+
+Route::prefix('cms')->group(function () {
+    Route::resource('berita', CmsBeritaController::class);
+});
+
+Route::resource('cms/produk', CmsProdukController::class);

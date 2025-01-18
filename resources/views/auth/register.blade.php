@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('user.layouts.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
@@ -33,7 +33,7 @@
                 <p class="text-gray-600 text-sm sm:text-base">Buat akun untuk mengakses layanan digital desa</p>
             </div>
 
-            <form method="POST" action="" class="space-y-4 sm:space-y-6">
+            <form method="POST" action="{{ route('register') }}" class="space-y-4 sm:space-y-6">
                 @csrf
 
                 <div class="space-y-3 sm:space-y-4">
