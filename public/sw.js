@@ -5,7 +5,6 @@ const urlsToCache = [
     '/js/app.js',
     '/images/background_sawah.jpg',
     '/images/gunungsawah.jpg',
-    // Tambahkan asset statis lainnya yang perlu di-cache
 ];
 
 self.addEventListener('install', function(event) {

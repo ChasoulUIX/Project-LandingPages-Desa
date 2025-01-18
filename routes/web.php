@@ -13,70 +13,70 @@ Route::get('/register', function () {
 
 // Pages
 Route::get('/', function () {
-    return view('app.dashboard');
+    return view('user.app.dashboard');
 });
 Route::get('/layanan', function () {
-    return view('pages.layanan');
+    return view('user.pages.layanan');
 });
 Route::get('/berita', function () {
-    return view('pages.berita');
+    return view('user.pages.berita');
 });
 Route::get('/galery', function () {
-    return view('pages.galery');
+    return view('user.pages.galery');
 });
 Route::get('/kontak', function () {
-    return view('pages.kontak');
+    return view('user.pages.kontak');
 });
 Route::get('/produk', function () {
-    return view('pages.produk');
+    return view('user.pages.produk');
 });
 Route::get('/aboutdesa', function () {
-    return view('pages.aboutdesa');
+    return view('user.pages.aboutdesa');
 });
 
 // Struktural
 Route::get('/pamongdesa', function () {
-    return view('pages.pamongdesa');
+    return view('user.pages.pamongdesa');
 });
 
 // Layanan
 Route::get('/keterangan', function () {
-    return view('pages.layanan.keterangan');
+    return view('user.pages.layanan.keterangan');
 });
 Route::get('/pengaduan', function () {
-    return view('pages.layanan.pengaduan');
+    return view('user.pages.layanan.pengaduan');
 });
 Route::get('/informasidesa', function () {
-    return view('pages.layanan.informasidesa');
+    return view('user.pages.layanan.informasidesa');
 });
 Route::get('/datakependudukan', function () {
-    return view('pages.layanan.datakependudukan');
+    return view('user.pages.layanan.datakependudukan');
 });
 Route::get('/bantuansosial', function () {
-    return view('pages.layanan.bantuansosial');
+    return view('user.pages.layanan.bantuansosial');
 });
 Route::get('/danadesa', function () {
-    return view('pages.layanan.danadesa');
+    return view('user.pages.layanan.danadesa');
 });
 
 //layanan surat keterangan
 Route::get('/suratketerangan/domisili', function () {
-    return view('pages.layanan.suratketerangan.domisili');
+    return view('user.pages.layanan.suratketerangan.domisili');
 });
 Route::get('/suratketerangan/tidakmampu', function () {
-    return view('pages.layanan.suratketerangan.tidakmampu');
+    return view('user.pages.layanan.suratketerangan.tidakmampu');
 });
 Route::get('/suratketerangan/usaha', function () {
-    return view('pages.layanan.suratketerangan.usaha');
+    return view('user.pages.layanan.suratketerangan.usaha');
 });
 Route::get('/suratketerangan/ktp', function () {
-    return view('pages.layanan.suratketerangan.ktp');
+    return view('user.pages.layanan.suratketerangan.ktp');
 });
 Route::get('/suratketerangan/kelahiran', function () {
-    return view('pages.layanan.suratketerangan.kelahiran');
+    return view('user.pages.layanan.suratketerangan.kelahiran');
 });
 Route::get('/suratketerangan/kematian', function () {
-    return view('pages.layanan.suratketerangan.kematian');
+    return view('user.pages.layanan.suratketerangan.kematian');
 });
 
 // Route untuk mengambil gambar dari public/images
