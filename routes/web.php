@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Cms\CmsKegiatanController;
 use App\Http\Controllers\Cms\CmsBeritaController;
 use App\Http\Controllers\Cms\CmsProdukController;
-
+use App\Http\Controllers\User\KeteranganDomisiliController;
 // Auth
 // ... existing code ...
 
@@ -75,6 +75,9 @@ Route::get('/danadesa', function () {
 Route::get('/suratketerangan/domisili', function () {
     return view('user.pages.layanan.suratketerangan.domisili');
 });
+Route::post('/suratketerangan/domisili', [KeteranganDomisiliController::class, 'store'])->name('domicili.store');
+Route::get('/suratketerangan/domisili', [KeteranganDomisiliController::class, 'create'])->name('user.domisili.layanan.suratketerangan.domisili');
+
 Route::get('/suratketerangan/tidakmampu', function () {
     return view('user.pages.layanan.suratketerangan.tidakmampu');
 });
@@ -117,3 +120,7 @@ Route::prefix('cms')->group(function () {
 });
 
 Route::resource('cms/produk', CmsProdukController::class);
+
+Route::get('/cms/suratketerangan/domisili', function () {
+    return view('cms.pages.suratketerangan.domisili');
+});

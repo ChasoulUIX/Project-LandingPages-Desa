@@ -42,6 +42,45 @@
                             </a>
                         </div>
                     </div>
+                    
+                     <!-- Layanan Dropdown -->
+                     <div class="relative" x-data="{ open: {{ request()->is('cms/berita', 'cms/kegiatan', 'cms/produk') ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="nav-link w-full px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
+                            <span><i class="fas fa-images mr-3"></i>Layanan</span>
+                            <i class="fas fa-chevron-down ml-2" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" 
+                             @click.outside="open = false"
+                             class="pl-4 mt-2 space-y-2">
+                             <div class="relative" x-data="{ open: {{ request()->is('cms/berita', 'cms/kegiatan', 'cms/produk') ? 'true' : 'false' }} }">
+
+                        <button @click="open = !open" class="nav-link w-full px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
+                            <span><i class="fas fa-images mr-3"></i>Keterangan</span>
+                            <i class="fas fa-chevron-down ml-2" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" 
+                             @click.outside="open = false"
+                             class="pl-4 mt-2 space-y-2">
+                             <a href="/cms/suratketerangan/domisili" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/kegiatan') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
+                                <i class="fas fa-newspaper mr-3"></i>Domisili
+                            </a>
+                            <a href="/cms/kegiatan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/kegiatan') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
+                                <i class="fas fa-newspaper mr-3"></i>Kegiatan
+                            </a>
+                            <a href="/cms/produk" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/produk') ? 'bg-blue-800' : '' }}" data-page="produk">
+                                <i class="fas fa-box mr-3"></i>Produk
+                            </a>
+                        </div>
+                    </div>
+                            <a href="/cms/kegiatan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/kegiatan') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
+                                <i class="fas fa-newspaper mr-3"></i>Kegiatan
+                            </a>
+                            <a href="/cms/produk" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/produk') ? 'bg-blue-800' : '' }}" data-page="produk">
+                                <i class="fas fa-box mr-3"></i>Produk
+                            </a>
+                        </div>
+                    </div>
+
                     <a href="#" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/layanan') ? 'bg-blue-800' : '' }}" data-page="layanan">
                         <i class="fas fa-file-alt mr-3"></i>Layanan
                     </a>
