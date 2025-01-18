@@ -19,8 +19,18 @@
 
                 <!-- Form Section -->
                 <div class="bg-white rounded-xl shadow-lg p-8">
-                    <form action="#" method="POST" class="space-y-6">
+                    <form action="{{ route('surat-tidak-mampu.store') }}" method="POST" class="space-y-6">
                         @csrf
+
+                        @if ($errors->any())
+                            <div class="bg-red-50 text-red-500 p-4 rounded-lg mb-6">
+                                <ul class="list-disc list-inside">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         
                         <!-- Data Pemohon -->
                         <div class="border-b pb-6">

@@ -64,11 +64,11 @@
                              <a href="/cms/suratketerangan/domisili" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/kegiatan') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
                                 <i class="fas fa-newspaper mr-3"></i>Domisili
                             </a>
-                            <a href="/cms/kegiatan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/kegiatan') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
-                                <i class="fas fa-newspaper mr-3"></i>Kegiatan
+                            <a href="/cms/suratketerangan/tidakmampu" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/suratketerangan/tidakmampu') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
+                                <i class="fas fa-newspaper mr-3"></i>Tidak Mampu
                             </a>
-                            <a href="/cms/produk" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/produk') ? 'bg-blue-800' : '' }}" data-page="produk">
-                                <i class="fas fa-box mr-3"></i>Produk
+                            <a href="/cms/suratketerangan/usaha" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/suratketerangan/usaha') ? 'bg-blue-800' : '' }}" data-page="produk">
+                                <i class="fas fa-box mr-3"></i>Usaha
                             </a>
                         </div>
                     </div>

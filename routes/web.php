@@ -7,6 +7,7 @@ use App\Http\Controllers\Cms\CmsKegiatanController;
 use App\Http\Controllers\Cms\CmsBeritaController;
 use App\Http\Controllers\Cms\CmsProdukController;
 use App\Http\Controllers\User\KeteranganDomisiliController;
+use App\Http\Controllers\User\TidakMampuController;
 // Auth
 // ... existing code ...
 
@@ -81,6 +82,10 @@ Route::get('/suratketerangan/domisili', [KeteranganDomisiliController::class, 'c
 Route::get('/suratketerangan/tidakmampu', function () {
     return view('user.pages.layanan.suratketerangan.tidakmampu');
 });
+Route::get('/surat-tidak-mampu', [TidakMampuController::class, 'index'])->name('surat-tidak-mampu.index');
+Route::post('/surat-tidak-mampu', [TidakMampuController::class, 'store'])->name('surat-tidak-mampu.store');
+Route::put('/surat-tidak-mampu/{id}/update-status', [TidakMampuController::class, 'updateStatus'])->name('cms.tidak-mampu.update-status');
+
 Route::get('/suratketerangan/usaha', function () {
     return view('user.pages.layanan.suratketerangan.usaha');
 });
@@ -123,4 +128,15 @@ Route::resource('cms/produk', CmsProdukController::class);
 
 Route::get('/cms/suratketerangan/domisili', function () {
     return view('cms.pages.suratketerangan.domisili');
+});
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/domisili', [KeteranganDomisiliController::class, 'index'])->name('cms.domisili.index');
+    Route::put('/domisili/{id}/update-status', [KeteranganDomisiliController::class, 'updateStatus'])->name('cms.domisili.update-status');
+});
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/suratketerangan/tidakmampu', function () {
+        return view('cms.pages.suratketerangan.tidakmampu');
+    });
 });
