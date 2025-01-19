@@ -14,6 +14,7 @@ use App\Http\Controllers\User\SuratKelahiranController;
 use App\Http\Controllers\User\PengaduanController;
 use App\Http\Controllers\Cms\StrukturDesaController;
 use App\Http\Controllers\Cms\StrukturController;
+use App\Http\Controllers\Cms\KependudukanController;
 // Auth
 // ... existing code ...
 
@@ -204,4 +205,12 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/pengaduan', function () {
         return view('cms.pages.pengaduan', ['title' => 'Pengaduan']);
     });
+});
+
+Route::get('/cms/app/kependudukan', function () {
+    return view('cms.pages.kependudukan');
+});
+
+Route::group(['prefix' => 'cms', 'as' => 'cms.'], function () {
+    Route::resource('kependudukan', KependudukanController::class);
 });

@@ -22,23 +22,25 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                     <div class="bg-white/90 backdrop-blur rounded-lg p-3 sm:p-4">
                         <p class="text-xs sm:text-sm text-gray-600">Total Penduduk</p>
-                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">2,500</h3>
-                        <p class="text-xs text-green-600">↑ 2.1% dari bulan lalu</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">{{ App\Models\Kependudukan::count() }}</h3>
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-3 sm:p-4">
                         <p class="text-xs sm:text-sm text-gray-600">Kepala Keluarga</p>
-                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">650</h3>
-                        <p class="text-xs text-green-600">↑ 1.5% dari bulan lalu</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">{{ App\Models\Kependudukan::where('status_keluarga', 'Kepala Keluarga')->count() }}</h3>
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-3 sm:p-4">
                         <p class="text-xs sm:text-sm text-gray-600">Penduduk Produktif</p>
-                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">1,600</h3>
-                        <p class="text-xs text-blue-600">64% dari total penduduk</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">{{ App\Models\Kependudukan::whereBetween('usia', [15, 64])->count() }}</h3>
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-3 sm:p-4">
                         <p class="text-xs sm:text-sm text-gray-600">Rasio Gender</p>
-                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">1.02</h3>
-                        <p class="text-xs text-gray-600">Laki-laki : Perempuan</p>
+                        @php
+                            $laki = App\Models\Kependudukan::where('jenis_kelamin', 'Laki-laki')->count();
+                            $perempuan = App\Models\Kependudukan::where('jenis_kelamin', 'Perempuan')->count();
+                            $ratio = $perempuan > 0 ? number_format($laki / $perempuan, 2) : 0;
+                        @endphp
+                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">{{ $ratio }}:1</h3>
+                        <p class="text-xs text-gray-600">{{ $laki }} laki-laki per {{ $perempuan }} perempuan</p>
                     </div>
                 </div>
 
@@ -53,11 +55,11 @@
                         <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                             <div class="text-center">
                                 <p class="text-gray-600">Laki-laki</p>
-                                <p class="font-semibold">1,200 (48%)</p>
+                                <p class="font-semibold">{{ $laki }} ({{ round(($laki / App\Models\Kependudukan::count()) * 100) }}%)</p>
                             </div>
                             <div class="text-center">
                                 <p class="text-gray-600">Perempuan</p>
-                                <p class="font-semibold">1,300 (52%)</p>
+                                <p class="font-semibold">{{ $perempuan }} ({{ round(($perempuan / App\Models\Kependudukan::count()) * 100) }}%)</p>
                             </div>
                         </div>
                     </div>
@@ -68,11 +70,18 @@
                         <div class="h-40 sm:h-48">
                             <canvas id="ageChart"></canvas>
                         </div>
+                        @php
+                            $anak = App\Models\Kependudukan::where('usia', '<', 15)->count();
+                            $remaja = App\Models\Kependudukan::whereBetween('usia', [15, 24])->count();
+                            $dewasa = App\Models\Kependudukan::whereBetween('usia', [25, 54])->count();
+                            $lansia = App\Models\Kependudukan::where('usia', '>=', 55)->count();
+                            $total = App\Models\Kependudukan::count();
+                        @endphp
                         <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-2 text-xs text-gray-600">
-                            <div>• 0-14 tahun: Anak-anak (20%)</div>
-                            <div>• 15-24 tahun: Remaja (24%)</div>
-                            <div>• 25-54 tahun: Dewasa (40%)</div>
-                            <div>• 55+ tahun: Lansia (16%)</div>
+                            <div>• 0-14 tahun: Anak-anak ({{ round(($anak / App\Models\Kependudukan::count()) * 100) }}%)</div>
+                            <div>• 15-24 tahun: Remaja ({{ round(($remaja / App\Models\Kependudukan::count()) * 100) }}%)</div>
+                            <div>• 25-54 tahun: Dewasa ({{ round(($dewasa / $total) * 100) }}%)</div>
+                            <div>• 55+ tahun: Lansia ({{ round(($lansia / $total) * 100) }}%)</div>
                         </div>
                     </div>
 
@@ -82,14 +91,21 @@
                         <div class="h-40 sm:h-48">
                             <canvas id="educationChart"></canvas>
                         </div>
+                        @php
+                            $pendidikan = [
+                                'SD' => App\Models\Kependudukan::where('pendidikan', 'SD')->count(),
+                                'SMP' => App\Models\Kependudukan::where('pendidikan', 'SMP')->count(),
+                                'SMA' => App\Models\Kependudukan::where('pendidikan', 'SMA')->count(),
+                                'D3' => App\Models\Kependudukan::where('pendidikan', 'D3')->count(),
+                                'S1' => App\Models\Kependudukan::where('pendidikan', 'S1')->count(),
+                                'S2/S3' => App\Models\Kependudukan::whereIn('pendidikan', ['S2', 'S3'])->count()
+                            ];
+                        @endphp
                         <div class="mt-3 sm:mt-4 text-xs">
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-gray-600">
-                                <div>• SD: 16%</div>
-                                <div>• SMP: 20%</div>
-                                <div>• SMA: 32%</div>
-                                <div>• D3: 12%</div>
-                                <div>• S1: 16%</div>
-                                <div>• S2/S3: 4%</div>
+                                @foreach($pendidikan as $level => $count)
+                                    <div>• {{ $level }}: {{ round(($count / App\Models\Kependudukan::count()) * 100) }}%</div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -100,13 +116,20 @@
                         <div class="h-40 sm:h-48">
                             <canvas id="occupationChart"></canvas>
                         </div>
+                        @php
+                            $pekerjaan = [
+                                'Petani' => App\Models\Kependudukan::where('mata_pencaharian', 'Petani')->count(),
+                                'Pedagang' => App\Models\Kependudukan::where('mata_pencaharian', 'Pedagang')->count(),
+                                'PNS' => App\Models\Kependudukan::where('mata_pencaharian', 'PNS')->count(),
+                                'Swasta' => App\Models\Kependudukan::where('mata_pencaharian', 'Swasta')->count(),
+                                'Wirausaha' => App\Models\Kependudukan::where('mata_pencaharian', 'Wirausaha')->count(),
+                                'Lainnya' => App\Models\Kependudukan::whereNotIn('mata_pencaharian', ['Petani', 'Pedagang', 'PNS', 'Swasta', 'Wirausaha'])->count()
+                            ];
+                        @endphp
                         <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-2 text-xs text-gray-600">
-                            <div>• Petani: 24%</div>
-                            <div>• Pedagang: 16%</div>
-                            <div>• PNS: 8%</div>
-                            <div>• Swasta: 20%</div>
-                            <div>• Wirausaha: 12%</div>
-                            <div>• Lainnya: 20%</div>
+                            @foreach($pekerjaan as $jenis => $count)
+                                <div>• {{ $jenis }}: {{ round(($count / App\Models\Kependudukan::count()) * 100) }}%</div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -128,7 +151,7 @@
             data: {
                 labels: ['Laki-laki', 'Perempuan'],
                 datasets: [{
-                    data: [1200, 1300],
+                    data: [{{ $laki }}, {{ $perempuan }}],
                     backgroundColor: ['#3B82F6', '#EC4899'],
                     borderWidth: 0
                 }]
@@ -153,7 +176,7 @@
                 labels: ['0-14', '15-24', '25-54', '55+'],
                 datasets: [{
                     label: 'Jumlah',
-                    data: [500, 600, 1000, 400],
+                    data: [{{ $anak }}, {{ $remaja }}, {{ $dewasa }}, {{ $lansia }}],
                     backgroundColor: '#3B82F6',
                     borderRadius: 4
                 }]
@@ -187,9 +210,9 @@
         new Chart(educationCtx, {
             type: 'polarArea',
             data: {
-                labels: ['SD', 'SMP', 'SMA', 'D3', 'S1', 'S2/S3'],
+                labels: {!! json_encode(array_keys($pendidikan)) !!},
                 datasets: [{
-                    data: [400, 500, 800, 300, 400, 100],
+                    data: {!! json_encode(array_values($pendidikan)) !!},
                     backgroundColor: [
                         'rgba(59, 130, 246, 0.7)',
                         'rgba(236, 72, 153, 0.7)', 
@@ -216,10 +239,10 @@
         new Chart(occupationCtx, {
             type: 'line',
             data: {
-                labels: ['Petani', 'Pedagang', 'PNS', 'Swasta', 'Wirausaha', 'Lainnya'],
+                labels: {!! json_encode(array_keys($pekerjaan)) !!},
                 datasets: [{
                     label: 'Jumlah',
-                    data: [600, 400, 200, 500, 300, 500],
+                    data: {!! json_encode(array_values($pekerjaan)) !!},
                     borderColor: '#3B82F6',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     tension: 0.4,

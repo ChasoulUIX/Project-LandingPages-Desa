@@ -21,6 +21,10 @@
                     <a href="/cms/app/dashboard" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/app/dashboard') ? 'bg-blue-800' : '' }}" data-page="dashboard">
                         <i class="fas fa-home mr-3"></i>Dashboard
                     </a>
+
+                    <a href="/cms/app/kependudukan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/app/kependudukan') ? 'bg-blue-800' : '' }}" data-page="kependudukan">
+                        <i class="fas fa-home mr-3"></i>Kependudukan
+                    </a>
                     
                     <!-- Galeri Dropdown -->
                     <div class="relative" x-data="{ open: {{ request()->is('cms/berita', 'cms/kegiatan', 'cms/produk') ? 'true' : 'false' }} }">
