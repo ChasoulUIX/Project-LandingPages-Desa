@@ -11,6 +11,7 @@ use App\Http\Controllers\User\TidakMampuController;
 use App\Http\Controllers\User\SuratKeteranganUsahaController;
 use App\Http\Controllers\User\SuratKtpController;
 use App\Http\Controllers\User\SuratKelahiranController;
+use App\Http\Controllers\User\PengaduanController;
 // Auth
 // ... existing code ...
 
@@ -181,4 +182,7 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/kelahiran', [SuratKelahiranController::class, 'indexAdmin'])->name('cms.kelahiran.index');
     Route::put('/kelahiran/{id}/update-status', [SuratKelahiranController::class, 'updateStatus'])->name('cms.kelahiran.update-status');
 });
+
+Route::get('/layanan/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
+Route::post('/layanan/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
 

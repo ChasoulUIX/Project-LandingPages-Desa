@@ -21,7 +21,25 @@
                 <!-- Pengaduan Form -->
                 <div class="max-w-3xl mx-auto">
                     <div class="bg-white rounded-xl shadow-lg p-8">
-                        <form class="space-y-6">
+                        <form class="space-y-6" action="{{ route('pengaduan.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            
+                            @if(session('success'))
+                                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if($errors->any())
+                                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                                    <ul class="list-disc list-inside">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <div>
                                 <label for="name" class="block text-gray-700 font-medium mb-2">Nama Lengkap</label>
                                 <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" required>
