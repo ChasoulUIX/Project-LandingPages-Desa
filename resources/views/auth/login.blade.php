@@ -106,7 +106,7 @@
                     </button>
                 </div>
 
-                <div class="mt-4 sm:mt-6">
+                <!-- <div class="mt-4 sm:mt-6">
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-gray-300"></div>
@@ -128,16 +128,16 @@
                             Facebook
                         </button>
                     </div>
-                </div>
+                </div> -->
 
-                <div class="text-center mt-6 sm:mt-8">
+                <!-- <div class="text-center mt-6 sm:mt-8">
                     <p class="text-sm text-gray-600">
                         Belum punya akun? 
                         <a href="{{ url('/register') }}" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                             Daftar disini
                         </a>
                     </p>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>

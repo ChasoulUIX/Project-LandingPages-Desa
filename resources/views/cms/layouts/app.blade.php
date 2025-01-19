@@ -58,7 +58,7 @@
                     </div>
                     
                      <!-- Layanan Dropdown -->
-                     <div class="relative" x-data="{ open: {{ request()->is('cms/suratketerangan/*') ? 'true' : 'false' }} }">
+                     <div class="relative" x-data="{ open: {{ request()->is('cms/suratketerangan/*', 'cms/pengaduan') ? 'true' : 'false' }} }">
                         <button @click="open = !open" class="nav-link w-full px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
                             <span><i class="fas fa-images mr-3"></i>Layanan</span>
                             <i class="fas fa-chevron-down ml-2" :class="{ 'transform rotate-180': open }"></i>
@@ -101,19 +101,11 @@
                                     </a>
                                 </div>
                             </div>
-                            <a href="/cms/pengaduan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/pengaduan') ? 'bg-blue-800' : '' }}" data-page="usaha">
-                                <i class="fas fa-box mr-3"></i>Pengaduan
+                            <a href="/cms/pengaduan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/pengaduan') ? 'bg-blue-800' : '' }}" data-page="pengaduan">
+                                <i class="fas fa-exclamation-circle mr-3"></i>Pengaduan
                             </a>
                         </div>
                     </div>
-
-
-                    <a href="#" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/pengguna') ? 'bg-blue-800' : '' }}" data-page="pengguna">
-                        <i class="fas fa-users mr-3"></i>Pengguna
-                    </a>
-                    <a href="#" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/pengaturan') ? 'bg-blue-800' : '' }}" data-page="pengaturan">
-                        <i class="fas fa-cog mr-3"></i>Pengaturan
-                    </a>
                 </div>
             </nav>
 

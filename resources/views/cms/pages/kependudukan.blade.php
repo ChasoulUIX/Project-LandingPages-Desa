@@ -153,26 +153,36 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">NIK</label>
-                        <input type="text" name="nik" id="editNik" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="nik" id="editNik" required 
+                               pattern="[0-9]{16}" title="NIK harus 16 digit angka"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                        <input type="text" name="nama" id="editNama" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="nama" id="editNama" required 
+                               pattern="[A-Za-z\s]+" title="Nama hanya boleh berisi huruf dan spasi"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" id="editJenisKelamin" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select name="jenis_kelamin" id="editJenisKelamin" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Pilih Jenis Kelamin</option>
                             <option value="Laki-laki">Laki-laki</option>
                             <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Usia</label>
-                        <input type="number" name="usia" id="editUsia" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="number" name="usia" id="editUsia" required 
+                               min="0" max="120" title="Usia harus antara 0-120 tahun"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status Keluarga</label>
-                        <select name="status_keluarga" id="editStatusKeluarga" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select name="status_keluarga" id="editStatusKeluarga" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Pilih Status Keluarga</option>
                             <option value="Kepala Keluarga">Kepala Keluarga</option>
                             <option value="Istri">Istri</option>
                             <option value="Anak">Anak</option>
@@ -181,7 +191,9 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Mata Pencaharian</label>
-                        <select name="mata_pencaharian" id="editMataPencaharian" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select name="mata_pencaharian" id="editMataPencaharian" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Pilih Mata Pencaharian</option>
                             <option value="Petani">Petani</option>
                             <option value="Pedagang">Pedagang</option>
                             <option value="PNS">PNS</option>
@@ -192,7 +204,9 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan</label>
-                        <select name="pendidikan" id="editPendidikan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select name="pendidikan" id="editPendidikan" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Pilih Pendidikan</option>
                             <option value="Tidak Sekolah">Tidak Sekolah</option>
                             <option value="SD">SD</option>
                             <option value="SMP">SMP</option>
@@ -205,7 +219,9 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
-                        <textarea name="alamat" id="editAlamat" required rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea name="alamat" id="editAlamat" required rows="3" 
+                                  minlength="10" maxlength="255"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
                         Update Data
@@ -228,9 +244,26 @@ function closeAddModal() {
 }
 
 function openEditModal(id) {
-    fetch(`/cms/kependudukan/${id}/edit`)
-        .then(response => response.json())
-        .then(data => {
+    fetch(`/cms/kependudukan/${id}/edit`, {
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.log('Response Status:', response.status);
+            return response.text().then(text => {
+                console.log('Response Text:', text);
+                throw new Error(`HTTP error! status: ${response.status}`);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Received data:', data);
+        
+        if (data) {
             document.getElementById('editNik').value = data.nik;
             document.getElementById('editNama').value = data.nama;
             document.getElementById('editJenisKelamin').value = data.jenis_kelamin;
@@ -242,7 +275,14 @@ function openEditModal(id) {
             document.getElementById('editForm').action = `/cms/kependudukan/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
-        });
+        } else {
+            throw new Error('Data tidak ditemukan');
+        }
+    })
+    .catch(error => {
+        console.error('Detail Error:', error);
+        alert('Terjadi kesalahan saat mengambil data: ' + error.message);
+    });
 }
 
 function closeEditModal() {

@@ -82,7 +82,7 @@
                         </td>
                         <td class="px-6 py-4">{{ $program->target }}</td>
                         <td class="px-6 py-4">
-                            <a href="{{ route('dana.tambahdana', ['id' => $program->id]) }}" class="text-blue-500 hover:text-blue-700">
+                            <a href="{{ route('dana.tambahdana', ['id' => $program->id, 'program' => $program]) }}" class="text-blue-500 hover:text-blue-700">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button onclick="deleteData({{ $program->id }})" class="text-red-500 hover:text-red-700 ml-2">
@@ -107,24 +107,26 @@
 <script>
 function deleteData(id) {
     if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/cms/dana/${id}`;
-        
-        const methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        methodInput.value = 'DELETE';
-        
-        const tokenInput = document.createElement('input');
-        tokenInput.type = 'hidden';
-        tokenInput.name = '_token';
-        tokenInput.value = '{{ csrf_token() }}';
-        
-        form.appendChild(methodInput);
-        form.appendChild(tokenInput);
-        document.body.appendChild(form);
-        form.submit();
+        // Menggunakan jQuery untuk AJAX request (pastikan jQuery sudah dimuat)
+        $.ajax({
+            url: `/cms/dana/${id}`,
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message);
+                    window.location.reload();
+                } else {
+                    alert(response.message || 'Gagal menghapus data');
+                }
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+                alert('Terjadi kesalahan saat menghapus data. Silakan coba lagi.');
+            }
+        });
     }
 }
 </script>

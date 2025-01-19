@@ -33,6 +33,16 @@ class KependudukanController extends Controller
             ->with('success', 'Data kependudukan berhasil ditambahkan.');
     }
 
+    public function edit($id)
+    {
+        try {
+            $kependudukan = Kependudukan::findOrFail($id);
+            return response()->json($kependudukan);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Data tidak ditemukan'], 404);
+        }
+    }
+
     public function update(Request $request, Kependudukan $kependudukan)
     {
         $request->validate([

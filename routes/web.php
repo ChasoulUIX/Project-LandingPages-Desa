@@ -215,6 +215,8 @@ Route::get('/cms/app/kependudukan', function () {
 
 Route::group(['prefix' => 'cms', 'as' => 'cms.'], function () {
     Route::resource('kependudukan', KependudukanController::class);
+    Route::get('/kependudukan/{id}/edit', [KependudukanController::class, 'edit'])
+        ->name('kependudukan.edit');
 });
 
 Route::get('/cms/dana', function () {
@@ -230,7 +232,7 @@ Route::prefix('cms')->middleware(['auth'])->group(function () {
 });
 
 Route::get('/cms/dana/create', [DanaDesaController::class, 'create'])->name('dana.create');
-Route::get('/cms/dana/tambahdana/{id}', [DanaDesaController::class, 'tambahdana'])->name('dana.tambahdana');
+Route::get('/cms/dana/tambahdana/{id}', [DanaDesaController::class, 'edit'])->name('dana.tambahdana');
 Route::put('/cms/dana/tambahdana/{id}', [DanaDesaController::class, 'update'])->name('dana.update');
 
 

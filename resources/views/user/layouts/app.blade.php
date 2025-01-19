@@ -58,7 +58,7 @@
             <div class="flex justify-between h-16 sm:h-20">
                 <div class="flex items-center">
                     <div class="flex items-center space-x-2">
-                        <img src="{{ asset('images/Logo_kab_probolinggo.png') }}" alt="Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg shadow-lg object-contain">
+                        <img src="{{ asset('images/probolinggo.png') }}" alt="Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg shadow-lg object-contain">
                         <div class="flex flex-col">
                             <div class="text-white text-base sm:text-xl font-bold tracking-wider">Desa Sumber Secang</div>
                             <div class="text-blue-200 text-xs">Sistem Informasi Desa Digital</div>
@@ -225,7 +225,7 @@
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-home w-5"></i><span>Beranda</span>
                             </div>
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-down" id="mobileBerandaArrow"></i>
                         </button>
                         <div id="mobileBeranda" class="hidden pl-7 mt-2 space-y-2">
                             <a href="/" class="block text-blue-200 hover:text-yellow-300">Home</a>
@@ -239,10 +239,12 @@
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-chart-pie w-5"></i><span>Infografis</span>
                             </div>
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-down" id="mobileInfografisArrow"></i>
                         </button>
                         <div id="mobileInfografis" class="hidden pl-7 mt-2 space-y-2">
                             <a href="{{ url('/danadesa') }}" class="block text-blue-200 hover:text-yellow-300">APBDES</a>
+                            <a href="{{ url('/datakependudukan') }}" class="block text-blue-200 hover:text-yellow-300">Kependudukan</a>
+                            <a href="{{ url('/informasidesa') }}" class="block text-blue-200 hover:text-yellow-300">Informasi Desa</a>
                         </div>
                     </div>
 
@@ -252,7 +254,7 @@
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-sitemap w-5"></i><span>Struktural</span>
                             </div>
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-down" id="mobileStrukturalArrow"></i>
                         </button>
                         <div id="mobileStruktural" class="hidden pl-7 mt-2 space-y-2">
                             <a href="{{ url('/pamongdesa') }}" class="block text-blue-200 hover:text-yellow-300">Pamong Desa</a>
@@ -268,7 +270,7 @@
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-hands-helping w-5"></i><span>Layanan</span>
                             </div>
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-down" id="mobileLayananArrow"></i>
                         </button>
                         <div id="mobileLayanan" class="hidden pl-7 mt-2 space-y-2">
                             <a href="{{ url('/keterangan') }}" class="block text-blue-200 hover:text-yellow-300">Surat Keterangan</a>
@@ -284,7 +286,7 @@
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-images w-5"></i><span>Galeri</span>
                             </div>
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-down" id="mobileGaleriArrow"></i>
                         </button>
                         <div id="mobileGaleri" class="hidden pl-7 mt-2 space-y-2">
                             <a href="{{ url('/galery') }}" class="block text-blue-200 hover:text-yellow-300">Kegiatan</a>
@@ -310,7 +312,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center space-x-3 mb-4">
-                        <img src="{{ asset('images/Logo_kab_probolinggo.png') }}" alt="Logo" class="h-14 w-12 rounded-lg">
+                        <img src="{{ asset('images/probolinggo.png') }}" alt="Logo" class="h-14 w-12 rounded-lg">
                         <div class="text-lg font-bold">Desa Sumber Secang</div>
                     </div>
                     <p class="text-blue-200 text-sm leading-relaxed">
@@ -431,17 +433,64 @@
         }
 
         function toggleMobileDropdown(id) {
+            // Close all other mobile dropdowns first
+            const allMobileDropdowns = ['mobileBeranda', 'mobileInfografis', 'mobileStruktural', 'mobileLayanan', 'mobileGaleri'];
+            const allMobileArrows = ['mobileBerandaArrow', 'mobileInfografisArrow', 'mobileStrukturalArrow', 'mobileLayananArrow', 'mobileGaleriArrow'];
+            
+            allMobileDropdowns.forEach((dropdownId) => {
+                if (dropdownId !== id) {
+                    const dropdown = document.getElementById(dropdownId);
+                    if (dropdown) {
+                        dropdown.classList.add('hidden');
+                    }
+                }
+            });
+            
+            allMobileArrows.forEach((arrowId) => {
+                const arrow = document.getElementById(arrowId);
+                if (arrow) {
+                    arrow.classList.remove('rotate-180');
+                }
+            });
+
+            // Toggle the clicked dropdown
             const dropdown = document.getElementById(id);
-            dropdown.classList.toggle('hidden');
+            const arrowId = id + 'Arrow';
+            const arrow = document.getElementById(arrowId);
+            
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+            if (arrow) {
+                arrow.classList.toggle('rotate-180');
+            }
         }
 
-        // Close mobile menu when clicking outside, but ignore clicks inside the menu
+        // Close mobile dropdowns when clicking outside
         document.addEventListener('click', function(event) {
             const mobileMenu = document.getElementById('mobileMenu');
             const menuButton = document.querySelector('button[onclick="toggleMobileMenu()"]');
             
             if (!mobileMenu.contains(event.target) && !menuButton.contains(event.target)) {
                 mobileMenu.classList.add('hidden');
+                
+                // Close all mobile dropdowns
+                const allMobileDropdowns = ['mobileBeranda', 'mobileInfografis', 'mobileStruktural', 'mobileLayanan', 'mobileGaleri'];
+                const allMobileArrows = ['mobileBerandaArrow', 'mobileInfografisArrow', 'mobileStrukturalArrow', 'mobileLayananArrow', 'mobileGaleriArrow'];
+                
+                allMobileDropdowns.forEach((id) => {
+                    const dropdown = document.getElementById(id);
+                    if (dropdown) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+                
+                allMobileArrows.forEach((arrowId) => {
+                    const arrow = document.getElementById(arrowId);
+                    if (arrow) {
+                        arrow.classList.remove('rotate-180');
+                    }
+                });
             }
         });
     </script>

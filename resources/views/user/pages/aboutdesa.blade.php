@@ -24,7 +24,7 @@
                     </p>
                 </div>
                 <div class="relative">
-                    <img src="{{ asset('images/Logo_kab_probolinggo.png') }}" alt="Sejarah Desa" class="rounded-2xl shadow-2xl w-1/3 md:w-1/2 h-1/3 md:h-1/2 mx-auto object-contain">
+                    <img src="{{ asset('images/probolinggo.png') }}" alt="Sejarah Desa" class="rounded-2xl shadow-2xl w-1/3 md:w-1/2 h-1/3 md:h-1/2 mx-auto object-contain">
                     <div class="absolute -bottom-6 -right-6 bg-yellow-500 text-blue-900 px-8 py-4 rounded-xl shadow-lg">
                         <span class="font-bold">Est. 1945</span>
                     </div>

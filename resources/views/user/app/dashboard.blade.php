@@ -117,29 +117,32 @@
 
                 <div class="grid md:grid-cols-2 gap-12 items-center">
                     <div class="relative">
-                        @if(App\Models\Sambutan::first()->image)
-                            <img src="{{ asset('images/' . App\Models\Sambutan::first()->image) }}" alt="{{ App\Models\Sambutan::first()->nama }}" class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
+                        @php
+                            $sambutan = App\Models\Sambutan::first();
+                        @endphp
+                        @if($sambutan && $sambutan->image)
+                            <img src="{{ asset('images/' . $sambutan->image) }}" alt="{{ $sambutan->nama }}" class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
                         @else
                             <img src="{{ asset('images/default.jpg') }}" alt="Default Image" class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
                         @endif
                         <div class="absolute -bottom-6 -right-6 bg-yellow-500 text-blue-900 px-8 py-4 rounded-xl shadow-lg">
-                            <p class="font-bold">{{ App\Models\Sambutan::first()->jabatan }}</p>
-                            <p class="text-sm">Periode {{ App\Models\Sambutan::first()->periode }}</p>
+                            <p class="font-bold">{{ $sambutan ? $sambutan->jabatan : 'Jabatan Belum Diisi' }}</p>
+                            <p class="text-sm">Periode {{ $sambutan ? $sambutan->periode : 'Belum Diisi' }}</p>
                         </div>
                     </div>
 
                     <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-blue-900">{{ App\Models\Sambutan::first()->nama }}</h3>
+                        <h3 class="text-2xl font-bold text-blue-900">{{ $sambutan ? $sambutan->nama : 'Nama Belum Diisi' }}</h3>
                         <div class="h-1 w-20 bg-yellow-500"></div>
                         <p class="text-gray-600 leading-relaxed">
-                            {{ App\Models\Sambutan::first()->sambutan }}
+                            {{ $sambutan ? $sambutan->sambutan : 'Sambutan Belum Diisi' }}
                         </p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-4">
                                 <div class="h-16 w-1 bg-yellow-500"></div>
                                 <div>
-                                    <p class="font-bold text-blue-900">{{ App\Models\Sambutan::first()->nama }}</p>
-                                    <p class="text-gray-600">{{ App\Models\Sambutan::first()->jabatan }}</p>
+                                    <p class="font-bold text-blue-900">{{ $sambutan ? $sambutan->nama : 'Nama Belum Diisi' }}</p>
+                                    <p class="text-gray-600">{{ $sambutan ? $sambutan->jabatan : 'Jabatan Belum Diisi' }}</p>
                                 </div>
                             </div>
                             <a href="{{ url('/pamongdesa') }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition duration-300">
@@ -374,6 +377,7 @@
                             @php
                                 $laki = App\Models\Kependudukan::where('jenis_kelamin', 'Laki-laki')->count();
                                 $perempuan = App\Models\Kependudukan::where('jenis_kelamin', 'Perempuan')->count();
+                                $total = App\Models\Kependudukan::count();
                             @endphp
                             <div class="aspect-square relative">
                                 <canvas id="genderChart"></canvas>
@@ -381,11 +385,11 @@
                             <div class="mt-6 space-y-3">
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-gray-600">Laki-laki</span>
-                                    <span class="font-medium">{{ round(($laki / App\Models\Kependudukan::count()) * 100) }}%</span>
+                                    <span class="font-medium">{{ $total > 0 ? round(($laki / $total) * 100) : 0 }}%</span>
                                 </div>
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-gray-600">Perempuan</span>
-                                    <span class="font-medium">{{ round(($perempuan / App\Models\Kependudukan::count()) * 100) }}%</span>
+                                    <span class="font-medium">{{ $total > 0 ? round(($perempuan / $total) * 100) : 0 }}%</span>
                                 </div>
                             </div>
                         </div>

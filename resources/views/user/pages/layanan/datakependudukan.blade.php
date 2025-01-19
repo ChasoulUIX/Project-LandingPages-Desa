@@ -55,11 +55,11 @@
                         <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                             <div class="text-center">
                                 <p class="text-gray-600">Laki-laki</p>
-                                <p class="font-semibold">{{ $laki }} ({{ round(($laki / App\Models\Kependudukan::count()) * 100) }}%)</p>
+                                <p class="font-semibold">{{ $laki }} ({{ App\Models\Kependudukan::count() > 0 ? round(($laki / App\Models\Kependudukan::count()) * 100) : 0 }}%)</p>
                             </div>
                             <div class="text-center">
                                 <p class="text-gray-600">Perempuan</p>
-                                <p class="font-semibold">{{ $perempuan }} ({{ round(($perempuan / App\Models\Kependudukan::count()) * 100) }}%)</p>
+                                <p class="font-semibold">{{ $perempuan }} ({{ App\Models\Kependudukan::count() > 0 ? round(($perempuan / App\Models\Kependudukan::count()) * 100) : 0 }}%)</p>
                             </div>
                         </div>
                     </div>
@@ -78,10 +78,10 @@
                             $total = App\Models\Kependudukan::count();
                         @endphp
                         <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-2 text-xs text-gray-600">
-                            <div>• 0-14 tahun: Anak-anak ({{ round(($anak / App\Models\Kependudukan::count()) * 100) }}%)</div>
-                            <div>• 15-24 tahun: Remaja ({{ round(($remaja / App\Models\Kependudukan::count()) * 100) }}%)</div>
-                            <div>• 25-54 tahun: Dewasa ({{ round(($dewasa / $total) * 100) }}%)</div>
-                            <div>• 55+ tahun: Lansia ({{ round(($lansia / $total) * 100) }}%)</div>
+                            <div>• 0-14 tahun: Anak-anak ({{ $total > 0 ? round(($anak / $total) * 100) : 0 }}%)</div>
+                            <div>• 15-24 tahun: Remaja ({{ $total > 0 ? round(($remaja / $total) * 100) : 0 }}%)</div>
+                            <div>• 25-54 tahun: Dewasa ({{ $total > 0 ? round(($dewasa / $total) * 100) : 0 }}%)</div>
+                            <div>• 55+ tahun: Lansia ({{ $total > 0 ? round(($lansia / $total) * 100) : 0 }}%)</div>
                         </div>
                     </div>
 
@@ -100,11 +100,12 @@
                                 'S1' => App\Models\Kependudukan::where('pendidikan', 'S1')->count(),
                                 'S2/S3' => App\Models\Kependudukan::whereIn('pendidikan', ['S2', 'S3'])->count()
                             ];
+                            $total = App\Models\Kependudukan::count();
                         @endphp
                         <div class="mt-3 sm:mt-4 text-xs">
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-gray-600">
                                 @foreach($pendidikan as $level => $count)
-                                    <div>• {{ $level }}: {{ round(($count / App\Models\Kependudukan::count()) * 100) }}%</div>
+                                    <div>• {{ $level }}: {{ $total > 0 ? round(($count / $total) * 100) : 0 }}%</div>
                                 @endforeach
                             </div>
                         </div>
@@ -125,10 +126,11 @@
                                 'Wirausaha' => App\Models\Kependudukan::where('mata_pencaharian', 'Wirausaha')->count(),
                                 'Lainnya' => App\Models\Kependudukan::whereNotIn('mata_pencaharian', ['Petani', 'Pedagang', 'PNS', 'Swasta', 'Wirausaha'])->count()
                             ];
+                            $total = App\Models\Kependudukan::count();
                         @endphp
                         <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-2 text-xs text-gray-600">
                             @foreach($pekerjaan as $jenis => $count)
-                                <div>• {{ $jenis }}: {{ round(($count / App\Models\Kependudukan::count()) * 100) }}%</div>
+                                <div>• {{ $jenis }}: {{ $total > 0 ? round(($count / $total) * 100) : 0 }}%</div>
                             @endforeach
                         </div>
                     </div>

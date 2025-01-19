@@ -89,11 +89,11 @@
                                 </div>
                             </div>
 
-                            <!-- Chart RT/RW -->
+                            <!-- Chart Mata Pencaharian -->
                             <div class="bg-white p-4 rounded-lg">
-                                <h3 class="text-lg font-medium text-gray-900 mb-4">Pembagian Wilayah</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Mata Pencaharian</h3>
                                 <div class="h-64">
-                                    <canvas id="areaChart"></canvas>
+                                    <canvas id="occupationChart"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -102,14 +102,20 @@
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                    // Konfigurasi chart penduduk
+                    // Konfigurasi chart penduduk berdasarkan jenis kelamin
+                    const populationData = @json(\App\Models\Kependudukan::query()
+                        ->groupBy('jenis_kelamin')
+                        ->selectRaw('jenis_kelamin, count(*) as count')
+                        ->pluck('count', 'jenis_kelamin')
+                        ->toArray());
+
                     const populationCtx = document.getElementById('populationChart').getContext('2d');
                     new Chart(populationCtx, {
                         type: 'doughnut',
                         data: {
-                            labels: ['Total Penduduk', 'Kepala Keluarga'],
+                            labels: Object.keys(populationData),
                             datasets: [{
-                                data: [2500, 650],
+                                data: Object.values(populationData),
                                 backgroundColor: ['#3B82F6', '#60A5FA'],
                                 borderWidth: 0,
                                 borderRadius: 5
@@ -127,16 +133,25 @@
                         }
                     });
 
-                    // Konfigurasi chart wilayah
-                    const areaCtx = document.getElementById('areaChart').getContext('2d');
-                    new Chart(areaCtx, {
+                    // Konfigurasi chart mata pencaharian
+                    const occupationData = @json(\App\Models\Kependudukan::query()
+                        ->groupBy('mata_pencaharian')
+                        ->selectRaw('mata_pencaharian, count(*) as count')
+                        ->pluck('count', 'mata_pencaharian')
+                        ->toArray());
+
+                    const occupationCtx = document.getElementById('occupationChart').getContext('2d');
+                    new Chart(occupationCtx, {
                         type: 'bar',
                         data: {
-                            labels: ['RT', 'RW'],
+                            labels: Object.keys(occupationData),
                             datasets: [{
                                 label: 'Jumlah',
-                                data: [15, 4],
-                                backgroundColor: ['#FCD34D', '#FBBF24'],
+                                data: Object.values(occupationData),
+                                backgroundColor: [
+                                    '#FCD34D', '#FBBF24', '#F59E0B', 
+                                    '#D97706', '#B45309', '#92400E'
+                                ],
                                 borderRadius: 8
                             }]
                         },
