@@ -12,6 +12,8 @@ use App\Http\Controllers\User\SuratKeteranganUsahaController;
 use App\Http\Controllers\User\SuratKtpController;
 use App\Http\Controllers\User\SuratKelahiranController;
 use App\Http\Controllers\User\PengaduanController;
+use App\Http\Controllers\Cms\StrukturDesaController;
+use App\Http\Controllers\Cms\StrukturController;
 // Auth
 // ... existing code ...
 
@@ -186,3 +188,20 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
 Route::get('/layanan/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
 Route::post('/layanan/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
 
+// CMS Struktur Desa Routes
+Route::prefix('cms')->middleware(['auth'])->group(function () {
+    // Struktur Desa Routes
+    Route::get('/strukturdesa', [StrukturController::class, 'index'])->name('cms.strukturdesa.index');
+    Route::post('/strukturdesa', [StrukturController::class, 'store'])->name('cms.strukturdesa.store');
+    Route::get('/strukturdesa/{struktur}/edit', [StrukturController::class, 'edit'])->name('cms.strukturdesa.edit');
+    Route::put('/strukturdesa/{struktur}', [StrukturController::class, 'update'])->name('cms.strukturdesa.update');
+    Route::delete('/strukturdesa/{struktur}', [StrukturController::class, 'destroy'])->name('cms.strukturdesa.destroy');
+});
+
+Route::resource('struktur', StrukturController::class);
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/pengaduan', function () {
+        return view('cms.pages.pengaduan', ['title' => 'Pengaduan']);
+    });
+});

@@ -86,14 +86,14 @@
                                     </a>
                                 </div>
                             </div>
-                            <a href="/cms/suratketerangan/pengaduan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/pengaduan') ? 'bg-blue-800' : '' }}" data-page="usaha">
+                            <a href="/cms/pengaduan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/pengaduan') ? 'bg-blue-800' : '' }}" data-page="usaha">
                                 <i class="fas fa-box mr-3"></i>Pengaduan
                             </a>
                         </div>
                     </div>
 
-                    <a href="#" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/layanan') ? 'bg-blue-800' : '' }}" data-page="layanan">
-                        <i class="fas fa-file-alt mr-3"></i>Layanan
+                    <a href="/cms/strukturdesa" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/strukturdesa') ? 'bg-blue-800' : '' }}" data-page="layanan">
+                        <i class="fas fa-file-alt mr-3"></i>Struktur Desa
                     </a>
                     <a href="#" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/pengguna') ? 'bg-blue-800' : '' }}" data-page="pengguna">
                         <i class="fas fa-users mr-3"></i>Pengguna
