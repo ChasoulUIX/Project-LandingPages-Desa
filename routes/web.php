@@ -164,3 +164,21 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('surat-kelahiran', SuratKelahiranController::class);
 });
 
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    // Surat Keterangan KTP routes
+    Route::get('/suratketerangan/ktp', function () {
+        return view('cms.pages.suratketerangan.ktp');
+    });
+    Route::get('/ktp', [SuratKtpController::class, 'indexAdmin'])->name('cms.ktp.index');
+    Route::put('/ktp/{id}/update-status', [SuratKtpController::class, 'updateStatus'])->name('cms.ktp.update-status');
+});
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    // Surat Keterangan Kelahiran routes
+    Route::get('/suratketerangan/kelahiran', function () {
+        return view('cms.pages.suratketerangan.kelahiran');
+    });
+    Route::get('/kelahiran', [SuratKelahiranController::class, 'indexAdmin'])->name('cms.kelahiran.index');
+    Route::put('/kelahiran/{id}/update-status', [SuratKelahiranController::class, 'updateStatus'])->name('cms.kelahiran.update-status');
+});
+

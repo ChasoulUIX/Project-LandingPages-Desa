@@ -1,6 +1,6 @@
 @extends('cms.layouts.app')
 
-@section('title', 'Surat Keterangan Tidak Mampu')
+@section('title', 'Surat Keterangan KTP')
 
 @section('content')
 <div class="p-6">
@@ -11,32 +11,43 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penghasilan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Tanggungan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Rumah</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keperluan</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TTL</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RT/RW</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dokumen</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @foreach(App\Models\SuratTidakMampu::all() as $surat)
+                @foreach(App\Models\SuratKtp::all() as $surat)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->id }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->nama }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->nik }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->pekerjaan }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">Rp {{ number_format($surat->penghasilan, 0, ',', '.') }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->jumlah_tanggungan }} orang</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ ucwords(str_replace('_', ' ', $surat->status_rumah)) }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->keperluan }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->tempat_lahir }}, {{ $surat->tanggal_lahir }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->alamat }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->rt }}/{{ $surat->rw }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {{ $surat->status === 'approved' ? 'bg-green-100 text-green-800' : 
-                               ($surat->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                            {{ ucfirst($surat->status) }}
+                            {{ $surat->status === 'Disetujui' ? 'bg-green-100 text-green-800' : 
+                               ($surat->status === 'Ditolak' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                            {{ $surat->status }}
                         </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <div class="flex space-x-2">
+                            @if($surat->ktp_file)
+                            <a href="{{ asset($surat->ktp_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                                <i class="fas fa-id-card"></i>
+                            </a>
+                            @endif
+                            @if($surat->kk_file)
+                            <a href="{{ asset($surat->kk_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                                <i class="fas fa-file-alt"></i>
+                            </a>
+                            @endif
+                        </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <button onclick="openEditModal({{ $surat->id }}, '{{ $surat->status }}')" class="text-yellow-500 hover:text-yellow-600">
@@ -61,9 +72,9 @@
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                 <select id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="pending">Menunggu</option>
-                    <option value="approved">Disetujui</option>
-                    <option value="rejected">Ditolak</option>
+                    <option value="Menunggu">Menunggu</option>
+                    <option value="Disetujui">Disetujui</option>
+                    <option value="Ditolak">Ditolak</option>
                 </select>
             </div>
             <div class="flex justify-end space-x-2">
@@ -86,7 +97,7 @@
         const form = document.getElementById('editForm');
         const statusSelect = document.getElementById('status');
         
-        form.action = `/cms/tidak-mampu/${id}/update-status`;
+        form.action = `/cms/suratktp/${id}/update-status`;
         document.getElementById('surat_id').value = id;
         statusSelect.value = currentStatus;
         

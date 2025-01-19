@@ -49,25 +49,46 @@
                             <i class="fas fa-chevron-down ml-2" :class="{ 'transform rotate-180': open }"></i>
                         </button>
                         <div x-show="open"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 transform scale-100"
+                             x-transition:leave-end="opacity-0 transform scale-95"
                              class="pl-4 mt-2 space-y-2">
                              <div class="relative" x-data="{ subOpen: {{ request()->is('cms/suratketerangan/*') ? 'true' : 'false' }} }">
-                                <button @click="subOpen = !subOpen" class="nav-link w-full px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
+                                <button @click="subOpen = !subOpen" class="nav-link w-full px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 flex items-center justify-between">
                                     <span><i class="fas fa-images mr-3"></i>Keterangan</span>
-                                    <i class="fas fa-chevron-down ml-2" :class="{ 'transform rotate-180': subOpen }"></i>
+                                    <i class="fas fa-chevron-down ml-2 transition-transform duration-200" :class="{ 'transform rotate-180': subOpen }"></i>
                                 </button>
-                                <div x-show="subOpen" 
+                                <div x-show="subOpen"
+                                     x-transition:enter="transition ease-out duration-200" 
+                                     x-transition:enter-start="opacity-0 transform -translate-y-2"
+                                     x-transition:enter-end="opacity-100 transform translate-y-0"
+                                     x-transition:leave="transition ease-in duration-150"
+                                     x-transition:leave-start="opacity-100 transform translate-y-0"
+                                     x-transition:leave-end="opacity-0 transform -translate-y-2"
                                      class="pl-4 mt-2 space-y-2">
-                                     <a href="/cms/suratketerangan/domisili" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/suratketerangan/domisili') ? 'bg-blue-800' : '' }}" data-page="domisili">
+                                     <a href="/cms/suratketerangan/domisili" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/domisili') ? 'bg-blue-800' : '' }}" data-page="domisili">
                                         <i class="fas fa-newspaper mr-3"></i>Domisili
                                     </a>
-                                    <a href="/cms/suratketerangan/tidakmampu" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/suratketerangan/tidakmampu') ? 'bg-blue-800' : '' }}" data-page="tidakmampu">
+                                    <a href="/cms/suratketerangan/tidakmampu" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/tidakmampu') ? 'bg-blue-800' : '' }}" data-page="tidakmampu">
                                         <i class="fas fa-newspaper mr-3"></i>Tidak Mampu
                                     </a>
-                                    <a href="/cms/suratketerangan/usaha" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/suratketerangan/usaha') ? 'bg-blue-800' : '' }}" data-page="usaha">
+                                    <a href="/cms/suratketerangan/usaha" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/usaha') ? 'bg-blue-800' : '' }}" data-page="usaha">
                                         <i class="fas fa-box mr-3"></i>Usaha
+                                    </a>
+                                    <a href="/cms/suratketerangan/ktp" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/ktp') ? 'bg-blue-800' : '' }}" data-page="usaha">
+                                        <i class="fas fa-box mr-3"></i>KTP
+                                    </a>
+                                    <a href="/cms/suratketerangan/kelahiran" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/kelahiran') ? 'bg-blue-800' : '' }}" data-page="usaha">
+                                        <i class="fas fa-box mr-3"></i>Kelahiran
                                     </a>
                                 </div>
                             </div>
+                            <a href="/cms/suratketerangan/pengaduan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200 {{ request()->is('cms/suratketerangan/pengaduan') ? 'bg-blue-800' : '' }}" data-page="usaha">
+                                <i class="fas fa-box mr-3"></i>Pengaduan
+                            </a>
                         </div>
                     </div>
 
