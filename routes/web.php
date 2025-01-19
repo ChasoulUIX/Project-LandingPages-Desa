@@ -15,6 +15,7 @@ use App\Http\Controllers\User\PengaduanController;
 use App\Http\Controllers\Cms\StrukturDesaController;
 use App\Http\Controllers\Cms\StrukturController;
 use App\Http\Controllers\Cms\KependudukanController;
+use App\Http\Controllers\Cms\DanaDesaController;
 // Auth
 // ... existing code ...
 
@@ -213,4 +214,16 @@ Route::get('/cms/app/kependudukan', function () {
 
 Route::group(['prefix' => 'cms', 'as' => 'cms.'], function () {
     Route::resource('kependudukan', KependudukanController::class);
+});
+
+Route::get('/cms/dana', function () {
+    return view('cms.pages.dana');
+});
+
+Route::prefix('cms')->middleware(['auth'])->group(function () {
+    Route::get('/dana', [DanaDesaController::class, 'index'])->name('dana.index');
+    Route::post('/dana', [DanaDesaController::class, 'store'])->name('dana.store');
+    Route::get('/dana/{id}/edit', [DanaDesaController::class, 'edit'])->name('dana.edit');
+    Route::put('/dana/{id}', [DanaDesaController::class, 'update'])->name('dana.update');
+    Route::delete('/dana/{id}', [DanaDesaController::class, 'destroy'])->name('dana.destroy');
 });
