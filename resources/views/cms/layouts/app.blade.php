@@ -29,6 +29,9 @@
                     <a href="/cms/strukturdesa" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/strukturdesa') ? 'bg-blue-800' : '' }}" data-page="layanan">
                         <i class="fas fa-file-alt mr-3"></i>Struktur Desa
                     </a>
+                    <a href="/cms/sambutan" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/sambutan') ? 'bg-blue-800' : '' }}" data-page="layanan">
+                        <i class="fas fa-file-alt mr-3"></i>Sambutan
+                    </a>
 
                     <a href="/cms/dana" class="nav-link block px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/dana') ? 'bg-blue-800' : '' }}" data-page="layanan">
                         <i class="fas fa-file-alt mr-3"></i>Dana Desa

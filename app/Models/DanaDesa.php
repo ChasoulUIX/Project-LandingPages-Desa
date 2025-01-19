@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DanaDesa extends Model
 {
+    protected $table = 'danadesa';
+
     protected $fillable = [
         'nama_program',
         'kategori',
@@ -14,4 +16,9 @@ class DanaDesa extends Model
         'status',
         'target'
     ];
+
+    public function getKategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
 }

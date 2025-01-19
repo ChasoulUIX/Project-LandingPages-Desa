@@ -236,28 +236,29 @@
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Kegiatan Card -->
+                    @foreach(App\Models\Kegiatan::latest()->take(1)->get() as $kegiatan)
                     <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
                         <div class="relative h-64">
-                            <img src="{{ asset('images/galery1.jpg') }}" alt="Kegiatan Desa" class="w-full h-full object-cover">
+                            <img src="{{ asset('images/' . $kegiatan->image) }}" alt="{{ $kegiatan->judul }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">Kegiatan Desa</h3>
-                                <p class="text-sm opacity-90">Dokumentasi kegiatan terkini</p>
+                                <h3 class="text-xl font-bold">{{ $kegiatan->judul }}</h3>
+                                <p class="text-sm opacity-90">{{ $kegiatan->deskripsi }}</p>
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-4">
                                     <i class="fas fa-calendar-alt text-yellow-500"></i>
-                                    <p class="text-gray-600">Gotong Royong Mingguan</p>
+                                    <p class="text-gray-600">{{ $kegiatan->created_at->format('F j, Y') }}</p>
                                 </div>
                                 <div class="flex items-center space-x-4">
                                     <i class="fas fa-users text-yellow-500"></i>
-                                    <p class="text-gray-600">Pertemuan PKK</p>
+                                    <p class="text-gray-600">{{ $kegiatan->kategori }}</p>
                                 </div>
                                 <div class="flex items-center space-x-4">
                                     <i class="fas fa-mosque text-yellow-500"></i>
-                                    <p class="text-gray-600">Pengajian Rutin</p>
+                                    <p class="text-gray-600">{{ $kegiatan->lokasi }}</p>
                                 </div>
                             </div>
                             <a href="{{ url('/galery') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
@@ -266,30 +267,24 @@
                             </a>
                         </div>
                     </div>
-
-                    <!-- Berita Card -->
+                    @endforeach
+                   
+                  <!-- Berita Card -->
+                    @foreach(App\Models\Berita::latest()->take(1)->get() as $berita)
                     <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
                         <div class="relative h-64">
-                            <img src="{{ asset('images/perbaikan_jalan.jpg') }}" alt="Berita Desa" class="w-full h-full object-cover">
+                            <img src="{{ asset('images/' . $berita->image) }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">Berita Desa</h3>
-                                <p class="text-sm opacity-90">Informasi terkini</p>
+                                <h3 class="text-xl font-bold">{{ $berita->judul }}</h3>
+                                <p class="text-sm opacity-90">{{ $berita->konten }}</p>
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-4">
                                     <i class="fas fa-newspaper text-yellow-500"></i>
-                                    <p class="text-gray-600">Pembangunan Infrastruktur</p>
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <i class="fas fa-bullhorn text-yellow-500"></i>
-                                    <p class="text-gray-600">Pengumuman Desa</p>
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <i class="fas fa-award text-yellow-500"></i>
-                                    <p class="text-gray-600">Prestasi Warga</p>
+                                    <p class="text-gray-600">{{ \Carbon\Carbon::parse($berita->tanggal)->format('F j, Y') }}</p>
                                 </div>
                             </div>
                             <a href="{{ url('/berita') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
@@ -298,38 +293,37 @@
                             </a>
                         </div>
                     </div>
+                    @endforeach
 
-                    <!-- Produk Card -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
-                        <div class="relative h-64">
-                            <img src="{{ asset('images/madu.jpg') }}" alt="Produk Desa" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">Produk UMKM</h3>
-                                <p class="text-sm opacity-90">Produk unggulan desa</p>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <div class="space-y-4">
-                                <div class="flex items-center space-x-4">
-                                    <i class="fas fa-store text-yellow-500"></i>
-                                    <p class="text-gray-600">Kerajinan Tangan</p>
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <i class="fas fa-utensils text-yellow-500"></i>
-                                    <p class="text-gray-600">Kuliner Tradisional</p>
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <i class="fas fa-seedling text-yellow-500"></i>
-                                    <p class="text-gray-600">Hasil Pertanian</p>
+                        <!-- Produk Card -->
+                        @foreach(App\Models\Produk::latest()->take(1)->get() as $produk)
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
+                            <div class="relative h-64">
+                                <img src="{{ asset('images/' . $produk->image) }}" alt="{{ $produk->nama }}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <h3 class="text-xl font-bold">{{ $produk->nama }}</h3>
+                                    <p class="text-sm opacity-90">{{ $produk->deskripsi }}</p>
                                 </div>
                             </div>
-                            <a href="{{ url('/produk') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
-                                <span>Lihat Semua Produk</span>
-                                <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
+                            <div class="p-6">
+                                <div class="space-y-4">
+                                    <div class="flex items-center space-x-4">
+                                        <i class="fas fa-store text-yellow-500"></i>
+                                        <p class="text-gray-600">Kategori: {{ $produk->kategori }}</p>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <i class="fas fa-calculator text-yellow-500"></i>
+                                        <p class="text-gray-600">Harga: {{ $produk->harga }}</p>
+                                    </div>
+                                </div>
+                                <a href="{{ url('/produk') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
+                                    <span>Lihat Semua Produk</span>
+                                    <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                        @endforeach
                 </div>
             </div>
         </div>
@@ -348,7 +342,7 @@
                     <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
                         <div class="p-6 sm:p-8 flex-grow">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
-                                <i class="fas fa-chart-pie text-white text-xl sm:text-2xl"></i>
+                                <i class="fas fa-calculator text-white text-xl sm:text-2xl"></i>
                             </div>
                             <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-4">APBDES / Dana Desa</h3>
                             <div class="aspect-square relative">
@@ -377,7 +371,7 @@
                             <div class="mt-6 space-y-3" id="demografiLegend"></div>
                         </div>
                         <div class="p-6 sm:p-8">
-                            <a href="{{ url('/demografi') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
+                            <a href="{{ url('/datakependudukan') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
                                 <span>Lihat Detail Demografi</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
@@ -689,107 +683,24 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <!-- Sekretaris Desa -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/obama.jpg') }}" alt="Sekretaris Desa" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Ahmad Fauzi</h3>
-                                <p class="text-sm opacity-90">Sekretaris Desa</p>
+                    @foreach(App\Models\Struktur::all() as $struktur)
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
+                            <div class="relative h-80">
+                                <img src="{{ asset('images/' . $struktur->image) }}" alt="{{ $struktur->jabatan }}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <h3 class="text-lg font-bold">{{ $struktur->nama }}</h3>
+                                    <p class="text-sm opacity-90">{{ $struktur->jabatan }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Kaur Keuangan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/joebiden.jpg') }}" alt="Kaur Keuangan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Siti Aminah</h3>
-                                <p class="text-sm opacity-90">Kaur Keuangan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kaur Umum -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/ronald.jpg') }}" alt="Kaur Umum" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Abdul Rahman</h3>
-                                <p class="text-sm opacity-90">Kaur Umum</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Pemerintahan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/trump.jpg') }}" alt="Kasi Pemerintahan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Muhammad Rizki</h3>
-                                <p class="text-sm opacity-90">Kasi Pemerintahan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Kesejahteraan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/prabowo.jpg') }}" alt="Kasi Kesejahteraan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Dewi Safitri</h3>
-                                <p class="text-sm opacity-90">Kasi Kesejahteraan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Pelayanan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/jokowi.jpg') }}" alt="Kasi Pelayanan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Hendra Wijaya</h3>
-                                <p class="text-sm opacity-90">Kasi Pelayanan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Pelayanan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/jokowi.jpg') }}" alt="Kasi Pelayanan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Hendra Wijaya</h3>
-                                <p class="text-sm opacity-90">Kasi Pelayanan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kasi Pelayanan -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
-                        <div class="relative h-80">
-                            <img src="{{ asset('images/jokowi.jpg') }}" alt="Kasi Pelayanan" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-lg font-bold">Hendra Wijaya</h3>
-                                <p class="text-sm opacity-90">Kasi Pelayanan</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center items-center mt-8 w-full">
-                        <a href="{{ url('/pamongdesa') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
-                            <span>Lihat Semua Aparatur Desa</span>
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
+                    @endforeach
+                </div>
+                <div class="flex justify-center items-center mt-8 w-full">
+                    <a href="{{ url('/pamongdesa') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
+                        <span>Lihat Semua Aparatur Desa</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -865,5 +776,5 @@
             }
         </script>
 
-          </main>
+    </main>
 @endsection

@@ -107,7 +107,7 @@
     </div>
 
     <!-- Add Modal -->
-    <div id="addModal" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50" style="display: none;">
+    <div id="addModal" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50" style="display: block;">
         <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg mt-20">
             <div class="flex justify-between items-center pb-3">
                 <h3 class="text-2xl font-bold text-gray-900">Tambah Program Dana Desa</h3>
@@ -226,18 +226,17 @@
     function toggleModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
-            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+            console.log('Toggling modal:', modalId);
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
         }
     }
 
     // Tambahkan event listener untuk menutup modal saat mengklik di luar
     window.onclick = function(event) {
-        const modals = document.getElementsByClassName('modal');
-        Array.from(modals).forEach(modal => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
+        const modal = document.getElementById('addModal');
+        if (modal && event.target === modal) {
+            modal.style.display = 'none';
+        }
     }
 
     // Edit modal functions

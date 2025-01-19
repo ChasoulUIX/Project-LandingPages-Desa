@@ -20,28 +20,21 @@
 
                 <!-- Filter Options -->
                 <div class="flex flex-wrap gap-4 mb-8">
-                    <div class="flex-1 min-w-[200px]">
-                        <select id="yearFilter" class="w-full bg-white/90 backdrop-blur rounded-lg px-4 py-2.5 text-gray-700 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
-                            <option value="">Pilih Tahun</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                        </select>
-                    </div>
+
                     <div class="flex-1 min-w-[200px]">
                         <select id="categoryFilter" class="w-full bg-white/90 backdrop-blur rounded-lg px-4 py-2.5 text-gray-700 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
                             <option value="">Pilih Kategori</option>
-                            <option value="infrastruktur">Infrastruktur</option>
-                            <option value="pemberdayaan">Pemberdayaan Masyarakat</option>
-                            <option value="kesehatan">Kesehatan</option>
+                            @foreach(\App\Models\DanaDesa::all()->unique('kategori') as $category)
+                                <option value="{{ $category->kategori }}">{{ $category->kategori }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="flex-1 min-w-[200px]">
                         <select id="statusFilter" class="w-full bg-white/90 backdrop-blur rounded-lg px-4 py-2.5 text-gray-700 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
                             <option value="">Status Program</option>
-                            <option value="selesai">Selesai</option>
-                            <option value="berjalan">Sedang Berjalan</option>
-                            <option value="rencana">Dalam Perencanaan</option>
+                            @foreach(\App\Models\DanaDesa::all()->unique('status') as $status)
+                                <option value="{{ $status->status }}">{{ $status->status }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -50,22 +43,30 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     <div class="bg-white/90 backdrop-blur rounded-lg p-4">
                         <p class="text-sm text-gray-600">Total Dana Desa</p>
-                        <h3 class="text-2xl font-bold text-blue-900 overview-total">Rp 2.5 M</h3>
-                        <p class="text-xs text-green-600">Tahun Anggaran 2024</p>
+                        <h3 class="text-2xl font-bold text-blue-900 overview-total">{{ \App\Models\DanaDesa::all()->sum('anggaran') }}</h3>
+                        <p class="text-xs text-green-600">Tahun Anggaran {{ date('Y') }}</p>
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-4">
                         <p class="text-sm text-gray-600">Terserap</p>
-                        <h3 class="text-2xl font-bold text-blue-900 overview-terserap">65%</h3>
-                        <p class="text-xs text-blue-600">Rp 1.625 M</p>
+                        <h3 class="text-2xl font-bold text-blue-900 overview-terserap">{{ \App\Models\DanaDesa::all()->sum(function($program) {
+                            return ($program->anggaran * $program->progress) / 100;
+                        }) }}</h3>
+                        <p class="text-xs text-blue-600">{{ \App\Models\DanaDesa::all()->sum(function($program) {
+                            return ($program->anggaran * $program->progress) / 100;
+                        }) }}</p>
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-4">
                         <p class="text-sm text-gray-600">Sisa Anggaran</p>
-                        <h3 class="text-2xl font-bold text-blue-900 overview-sisa">35%</h3>
-                        <p class="text-xs text-orange-600">Rp 875 Jt</p>
+                        <h3 class="text-2xl font-bold text-blue-900 overview-sisa">{{ \App\Models\DanaDesa::all()->sum('anggaran') - \App\Models\DanaDesa::all()->sum(function($program) {
+                            return ($program->anggaran * $program->progress) / 100;
+                        }) }}</h3>
+                        <p class="text-xs text-orange-600">{{ \App\Models\DanaDesa::all()->sum('anggaran') - \App\Models\DanaDesa::all()->sum(function($program) {
+                            return ($program->anggaran * $program->progress) / 100;
+                        }) }}</p>
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-4">
                         <p class="text-sm text-gray-600">Total Program</p>
-                        <h3 class="text-2xl font-bold text-blue-900 overview-total-program">24</h3>
+                        <h3 class="text-2xl font-bold text-blue-900 overview-total-program">{{ \App\Models\DanaDesa::all()->count() }}</h3>
                         <p class="text-xs text-gray-600">Program Aktif</p>
                     </div>
                 </div>
@@ -97,32 +98,21 @@
                     <div class="mb-8">
                         <h4 class="text-md font-medium text-blue-800 mb-4">Infrastruktur (40%)</h4>
                         <div class="space-y-4">
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-medium">Pembangunan Jalan Desa</span>
-                                    <span class="text-blue-600">Rp 400 Jt</span>
+                            @foreach(\App\Models\DanaDesa::where('kategori', 'Infrastruktur')->get() as $program)
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium">{{ $program->nama_program }}</span>
+                                        <span class="text-blue-600">{{ $program->anggaran }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $program->progress }}%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                        <span>Progress: {{ $program->progress }}%</span>
+                                        <span>Target: {{ $program->target }}</span>
+                                    </div>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 75%"></div>
-                                </div>
-                                <div class="flex justify-between text-sm text-gray-600 mt-1">
-                                    <span>Progress: 75%</span>
-                                    <span>Target: Q2 2024</span>
-                                </div>
-                            </div>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-medium">Renovasi Balai Desa</span>
-                                    <span class="text-blue-600">Rp 300 Jt</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
-                                </div>
-                                <div class="flex justify-between text-sm text-gray-600 mt-1">
-                                    <span>Progress: 60%</span>
-                                    <span>Target: Q3 2024</span>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -130,19 +120,21 @@
                     <div class="mb-8">
                         <h4 class="text-md font-medium text-blue-800 mb-4">Pemberdayaan Masyarakat (30%)</h4>
                         <div class="space-y-4">
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-medium">Pelatihan UMKM</span>
-                                    <span class="text-blue-600">Rp 250 Jt</span>
+                            @foreach(\App\Models\DanaDesa::where('kategori', 'Pemberdayaan Masyarakat')->get() as $program)
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium">{{ $program->nama_program }}</span>
+                                        <span class="text-blue-600">{{ $program->anggaran }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $program->progress }}%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                        <span>Progress: {{ $program->progress }}%</span>
+                                        <span>Target: {{ $program->target }}</span>
+                                    </div>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 80%"></div>
-                                </div>
-                                <div class="flex justify-between text-sm text-gray-600 mt-1">
-                                    <span>Progress: 80%</span>
-                                    <span>Target: Q2 2024</span>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -150,19 +142,21 @@
                     <div>
                         <h4 class="text-md font-medium text-blue-800 mb-4">Kesehatan (30%)</h4>
                         <div class="space-y-4">
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-medium">Pengadaan Ambulans Desa</span>
-                                    <span class="text-blue-600">Rp 350 Jt</span>
+                            @foreach(\App\Models\DanaDesa::where('kategori', 'Kesehatan')->get() as $program)
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium">{{ $program->nama_program }}</span>
+                                        <span class="text-blue-600">{{ $program->anggaran }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $program->progress }}%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                        <span>Progress: {{ $program->progress }}%</span>
+                                        <span>Target: {{ $program->target }}</span>
+                                    </div>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
-                                </div>
-                                <div class="flex justify-between text-sm text-gray-600 mt-1">
-                                    <span>Progress: 90%</span>
-                                    <span>Target: Q1 2024</span>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
