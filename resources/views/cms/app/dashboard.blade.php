@@ -5,11 +5,11 @@
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500">Total Kegiatan</p>
-                <h3 class="text-2xl font-bold">{{ App\Models\Kegiatan::count() }}</h3>
+                <p class="text-gray-500">Total Dana Desa</p>
+                <h3 class="text-2xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::sum('anggaran'), 0, ',', '.') }}</h3>
             </div>
             <div class="bg-blue-100 p-3 rounded-full">
-                <i class="fas fa-calendar-alt text-blue-500"></i>
+                <i class="fas fa-money-bill text-blue-500"></i>
             </div>
         </div>
     </div>
@@ -17,11 +17,11 @@
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500">Total Berita</p>
-                <h3 class="text-2xl font-bold">{{ App\Models\Berita::count() }}</h3>
+                <p class="text-gray-500">Total Penduduk</p>
+                <h3 class="text-2xl font-bold">{{ App\Models\Kependudukan::count() }}</h3>
             </div>
             <div class="bg-green-100 p-3 rounded-full">
-                <i class="fas fa-newspaper text-green-500"></i>
+                <i class="fas fa-users text-green-500"></i>
             </div>
         </div>
     </div>
@@ -29,11 +29,11 @@
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500">Total Produk</p>
-                <h3 class="text-2xl font-bold">{{ App\Models\Produk::count() }}</h3>
+                <p class="text-gray-500">Total Surat Kelahiran</p>
+                <h3 class="text-2xl font-bold">{{ App\Models\SuratKelahiran::count() }}</h3>
             </div>
             <div class="bg-purple-100 p-3 rounded-full">
-                <i class="fas fa-box text-purple-500"></i>
+                <i class="fas fa-baby text-purple-500"></i>
             </div>
         </div>
     </div>
@@ -42,11 +42,46 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500">Total Pengaduan</p>
-               
+                <h3 class="text-2xl font-bold">{{ App\Models\Pengaduan::count() }}</h3>
             </div>
             <div class="bg-red-100 p-3 rounded-full">
                 <i class="fas fa-exclamation-circle text-red-500"></i>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- Grafik Distribusi Dana per Kategori -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Dana per Kategori</h3>
+        <div class="h-64">
+            <canvas id="kategoriChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Grafik Status Program -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Status Program</h3>
+        <div class="h-64">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Grafik Demografi Penduduk -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Demografi Penduduk</h3>
+        <div class="h-64">
+            <canvas id="demografiChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Grafik Distribusi Usia -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Usia</h3>
+        <div class="h-64">
+            <canvas id="usiaChart"></canvas>
         </div>
     </div>
 </div>
@@ -132,6 +167,239 @@
             </div>
         </div>
         @endforeach
+
+        @foreach(App\Models\DanaDesa::latest()->take(3)->get() as $dana)
+        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-money-bill text-purple-500 text-lg"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">
+                        {{ $dana->nama_program }}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        <i class="far fa-clock mr-1"></i>
+                        {{ $dana->created_at->diffForHumans() }}
+                    </p>
+                </div>
+                <div class="inline-flex items-center text-sm font-semibold text-purple-600">
+                    <span class="px-2 py-1 bg-purple-50 rounded-md">Dana Desa</span>
+                </div>
+            </div>
+        </div>
+        @endforeach
+
+        @foreach(App\Models\Kependudukan::latest()->take(3)->get() as $penduduk)
+        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-users text-pink-500 text-lg"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">
+                        {{ $penduduk->nama }}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        <i class="far fa-clock mr-1"></i>
+                        {{ $penduduk->created_at->diffForHumans() }}
+                    </p>
+                </div>
+                <div class="inline-flex items-center text-sm font-semibold text-pink-600">
+                    <span class="px-2 py-1 bg-pink-50 rounded-md">Kependudukan</span>
+                </div>
+            </div>
+        </div>
+        @endforeach
+
+        @foreach(App\Models\Pengaduan::latest()->take(3)->get() as $pengaduan)
+        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-circle text-red-500 text-lg"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">
+                        {{ $pengaduan->judul }}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        <i class="far fa-clock mr-1"></i>
+                        {{ $pengaduan->created_at->diffForHumans() }}
+                    </p>
+                </div>
+                <div class="inline-flex items-center text-sm font-semibold text-red-600">
+                    <span class="px-2 py-1 bg-red-50 rounded-md">Pengaduan</span>
+                </div>
+            </div>
+        </div>
+        @endforeach
+
+        @foreach(App\Models\Sambutan::latest()->take(3)->get() as $sambutan)
+        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-comment text-indigo-500 text-lg"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">
+                        {{ $sambutan->nama }}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        <i class="far fa-clock mr-1"></i>
+                        {{ $sambutan->created_at->diffForHumans() }}
+                    </p>
+                </div>
+                <div class="inline-flex items-center text-sm font-semibold text-indigo-600">
+                    <span class="px-2 py-1 bg-indigo-50 rounded-md">Sambutan</span>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.font.size = window.innerWidth < 640 ? 10 : 12;
+    
+    // Kategori Chart
+    const kategoriCtx = document.getElementById('kategoriChart').getContext('2d');
+    new Chart(kategoriCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode(\App\Models\DanaDesa::select('kategori')->groupBy('kategori')->pluck('kategori')) !!},
+            datasets: [{
+                data: {!! json_encode(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->pluck('total')) !!},
+                backgroundColor: ['#3B82F6', '#EC4899', '#10B981'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20
+                    }
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    // Status Chart
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'polarArea',
+        data: {
+            labels: {!! json_encode(\App\Models\DanaDesa::select('status')->groupBy('status')->pluck('status')) !!},
+            datasets: [{
+                data: {!! json_encode(\App\Models\DanaDesa::select('status')->selectRaw('count(*) as total')->groupBy('status')->pluck('total')) !!},
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(236, 72, 153, 0.7)', 
+                    'rgba(16, 185, 129, 0.7)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20
+                    }
+                }
+            }
+        }
+    });
+
+    // Demografi Chart
+    const demografiCtx = document.getElementById('demografiChart').getContext('2d');
+    new Chart(demografiCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Laki-laki', 'Perempuan'],
+            datasets: [{
+                data: [
+                    {{ App\Models\Kependudukan::where('jenis_kelamin', 'Laki-laki')->count() }},
+                    {{ App\Models\Kependudukan::where('jenis_kelamin', 'Perempuan')->count() }}
+                ],
+                backgroundColor: ['#3B82F6', '#EC4899'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20
+                    }
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    // Usia Chart
+    const usiaCtx = document.getElementById('usiaChart').getContext('2d');
+    new Chart(usiaCtx, {
+        type: 'bar',
+        data: {
+            labels: ['0-14 tahun', '15-24 tahun', '25-54 tahun', '55+ tahun'],
+            datasets: [{
+                label: 'Jumlah Penduduk',
+                data: [
+                    {{ App\Models\Kependudukan::where('usia', '<', 15)->count() }},
+                    {{ App\Models\Kependudukan::whereBetween('usia', [15, 24])->count() }},
+                    {{ App\Models\Kependudukan::whereBetween('usia', [25, 54])->count() }},
+                    {{ App\Models\Kependudukan::where('usia', '>=', 55)->count() }}
+                ],
+                backgroundColor: '#3B82F6',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
+
 @endsection

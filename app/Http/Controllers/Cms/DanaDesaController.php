@@ -46,7 +46,14 @@ class DanaDesaController extends Controller
             'target' => 'required|string',
         ]);
 
-        DanaDesa::create($validated);
+        $program = new DanaDesa();
+        $program->nama_program = $validated['nama_program'];
+        $program->kategori = $validated['kategori'];
+        $program->anggaran = $validated['anggaran'];
+        $program->progress = $validated['progress'];
+        $program->status = $validated['status'];
+        $program->target = $validated['target'];
+        $program->save();
 
         return redirect()->route('dana.index')->with('success', 'Program berhasil ditambahkan');
     }
@@ -81,5 +88,16 @@ class DanaDesaController extends Controller
         $program->delete();
 
         return redirect()->route('dana.index')->with('success', 'Program berhasil dihapus');
+    }
+
+    public function create()
+    {
+        return view('cms.pages.tambahdana');
+    }
+
+    public function tambahdana($id)
+    {
+        $program = DanaDesa::findOrFail($id);
+        return view('cms.pages.tambahdana', compact('program'));
     }
 }

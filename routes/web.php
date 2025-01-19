@@ -16,6 +16,7 @@ use App\Http\Controllers\Cms\StrukturDesaController;
 use App\Http\Controllers\Cms\StrukturController;
 use App\Http\Controllers\Cms\KependudukanController;
 use App\Http\Controllers\Cms\DanaDesaController;
+use App\Http\Controllers\Cms\SambutanController;
 // Auth
 // ... existing code ...
 
@@ -226,4 +227,15 @@ Route::prefix('cms')->middleware(['auth'])->group(function () {
     Route::get('/dana/{id}/edit', [DanaDesaController::class, 'edit'])->name('dana.edit');
     Route::put('/dana/{id}', [DanaDesaController::class, 'update'])->name('dana.update');
     Route::delete('/dana/{id}', [DanaDesaController::class, 'destroy'])->name('dana.destroy');
+});
+
+Route::get('/cms/dana/create', [DanaDesaController::class, 'create'])->name('dana.create');
+Route::get('/cms/dana/tambahdana/{id}', [DanaDesaController::class, 'tambahdana'])->name('dana.tambahdana');
+Route::put('/cms/dana/tambahdana/{id}', [DanaDesaController::class, 'update'])->name('dana.update');
+
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/sambutan', [SambutanController::class, 'index'])->name('cms.sambutan.index');
+    Route::get('/sambutan/{id}/edit', [SambutanController::class, 'edit'])->name('sambutan.edit');
+    Route::put('/sambutan/{id}', [SambutanController::class, 'update'])->name('sambutan.update');
 });

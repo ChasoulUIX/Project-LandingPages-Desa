@@ -117,33 +117,29 @@
 
                 <div class="grid md:grid-cols-2 gap-12 items-center">
                     <div class="relative">
-                        <img src="{{ asset('images/prabowo.jpg') }}" alt="Foto Kepala Desa" class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
+                        @if(App\Models\Sambutan::first()->image)
+                            <img src="{{ asset('images/' . App\Models\Sambutan::first()->image) }}" alt="{{ App\Models\Sambutan::first()->nama }}" class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
+                        @else
+                            <img src="{{ asset('images/default.jpg') }}" alt="Default Image" class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
+                        @endif
                         <div class="absolute -bottom-6 -right-6 bg-yellow-500 text-blue-900 px-8 py-4 rounded-xl shadow-lg">
-                            <p class="font-bold">Kepala Desa</p>
-                            <p class="text-sm">Periode 2024-2029</p>
+                            <p class="font-bold">{{ App\Models\Sambutan::first()->jabatan }}</p>
+                            <p class="text-sm">Periode {{ App\Models\Sambutan::first()->periode }}</p>
                         </div>
                     </div>
 
                     <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-blue-900">H. Muhammad Sholeh</h3>
+                        <h3 class="text-2xl font-bold text-blue-900">{{ App\Models\Sambutan::first()->nama }}</h3>
                         <div class="h-1 w-20 bg-yellow-500"></div>
                         <p class="text-gray-600 leading-relaxed">
-                            Assalamualaikum Wr. Wb.
-                            <br><br>
-                            Puji syukur kita panjatkan kepada Allah SWT yang telah memberikan rahmat dan karunia-Nya kepada kita semua. Selamat datang di website resmi Desa Sumber Secang, Kecamatan Sumber, Kabupaten Probolinggo.
-                            <br><br>
-                            Website ini merupakan salah satu media informasi dan komunikasi antara pemerintah desa dengan masyarakat. Melalui website ini, kami berharap dapat memberikan pelayanan informasi yang lebih baik dan terciptanya good governance dalam pemerintahan desa.
-                            <br><br>
-                            Mari bersama-sama kita bangun Desa Sumber Secang menjadi desa yang maju, mandiri, dan sejahtera.
-                            <br><br>
-                            Wassalamualaikum Wr. Wb.
+                            {{ App\Models\Sambutan::first()->sambutan }}
                         </p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-4">
                                 <div class="h-16 w-1 bg-yellow-500"></div>
                                 <div>
-                                    <p class="font-bold text-blue-900">H. Muhammad Sholeh</p>
-                                    <p class="text-gray-600">Kepala Desa Sumber Secang</p>
+                                    <p class="font-bold text-blue-900">{{ App\Models\Sambutan::first()->nama }}</p>
+                                    <p class="text-gray-600">{{ App\Models\Sambutan::first()->jabatan }}</p>
                                 </div>
                             </div>
                             <a href="{{ url('/pamongdesa') }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition duration-300">
@@ -346,12 +342,22 @@
                             </div>
                             <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-4">APBDES / Dana Desa</h3>
                             <div class="aspect-square relative">
-                                <canvas id="apbdesChart" width="400" height="400"></canvas>
+                                <canvas id="kategoriChart"></canvas>
                             </div>
-                            <div class="mt-6 space-y-3" id="apbdesLegend"></div>
+                            <div class="mt-6 space-y-3">
+                                @php
+                                    $totalAnggaran = \App\Models\DanaDesa::sum('anggaran');
+                                @endphp
+                                @foreach(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->get() as $kat)
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="text-gray-600">{{ $kat->kategori }}</span>
+                                        <span class="font-medium">{{ round(($kat->total / $totalAnggaran) * 100) }}%</span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                         <div class="p-6 sm:p-8">
-                            <a href="{{ url('/apbdes') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
+                            <a href="{{ url('/layanan/danadesa') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
                                 <span>Lihat Detail APBDES</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
@@ -365,10 +371,23 @@
                                 <i class="fas fa-users text-white text-xl sm:text-2xl"></i>
                             </div>
                             <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-4">Demografi Penduduk</h3>
+                            @php
+                                $laki = App\Models\Kependudukan::where('jenis_kelamin', 'Laki-laki')->count();
+                                $perempuan = App\Models\Kependudukan::where('jenis_kelamin', 'Perempuan')->count();
+                            @endphp
                             <div class="aspect-square relative">
-                                <canvas id="demografiChart" width="400" height="400"></canvas>
+                                <canvas id="genderChart"></canvas>
                             </div>
-                            <div class="mt-6 space-y-3" id="demografiLegend"></div>
+                            <div class="mt-6 space-y-3">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Laki-laki</span>
+                                    <span class="font-medium">{{ round(($laki / App\Models\Kependudukan::count()) * 100) }}%</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Perempuan</span>
+                                    <span class="font-medium">{{ round(($perempuan / App\Models\Kependudukan::count()) * 100) }}%</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="p-6 sm:p-8">
                             <a href="{{ url('/datakependudukan') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
@@ -387,53 +406,33 @@
                 // Data untuk APBDES Chart
                 const apbdesData = {
                     labels: [
-                        'Pembangunan Infrastruktur',
-                        'Pemberdayaan Masyarakat',
-                        'Operasional Desa',
-                        'Pendidikan',
-                        'Kesehatan',
-                        'Lainnya'
+                        @foreach(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->get() as $kat)
+                            '{{ $kat->kategori }}',
+                        @endforeach
                     ],
                     datasets: [{
-                        data: [35, 25, 15, 10, 10, 5],
+                        data: [
+                            @foreach(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->get() as $kat)
+                                {{ round(($kat->total / $totalAnggaran) * 100) }},
+                            @endforeach
+                        ],
                         backgroundColor: [
-                            '#1E3A8A', // Blue
-                            '#EAB308', // Yellow
-                            '#64748B', // Slate
-                            '#059669', // Green
-                            '#DC2626', // Red
-                            '#7C3AED'  // Purple
+                            '#1E40AF', // Blue-800
+                            '#EAB308', // Yellow-500
+                            '#059669', // Green-600
+                            '#DC2626', // Red-600
+                            '#7C3AED', // Purple-600
+                            '#2563EB'  // Blue-600
                         ],
                         borderWidth: 0,
                         hoverOffset: 15
                     }]
                 };
 
-                // Data untuk Demografi Chart
-                const demografiData = {
-                    labels: [
-                        'Laki-laki Dewasa',
-                        'Perempuan Dewasa',
-                        'Remaja',
-                        'Anak-anak',
-                        'Lansia'
-                    ],
-                    datasets: [{
-                        data: [30, 28, 20, 15, 7],
-                        backgroundColor: [
-                            '#1E3A8A',
-                            '#EAB308',
-                            '#059669',
-                            '#DC2626',
-                            '#7C3AED'
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 15
-                    }]
-                };
-
+                // Konfigurasi chart
                 const chartConfig = {
                     type: 'doughnut',
+                    data: apbdesData,
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
@@ -467,52 +466,141 @@
                     }
                 };
 
-                // Fungsi untuk membuat legend custom dengan animasi hover
-                function createCustomLegend(data, elementId) {
-                    const legendContainer = document.getElementById(elementId);
-                    legendContainer.innerHTML = '';
-                    
-                    data.labels.forEach((label, index) => {
-                        const div = document.createElement('div');
-                        div.className = 'flex items-center justify-between text-sm p-2 rounded-lg transition-all duration-300 hover:bg-gray-100 cursor-pointer';
-                        div.innerHTML = `
-                            <div class="flex items-center">
-                                <span class="w-4 h-4 rounded-full mr-3 transition-transform duration-300 hover:scale-110" 
-                                      style="background-color: ${data.datasets[0].backgroundColor[index]}"></span>
-                                <span class="text-gray-700 font-medium">${label}</span>
-                            </div>
-                            <span class="font-bold text-blue-900">${data.datasets[0].data[index]}%</span>
-                        `;
-                        
-                        // Hover effect untuk highlight chart segment
-                        div.addEventListener('mouseenter', () => {
-                            const chart = Chart.getChart(elementId.replace('Legend', 'Chart'));
-                            chart.setActiveElements([{datasetIndex: 0, index: index}]);
-                            chart.update();
+                // Inisialisasi chart
+                const ctx = document.getElementById('kategoriChart').getContext('2d');
+                const apbdesChart = new Chart(ctx, chartConfig);
+
+                // Fungsi untuk membuat custom legend dengan interaksi hover
+                function createCustomLegend() {
+                    const legendContainer = document.querySelector('.mt-6.space-y-3');
+                    const legendItems = legendContainer.querySelectorAll('div');
+
+                    legendItems.forEach((item, index) => {
+                        // Tambahkan warna background sesuai dengan chart
+                        const colorBox = document.createElement('span');
+                        colorBox.className = 'inline-block w-3 h-3 rounded-full mr-2';
+                        colorBox.style.backgroundColor = apbdesData.datasets[0].backgroundColor[index];
+                        item.insertBefore(colorBox, item.firstChild);
+
+                        // Tambahkan event listener untuk hover
+                        item.addEventListener('mouseenter', () => {
+                            apbdesChart.setActiveElements([{datasetIndex: 0, index: index}]);
+                            apbdesChart.update();
                         });
-                        
-                        div.addEventListener('mouseleave', () => {
-                            const chart = Chart.getChart(elementId.replace('Legend', 'Chart'));
-                            chart.setActiveElements([]);
-                            chart.update();
+
+                        item.addEventListener('mouseleave', () => {
+                            apbdesChart.setActiveElements([]);
+                            apbdesChart.update();
                         });
-                        
-                        legendContainer.appendChild(div);
+
+                        // Tambahkan style untuk interaktivitas
+                        item.classList.add('cursor-pointer', 'hover:bg-gray-50', 'p-2', 'rounded-lg', 'transition-colors', 'duration-300');
                     });
                 }
 
-                // Inisialisasi Charts dengan animasi
-                const apbdesChart = new Chart(document.getElementById('apbdesChart'), {
-                    ...chartConfig,
-                    data: apbdesData
-                });
-                createCustomLegend(apbdesData, 'apbdesLegend');
+                // Panggil fungsi untuk membuat legend
+                createCustomLegend();
 
-                const demografiChart = new Chart(document.getElementById('demografiChart'), {
-                    ...chartConfig,
-                    data: demografiData
+                // Responsive update saat resize window
+                window.addEventListener('resize', () => {
+                    apbdesChart.resize();
                 });
-                createCustomLegend(demografiData, 'demografiLegend');
+
+                // Data untuk Gender Chart
+                const genderData = {
+                    labels: ['Laki-laki', 'Perempuan'],
+                    datasets: [{
+                        data: [{{ $laki }}, {{ $perempuan }}],
+                        backgroundColor: [
+                            '#1E40AF', // Blue-800 untuk laki-laki
+                            '#EC4899'  // Pink-500 untuk perempuan
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                };
+
+                // Konfigurasi Gender Chart
+                const genderConfig = {
+                    type: 'doughnut',
+                    data: genderData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.raw;
+                                        const total = {{ App\Models\Kependudukan::count() }};
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `${context.label}: ${value} (${percentage}%)`;
+                                    }
+                                },
+                                padding: 12,
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                }
+                            }
+                        },
+                        cutout: '75%',
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true,
+                            duration: 2000
+                        }
+                    }
+                };
+
+                // Inisialisasi Gender Chart
+                const genderCtx = document.getElementById('genderChart').getContext('2d');
+                const genderChart = new Chart(genderCtx, genderConfig);
+
+                // Fungsi untuk membuat custom legend dengan interaksi hover untuk Gender Chart
+                function createGenderLegend() {
+                    const legendContainer = document.querySelector('.gender-legend');
+                    if (!legendContainer) return;
+
+                    const legendItems = legendContainer.querySelectorAll('div');
+
+                    legendItems.forEach((item, index) => {
+                        // Tambahkan warna background sesuai dengan chart
+                        const colorBox = document.createElement('span');
+                        colorBox.className = 'inline-block w-3 h-3 rounded-full mr-2';
+                        colorBox.style.backgroundColor = genderData.datasets[0].backgroundColor[index];
+                        item.insertBefore(colorBox, item.firstChild);
+
+                        // Tambahkan event listener untuk hover
+                        item.addEventListener('mouseenter', () => {
+                            genderChart.setActiveElements([{datasetIndex: 0, index: index}]);
+                            genderChart.update();
+                        });
+
+                        item.addEventListener('mouseleave', () => {
+                            genderChart.setActiveElements([]);
+                            genderChart.update();
+                        });
+
+                        // Tambahkan style untuk interaktivitas
+                        item.classList.add('cursor-pointer', 'hover:bg-gray-50', 'p-2', 'rounded-lg', 'transition-colors', 'duration-300');
+                    });
+                }
+
+                // Panggil fungsi untuk membuat legend
+                createGenderLegend();
+
+                // Responsive update saat resize window
+                window.addEventListener('resize', () => {
+                    genderChart.resize();
+                });
             });
         </script>
 
