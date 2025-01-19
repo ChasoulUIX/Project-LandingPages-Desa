@@ -9,6 +9,8 @@ use App\Http\Controllers\Cms\CmsProdukController;
 use App\Http\Controllers\User\KeteranganDomisiliController;
 use App\Http\Controllers\User\TidakMampuController;
 use App\Http\Controllers\User\SuratKeteranganUsahaController;
+use App\Http\Controllers\User\SuratKtpController;
+use App\Http\Controllers\User\SuratKelahiranController;
 // Auth
 // ... existing code ...
 
@@ -152,5 +154,13 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     });
     Route::get('/usaha', [SuratKeteranganUsahaController::class, 'indexAdmin'])->name('cms.usaha.index');
     Route::put('/usaha/{id}/update-status', [SuratKeteranganUsahaController::class, 'updateStatus'])->name('cms.usaha.update-status');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('surat-ktp', SuratKtpController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('surat-kelahiran', SuratKelahiranController::class);
 });
 

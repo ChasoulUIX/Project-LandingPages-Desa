@@ -19,7 +19,7 @@
 
                 <!-- Form Section -->
                 <div class="bg-white rounded-xl shadow-lg p-8">
-                    <form action="#" method="POST" class="space-y-6">
+                    <form action="{{ route('surat-ktp.store') }}" method="POST" class="space-y-6">
                         @csrf
                         
                         <!-- Data Pemohon -->
