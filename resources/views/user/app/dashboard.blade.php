@@ -334,10 +334,10 @@
                 <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
                     <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Infografis Desa</h2>
                     <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
-                    <p class="text-gray-600 text-base sm:text-lg">Visualisasi data penting tentang keuangan, demografi, dan bantuan sosial desa</p>
+                    <p class="text-gray-600 text-base sm:text-lg">Visualisasi data penting tentang keuangan dan demografi desa</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8">
                     <!-- APBDES Card -->
                     <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
                         <div class="p-6 sm:p-8 flex-grow">
@@ -373,26 +373,6 @@
                         <div class="p-6 sm:p-8">
                             <a href="{{ url('/datakependudukan') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
                                 <span>Lihat Detail Demografi</span>
-                                <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Bantuan Sosial Card -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
-                        <div class="p-6 sm:p-8 flex-grow">
-                            <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
-                                <i class="fas fa-hands-helping text-white text-xl sm:text-2xl"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-4">Bantuan Sosial</h3>
-                            <div class="aspect-square relative">
-                                <canvas id="bantuanChart" width="400" height="400"></canvas>
-                            </div>
-                            <div class="mt-6 space-y-3" id="bantuanLegend"></div>
-                        </div>
-                        <div class="p-6 sm:p-8">
-                            <a href="{{ url('/bantuan-sosial') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
-                                <span>Lihat Detail Bantuan</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -443,31 +423,6 @@
                         backgroundColor: [
                             '#1E3A8A',
                             '#EAB308',
-                            '#059669',
-                            '#DC2626',
-                            '#7C3AED'
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 15
-                    }]
-                };
-
-                // Data untuk Bantuan Chart
-                const bantuanData = {
-                    labels: [
-                        'PKH',
-                        'BPNT',
-                        'BLT DD',
-                        'PIP',
-                        'KIS',
-                        'BPUM'
-                    ],
-                    datasets: [{
-                        data: [25, 20, 15, 15, 15, 10],
-                        backgroundColor: [
-                            '#1E3A8A',
-                            '#EAB308',
-                            '#64748B',
                             '#059669',
                             '#DC2626',
                             '#7C3AED'
@@ -558,12 +513,6 @@
                     data: demografiData
                 });
                 createCustomLegend(demografiData, 'demografiLegend');
-
-                const bantuanChart = new Chart(document.getElementById('bantuanChart'), {
-                    ...chartConfig,
-                    data: bantuanData
-                });
-                createCustomLegend(bantuanData, 'bantuanLegend');
             });
         </script>
 
