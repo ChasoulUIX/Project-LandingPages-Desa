@@ -1,107 +1,107 @@
 @extends('cms.layouts.app')
 
 @section('content')
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    <div class="bg-white rounded-lg shadow-md p-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+    <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500">Total Dana Desa</p>
-                <h3 class="text-2xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::sum('anggaran'), 0, ',', '.') }}</h3>
+                <p class="text-gray-500 text-sm">Total Dana Desa</p>
+                <h3 class="text-xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::sum('anggaran'), 0, ',', '.') }}</h3>
             </div>
-            <div class="bg-blue-100 p-3 rounded-full">
-                <i class="fas fa-money-bill text-blue-500"></i>
+            <div class="bg-blue-100 p-2 rounded-full">
+                <i class="fas fa-money-bill text-blue-500 text-sm"></i>
             </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500">Total Penduduk</p>
-                <h3 class="text-2xl font-bold">{{ App\Models\Kependudukan::count() }}</h3>
+                <p class="text-gray-500 text-sm">Total Penduduk</p>
+                <h3 class="text-xl font-bold">{{ App\Models\Kependudukan::count() }}</h3>
             </div>
-            <div class="bg-green-100 p-3 rounded-full">
-                <i class="fas fa-users text-green-500"></i>
+            <div class="bg-green-100 p-2 rounded-full">
+                <i class="fas fa-users text-green-500 text-sm"></i>
             </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500">Total Surat Kelahiran</p>
-                <h3 class="text-2xl font-bold">{{ App\Models\SuratKelahiran::count() }}</h3>
+                <p class="text-gray-500 text-sm">Total Surat Kelahiran</p>
+                <h3 class="text-xl font-bold">{{ App\Models\SuratKelahiran::count() }}</h3>
             </div>
-            <div class="bg-purple-100 p-3 rounded-full">
-                <i class="fas fa-baby text-purple-500"></i>
+            <div class="bg-purple-100 p-2 rounded-full">
+                <i class="fas fa-baby text-purple-500 text-sm"></i>
             </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500">Total Pengaduan</p>
-                <h3 class="text-2xl font-bold">{{ App\Models\Pengaduan::count() }}</h3>
+                <p class="text-gray-500 text-sm">Total Pengaduan</p>
+                <h3 class="text-xl font-bold">{{ App\Models\Pengaduan::count() }}</h3>
             </div>
-            <div class="bg-red-100 p-3 rounded-full">
-                <i class="fas fa-exclamation-circle text-red-500"></i>
+            <div class="bg-red-100 p-2 rounded-full">
+                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Charts Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <!-- Grafik Distribusi Dana per Kategori -->
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Dana per Kategori</h3>
-        <div class="h-64">
+    <div class="bg-white rounded-xl shadow-lg p-4">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">Distribusi Dana per Kategori</h3>
+        <div class="h-48">
             <canvas id="kategoriChart"></canvas>
         </div>
     </div>
 
     <!-- Grafik Status Program -->
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Status Program</h3>
-        <div class="h-64">
+    <div class="bg-white rounded-xl shadow-lg p-4">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">Status Program</h3>
+        <div class="h-48">
             <canvas id="statusChart"></canvas>
         </div>
     </div>
 
     <!-- Grafik Demografi Penduduk -->
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Demografi Penduduk</h3>
-        <div class="h-64">
+    <div class="bg-white rounded-xl shadow-lg p-4">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">Demografi Penduduk</h3>
+        <div class="h-48">
             <canvas id="demografiChart"></canvas>
         </div>
     </div>
 
     <!-- Grafik Distribusi Usia -->
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Usia</h3>
-        <div class="h-64">
+    <div class="bg-white rounded-xl shadow-lg p-4">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">Distribusi Usia</h3>
+        <div class="h-48">
             <canvas id="usiaChart"></canvas>
         </div>
     </div>
 </div>
 
 <!-- Recent Activities -->
-<div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
-    <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-bold text-gray-800">Aktivitas Terbaru</h2>
-        <div class="bg-blue-50 text-blue-600 text-sm font-medium px-3 py-1 rounded-full">
+<div class="bg-white rounded-lg shadow-lg p-4 border border-gray-100">
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-gray-800">Aktivitas Terbaru</h2>
+        <div class="bg-blue-50 text-blue-600 text-xs font-medium px-2 py-1 rounded-full">
             Real-time Updates
         </div>
     </div>
 
     <div class="divide-y divide-gray-100">
         @foreach(App\Models\Kegiatan::latest()->take(3)->get() as $kegiatan)
-        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
-            <div class="flex items-center space-x-4">
+        <div class="py-3 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-calendar-alt text-blue-500 text-lg"></i>
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-blue-500 text-sm"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -121,11 +121,11 @@
         @endforeach
 
         @foreach(App\Models\Berita::latest()->take(3)->get() as $berita)
-        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
-            <div class="flex items-center space-x-4">
+        <div class="py-3 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-newspaper text-green-500 text-lg"></i>
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-newspaper text-green-500 text-sm"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -145,11 +145,11 @@
         @endforeach
 
         @foreach(App\Models\Produk::latest()->take(3)->get() as $produk)
-        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
-            <div class="flex items-center space-x-4">
+        <div class="py-3 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-box text-yellow-500 text-lg"></i>
+                    <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-box text-yellow-500 text-sm"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -169,11 +169,11 @@
         @endforeach
 
         @foreach(App\Models\DanaDesa::latest()->take(3)->get() as $dana)
-        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
-            <div class="flex items-center space-x-4">
+        <div class="py-3 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-money-bill text-purple-500 text-lg"></i>
+                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-money-bill text-purple-500 text-sm"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -193,11 +193,11 @@
         @endforeach
 
         @foreach(App\Models\Kependudukan::latest()->take(3)->get() as $penduduk)
-        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
-            <div class="flex items-center space-x-4">
+        <div class="py-3 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-users text-pink-500 text-lg"></i>
+                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-users text-pink-500 text-sm"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -217,11 +217,11 @@
         @endforeach
 
         @foreach(App\Models\Pengaduan::latest()->take(3)->get() as $pengaduan)
-        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
-            <div class="flex items-center space-x-4">
+        <div class="py-3 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-exclamation-circle text-red-500 text-lg"></i>
+                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -241,11 +241,11 @@
         @endforeach
 
         @foreach(App\Models\Sambutan::latest()->take(3)->get() as $sambutan)
-        <div class="py-4 transition duration-300 hover:bg-gray-50 rounded-lg">
-            <div class="flex items-center space-x-4">
+        <div class="py-3 transition duration-300 hover:bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-comment text-indigo-500 text-lg"></i>
+                    <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-comment text-indigo-500 text-sm"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -271,7 +271,7 @@
 
 <script>
     Chart.defaults.font.family = "'Inter', sans-serif";
-    Chart.defaults.font.size = window.innerWidth < 640 ? 10 : 12;
+    Chart.defaults.font.size = window.innerWidth < 640 ? 8 : 10;
     
     // Kategori Chart
     const kategoriCtx = document.getElementById('kategoriChart').getContext('2d');

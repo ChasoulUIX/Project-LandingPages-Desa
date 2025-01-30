@@ -130,14 +130,14 @@
                     </div>
                 </div> -->
 
-                <!-- <div class="text-center mt-6 sm:mt-8">
+                <div class="text-center mt-6 sm:mt-8">
                     <p class="text-sm text-gray-600">
                         Belum punya akun? 
                         <a href="{{ url('/register') }}" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                             Daftar disini
                         </a>
                     </p>
-                </div> -->
+                </div>
             </form>
         </div>
     </div>

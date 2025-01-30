@@ -10,14 +10,14 @@
     </div>
 
     <!-- Overview Cards -->
-    <div class="grid gap-6 mb-8 md:grid-cols-4">
-        <div class="min-w-0 p-4 bg-white rounded-lg shadow-sm">
-            <h4 class="mb-4 font-semibold text-gray-600">Total Dana Desa</h4>
-            <p class="text-gray-800 text-2xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::sum('anggaran'), 0, ',', '.') }}</p>
-            <p class="text-sm text-gray-600">Tahun Anggaran 2024</p>
+    <div class="grid gap-4 mb-6 grid-cols-2 md:grid-cols-4 md:gap-6 md:mb-8">
+        <div class="min-w-0 p-3 md:p-4 bg-white rounded-lg shadow-sm">
+            <h4 class="mb-2 md:mb-4 font-semibold text-gray-600 text-sm md:text-base">Total Dana Desa</h4>
+            <p class="text-gray-800 text-xl md:text-2xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::sum('anggaran'), 0, ',', '.') }}</p>
+            <p class="text-xs md:text-sm text-gray-600">Tahun Anggaran 2024</p>
         </div>
-        <div class="min-w-0 p-4 bg-white rounded-lg shadow-sm">
-            <h4 class="mb-4 font-semibold text-gray-600">Dana Terserap</h4>
+        <div class="min-w-0 p-3 md:p-4 bg-white rounded-lg shadow-sm">
+            <h4 class="mb-2 md:mb-4 font-semibold text-gray-600 text-sm md:text-base">Dana Terserap</h4>
             @php
                 $totalAnggaran = \App\Models\DanaDesa::sum('anggaran');
                 $terserap = \App\Models\DanaDesa::all()->sum(function($program) {
@@ -25,47 +25,47 @@
                 });
                 $persentase = $totalAnggaran > 0 ? ($terserap / $totalAnggaran) * 100 : 0;
             @endphp
-            <p class="text-gray-800 text-2xl font-bold">{{ number_format($persentase, 1) }}%</p>
-            <p class="text-sm text-gray-600">Rp {{ number_format($terserap, 0, ',', '.') }}</p>
+            <p class="text-gray-800 text-xl md:text-2xl font-bold">{{ number_format($persentase, 1) }}%</p>
+            <p class="text-xs md:text-sm text-gray-600">Rp {{ number_format($terserap, 0, ',', '.') }}</p>
         </div>
-        <div class="min-w-0 p-4 bg-white rounded-lg shadow-sm">
-            <h4 class="mb-4 font-semibold text-gray-600">Sisa Anggaran</h4>
+        <div class="min-w-0 p-3 md:p-4 bg-white rounded-lg shadow-sm">
+            <h4 class="mb-2 md:mb-4 font-semibold text-gray-600 text-sm md:text-base">Sisa Anggaran</h4>
             @php
                 $sisa = $totalAnggaran - $terserap;
                 $persentaseSisa = $totalAnggaran > 0 ? ($sisa / $totalAnggaran) * 100 : 0;
             @endphp
-            <p class="text-gray-800 text-2xl font-bold">{{ number_format($persentaseSisa, 1) }}%</p>
-            <p class="text-sm text-gray-600">Rp {{ number_format($sisa, 0, ',', '.') }}</p>
+            <p class="text-gray-800 text-xl md:text-2xl font-bold">{{ number_format($persentaseSisa, 1) }}%</p>
+            <p class="text-xs md:text-sm text-gray-600">Rp {{ number_format($sisa, 0, ',', '.') }}</p>
         </div>
-        <div class="min-w-0 p-4 bg-white rounded-lg shadow-sm">
-            <h4 class="mb-4 font-semibold text-gray-600">Total Program</h4>
-            <p class="text-gray-800 text-2xl font-bold">{{ $totalPrograms }}</p>
-            <p class="text-sm text-gray-600">Program Aktif</p>
+        <div class="min-w-0 p-3 md:p-4 bg-white rounded-lg shadow-sm">
+            <h4 class="mb-2 md:mb-4 font-semibold text-gray-600 text-sm md:text-base">Total Program</h4>
+            <p class="text-gray-800 text-xl md:text-2xl font-bold">{{ $totalPrograms }}</p>
+            <p class="text-xs md:text-sm text-gray-600">Program Aktif</p>
         </div>
     </div>
 
     <!-- Data Grid -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full">
+            <table class="w-full text-sm md:text-base">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse(\App\Models\DanaDesa::all() as $program)
                     <tr class="text-gray-700">
-                        <td class="px-6 py-4">{{ $program->nama_program }}</td>
-                        <td class="px-6 py-4">{{ $program->kategori }}</td>
-                        <td class="px-6 py-4">Rp {{ number_format($program->anggaran, 0, ',', '.') }}</td>
-                        <td class="px-6 py-4">
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $program->nama_program }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $program->kategori }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($program->anggaran, 0, ',', '.') }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">
                             <div class="relative pt-1">
                                 <div class="overflow-hidden h-2 text-xs flex rounded bg-blue-200">
                                     <div style="width: {{ $program->progress }}%" 
@@ -75,13 +75,13 @@
                                 <div class="text-xs mt-1">{{ $program->progress }}%</div>
                             </div>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-3 py-2 md:px-6 md:py-4">
                             <span class="px-2 py-1 font-semibold leading-tight rounded-full {{ $program->status === 'Selesai' ? 'text-green-700 bg-green-100' : ($program->status === 'Berjalan' ? 'text-yellow-700 bg-yellow-100' : 'text-gray-700 bg-gray-100') }}">
                                 {{ $program->status }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">{{ $program->target }}</td>
-                        <td class="px-6 py-4">
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $program->target }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">
                             <a href="{{ route('dana.tambahdana', ['id' => $program->id, 'program' => $program]) }}" class="text-blue-500 hover:text-blue-700">
                                 <i class="fas fa-edit"></i>
                             </a>

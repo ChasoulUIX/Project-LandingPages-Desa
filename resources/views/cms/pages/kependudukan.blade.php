@@ -10,41 +10,41 @@
     </div>
 
     <!-- Data Grid -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="bg-white rounded-lg shadow-md">
         <div class="overflow-x-auto">
-            <table class="w-full">
+            <table class="min-w-full table-auto text-sm">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Kelamin</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usia</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Keluarga</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mata Pencaharian</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pendidikan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
+                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">JK</th>
+                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usia</th>
+                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
+                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pendidikan</th>
+                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
+                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach(App\Models\Kependudukan::all() as $index => $kependudukan)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $kependudukan->nik }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $kependudukan->nama }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $kependudukan->jenis_kelamin == 'Laki-laki' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
-                                {{ $kependudukan->jenis_kelamin }}
+                        <td class="px-2 py-2">{{ $index + 1 }}</td>
+                        <td class="px-2 py-2">{{ $kependudukan->nik }}</td>
+                        <td class="px-2 py-2">{{ $kependudukan->nama }}</td>
+                        <td class="px-2 py-2">
+                            <span class="px-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $kependudukan->jenis_kelamin == 'Laki-laki' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
+                                {{ $kependudukan->jenis_kelamin == 'Laki-laki' ? 'L' : 'P' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $kependudukan->usia }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $kependudukan->status_keluarga }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $kependudukan->mata_pencaharian }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $kependudukan->pendidikan }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $kependudukan->alamat }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button onclick="openEditModal({{ $kependudukan->id }})" class="text-blue-600 hover:text-blue-800 mr-3">
+                        <td class="px-2 py-2">{{ $kependudukan->usia }}</td>
+                        <td class="hidden md:table-cell px-2 py-2">{{ $kependudukan->status_keluarga }}</td>
+                        <td class="hidden md:table-cell px-2 py-2">{{ $kependudukan->mata_pencaharian }}</td>
+                        <td class="hidden md:table-cell px-2 py-2">{{ $kependudukan->pendidikan }}</td>
+                        <td class="hidden md:table-cell px-2 py-2 max-w-xs truncate">{{ $kependudukan->alamat }}</td>
+                        <td class="px-2 py-2 text-right text-sm font-medium">
+                            <button onclick="openEditModal({{ $kependudukan->id }})" class="text-blue-600 hover:text-blue-800 mr-2">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <form action="{{ route('cms.kependudukan.destroy', $kependudukan->id) }}" method="POST" class="inline">
