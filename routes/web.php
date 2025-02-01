@@ -17,6 +17,8 @@ use App\Http\Controllers\Cms\StrukturController;
 use App\Http\Controllers\Cms\KependudukanController;
 use App\Http\Controllers\Cms\DanaDesaController;
 use App\Http\Controllers\Cms\SambutanController;
+use App\Http\Controllers\Cms\CmsPengaduanController;
+
 // Auth
 // ... existing code ...
 
@@ -191,6 +193,7 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
 Route::get('/layanan/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
 Route::post('/layanan/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
 
+
 // CMS Struktur Desa Routes
 Route::prefix('cms')->middleware(['auth'])->group(function () {
     // Struktur Desa Routes
@@ -207,6 +210,10 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/pengaduan', function () {
         return view('cms.pages.pengaduan', ['title' => 'Pengaduan']);
     });
+    
+    // Tambahkan route untuk edit pengaduan
+    Route::get('/pengaduan/{id}/edit', [CmsPengaduanController::class, 'edit'])->name('pengaduan.edit');
+    Route::put('/pengaduan/{id}', [CmsPengaduanController::class, 'update'])->name('pengaduan.update');
 });
 
 Route::get('/cms/app/kependudukan', function () {

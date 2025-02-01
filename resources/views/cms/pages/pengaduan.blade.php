@@ -78,15 +78,19 @@
         const modal = document.getElementById('editModal');
         const form = document.getElementById('editForm');
         
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+        
         fetch(`/cms/pengaduan/${id}/edit`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('status').value = data.status;
-                document.getElementById('response').value = data.response;
+                document.getElementById('status').value = data.status || 'Menunggu';
+                document.getElementById('response').value = data.response || '';
                 form.action = `/cms/pengaduan/${id}`;
-                
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                closeEditModal();
             });
     }
 
