@@ -48,8 +48,9 @@ class PengaduanController extends Controller
 
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');
-            $path = $file->store('public/complaints');
-            $data['attachment'] = Storage::url($path);
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+            $data['attachment'] = $filename;
         }
 
         Pengaduan::create($data);

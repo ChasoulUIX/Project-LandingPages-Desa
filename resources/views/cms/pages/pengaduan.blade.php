@@ -25,7 +25,7 @@
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">{{ $pengaduan->description }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         @if($pengaduan->attachment)
-                            <a href="{{ asset($pengaduan->attachment) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                            <a href="{{ asset('images/' . $pengaduan->attachment) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
                                 <i class="fas fa-file"></i>
                             </a>
                         @endif

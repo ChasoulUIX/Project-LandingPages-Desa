@@ -75,7 +75,7 @@
 
                             <div>
                                 <label for="attachment" class="block text-gray-700 font-medium mb-2">Lampiran (Opsional)</label>
-                                <input type="file" id="attachment" name="attachment" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                                <input type="file" id="attachment" name="attachment" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" accept="image/jpeg,image/png,application/pdf">
                                 <p class="text-sm text-gray-500 mt-1">Format yang didukung: JPG, PNG, PDF (Max. 2MB)</p>
                             </div>
 
