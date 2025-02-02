@@ -18,9 +18,9 @@
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <div class="relative">
             @if($sambutan->image)
-                <img src="{{ asset('images/' . $sambutan->image) }}" alt="{{ $sambutan->nama }}" class="w-full h-96 object-cover">
+                <img src="{{ asset('images/' . $sambutan->image) }}" alt="{{ $sambutan->nama }}" class="w-64 h-64 object-contain float-left mr-6">
             @else
-                <img src="{{ asset('images/default.jpg') }}" alt="Default Image" class="w-full h-96 object-cover">
+                <img src="{{ asset('images/default.jpg') }}" alt="Default Image" class="w-64 h-64 object-contain float-left mr-6">
             @endif
             <div class="absolute top-0 right-0 p-3 flex space-x-2">
                 <button onclick="openEditModal({{ $sambutan->id }})" class="bg-white p-2 rounded-full shadow-md text-blue-600 hover:text-blue-800 transition duration-300">
