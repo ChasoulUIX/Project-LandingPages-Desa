@@ -18,6 +18,7 @@ use App\Http\Controllers\Cms\KependudukanController;
 use App\Http\Controllers\Cms\DanaDesaController;
 use App\Http\Controllers\Cms\SambutanController;
 use App\Http\Controllers\Cms\CmsPengaduanController;
+use App\Http\Controllers\Cms\CmsSuratTidakMampuController;
 
 // Auth
 // ... existing code ...
@@ -231,20 +232,24 @@ Route::get('/cms/dana', function () {
 });
 
 Route::prefix('cms')->middleware(['auth'])->group(function () {
-    Route::get('/dana', [DanaDesaController::class, 'index'])->name('dana.index');
-    Route::post('/dana', [DanaDesaController::class, 'store'])->name('dana.store');
-    Route::get('/dana/{id}/edit', [DanaDesaController::class, 'edit'])->name('dana.edit');
-    Route::put('/dana/{id}', [DanaDesaController::class, 'update'])->name('dana.update');
-    Route::delete('/dana/{id}', [DanaDesaController::class, 'destroy'])->name('dana.destroy');
+    Route::controller(DanaDesaController::class)->group(function () {
+        Route::get('/dana', 'index')->name('dana.index');
+        Route::get('/dana/create', 'create')->name('dana.create');
+        Route::post('/dana', 'store')->name('dana.store');
+        Route::get('/dana/{id}/edit', 'edit')->name('dana.edit');
+        Route::put('/dana/{id}', 'update')->name('dana.update');
+        Route::delete('/dana/{id}', 'destroy')->name('dana.destroy');
+    });
 });
-
-Route::get('/cms/dana/create', [DanaDesaController::class, 'create'])->name('dana.create');
-Route::get('/cms/dana/tambahdana/{id}', [DanaDesaController::class, 'edit'])->name('dana.tambahdana');
-Route::put('/cms/dana/tambahdana/{id}', [DanaDesaController::class, 'update'])->name('dana.update');
-
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/sambutan', [SambutanController::class, 'index'])->name('cms.sambutan.index');
     Route::get('/sambutan/{id}/edit', [SambutanController::class, 'edit'])->name('sambutan.edit');
     Route::put('/sambutan/{id}', [SambutanController::class, 'update'])->name('sambutan.update');
+});
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/tidak-mampu', [CmsSuratTidakMampuController::class, 'index'])->name('cms.tidakmampu.index');
+    Route::put('/tidak-mampu/{id}/update-status', [CmsSuratTidakMampuController::class, 'updateStatus'])
+        ->name('cms.tidakmampu.update-status');
 });

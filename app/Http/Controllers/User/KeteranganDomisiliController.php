@@ -57,4 +57,20 @@ class KeteranganDomisiliController extends Controller
         return redirect()->route('user.domisili.layanan.suratketerangan.domisili')
             ->with('success', 'Permohonan surat keterangan domisili berhasil diajukan!');
     }
+
+    /**
+     * Update the status of the specified resource.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,approved,rejected',
+        ]);
+
+        $domisili = KeteranganDomisili::findOrFail($id);
+        $domisili->status = $request->status;
+        $domisili->save();
+
+        return redirect()->back()->with('success', 'Status berhasil diperbarui');
+    }
 }

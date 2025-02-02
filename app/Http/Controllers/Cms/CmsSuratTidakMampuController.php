@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Http\Controllers\Controller;
-use App\Models\KeteranganDomisili;
+use App\Models\SuratTidakMampu;
 use Illuminate\Http\Request;
 
-class CmsDomisiliController extends Controller
+class CmsSuratTidakMampuController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('cms.pages.suratketerangan.domisili');
+        return view('cms.pages.suratketerangan.tidakmampu');
     }
 
     /**
@@ -25,10 +25,10 @@ class CmsDomisiliController extends Controller
             'status' => 'required|in:pending,approved,rejected',
         ]);
 
-        $domisili = KeteranganDomisili::findOrFail($id);
-        $domisili->status = $request->status;
-        $domisili->save();
+        $surat = SuratTidakMampu::findOrFail($id);
+        $surat->status = $request->status;
+        $surat->save();
 
         return redirect()->back()->with('success', 'Status berhasil diperbarui');
     }
-}
+} 

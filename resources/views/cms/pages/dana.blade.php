@@ -82,11 +82,12 @@
                         </td>
                         <td class="px-3 py-2 md:px-6 md:py-4">{{ $program->target }}</td>
                         <td class="px-3 py-2 md:px-6 md:py-4">
-                            <a href="{{ route('dana.tambahdana', ['id' => $program->id, 'program' => $program]) }}" class="text-blue-500 hover:text-blue-700">
-                                <i class="fas fa-edit"></i>
-                            </a>
+                            <button onclick="openEditModal({{ $program->id }}, '{{ $program->nama_program }}', '{{ $program->kategori }}', {{ $program->anggaran }}, {{ $program->progress }}, '{{ $program->target }}', '{{ $program->status }}')" 
+                                    class="text-blue-500 hover:text-blue-700">
+                                ✏️
+                            </button>
                             <button onclick="deleteData({{ $program->id }})" class="text-red-500 hover:text-red-700 ml-2">
-                                <i class="fas fa-trash"></i>
+                                🗑️
                             </button>
                         </td>
                     </tr>
@@ -101,35 +102,189 @@
             </table>
         </div>
     </div>
+
+    <!-- Modal Edit -->
+    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">Edit Program Dana Desa</h2>
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="editId" name="id">
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Program</label>
+                        <input type="text" id="editNama" name="nama_program" class="w-full px-3 py-2 border rounded-md">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                        <select id="editKategori" name="kategori" class="w-full px-3 py-2 border rounded-md">
+                            <option value="Kesehatan">Kesehatan</option>
+                            <option value="Pendidikan">Pendidikan</option>
+                            <option value="Infrastruktur">Infrastruktur</option>
+                            <option value="Pemberdayaan Masyarakat">Pemberdayaan Masyarakat</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Anggaran</label>
+                        <input type="text" id="editAnggaran" name="anggaran" class="w-full px-3 py-2 border rounded-md" 
+                               oninput="formatRupiah(this)" placeholder="Rp 0">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Progress (%)</label>
+                        <input type="number" id="editProgress" name="progress" class="w-full px-3 py-2 border rounded-md" min="0" max="100">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Target</label>
+                        <input type="text" id="editTarget" name="target" class="w-full px-3 py-2 border rounded-md">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="editStatus" name="status" class="w-full px-3 py-2 border rounded-md">
+                            <option value="Belum Dimulai">Belum Dimulai</option>
+                            <option value="Berjalan">Berjalan</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
+                    </div>
+
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+@endsection
 
 @push('scripts')
 <script>
+// Fungsi untuk format Rupiah
+function formatRupiah(input) {
+    let value = input.value.replace(/[^\d]/g, ''); // Hapus semua karakter kecuali angka
+    if (value === '') {
+        input.value = '';
+        return;
+    }
+    
+    // Convert to number and format
+    const number = parseInt(value, 10);
+    const formatted = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(number);
+    
+    // Update input value (remove 'IDR' prefix and trim)
+    input.value = formatted.replace('IDR', 'Rp').trim();
+}
+
+function openEditModal(id, nama, kategori, anggaran, progress, target, status) {
+    // Set form action
+    const form = document.getElementById('editForm');
+    form.action = `/cms/dana/${id}`;
+    
+    // Set form values
+    document.getElementById('editId').value = id;
+    document.getElementById('editNama').value = nama;
+    document.getElementById('editKategori').value = kategori;
+    // Format anggaran saat modal dibuka
+    const formattedAnggaran = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(anggaran).replace('IDR', 'Rp').trim();
+    document.getElementById('editAnggaran').value = formattedAnggaran;
+    document.getElementById('editProgress').value = progress;
+    document.getElementById('editTarget').value = target;
+    document.getElementById('editStatus').value = status;
+    
+    // Show modal
+    document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('editModal').classList.add('hidden');
+}
+
+// Update form submission untuk handle format Rupiah
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    // Convert Rupiah format back to number before sending
+    const anggaranInput = document.getElementById('editAnggaran');
+    const anggaranValue = anggaranInput.value.replace(/[^\d]/g, '');
+    formData.set('anggaran', anggaranValue);
+    
+    const url = this.action;
+
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeModal();
+            window.location.reload();
+        } else {
+            alert(data.message || 'Terjadi kesalahan');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menyimpan data');
+    });
+});
+
+// Close modal when clicking outside
+document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
+
 function deleteData(id) {
     if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-        // Menggunakan jQuery untuk AJAX request (pastikan jQuery sudah dimuat)
-        $.ajax({
-            url: `/cms/dana/${id}`,
-            type: 'DELETE',
+        fetch(`/cms/dana/${id}`, {
+            method: 'DELETE',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert(response.message);
-                    window.location.reload();
-                } else {
-                    alert(response.message || 'Gagal menghapus data');
-                }
-            },
-            error: function(xhr) {
-                console.error('Error:', xhr);
-                alert('Terjadi kesalahan saat menghapus data. Silakan coba lagi.');
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
             }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert(data.message || 'Gagal menghapus data');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menghapus data');
         });
     }
 }
 </script>
 @endpush
-
-@endsection

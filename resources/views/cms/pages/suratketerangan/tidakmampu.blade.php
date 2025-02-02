@@ -35,7 +35,7 @@
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                             {{ $surat->status === 'approved' ? 'bg-green-100 text-green-800' : 
                                ($surat->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                            {{ ucfirst($surat->status) }}
+                            {{ $surat->status_indonesia }}
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -54,10 +54,9 @@
 <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg p-8 max-w-md w-full m-4">
         <h2 class="text-xl font-bold mb-4">Ubah Status Surat</h2>
-        <form id="editForm" method="POST" action="">
+        <form id="editForm" method="POST" data-base-url="{{ route('cms.tidakmampu.update-status', ['id' => ':id']) }}">
             @csrf
             @method('PUT')
-            <input type="hidden" id="surat_id" name="surat_id">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                 <select id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -81,13 +80,33 @@
 
 @push('scripts')
 <script>
+    function getStatusValue(displayStatus) {
+        const statusMap = {
+            'Menunggu': 'pending',
+            'Disetujui': 'approved',
+            'Ditolak': 'rejected'
+        };
+        return statusMap[displayStatus] || 'pending';
+    }
+
+    function getDisplayStatus(value) {
+        const displayMap = {
+            'pending': 'Menunggu',
+            'approved': 'Disetujui',
+            'rejected': 'Ditolak'
+        };
+        return displayMap[value] || 'Menunggu';
+    }
+
     function openEditModal(id, currentStatus) {
         const modal = document.getElementById('editModal');
         const form = document.getElementById('editForm');
         const statusSelect = document.getElementById('status');
         
-        form.action = `/cms/tidak-mampu/${id}/update-status`;
-        document.getElementById('surat_id').value = id;
+        // Update form action URL menggunakan data-base-url
+        const baseUrl = form.dataset.baseUrl;
+        form.action = baseUrl.replace(':id', id);
+        
         statusSelect.value = currentStatus;
         
         modal.classList.remove('hidden');

@@ -60,26 +60,49 @@ class DanaDesaController extends Controller
 
     public function edit($id)
     {
-        $program = DanaDesa::findOrFail($id);
-        return view('cms.pages.tambahdana', compact('program'));
+        try {
+            \Log::info('Edit method called for ID: ' . $id);
+            $program = DanaDesa::findOrFail($id);
+            
+            if (request()->ajax()) {
+                return view('cms.pages.tambahdana', compact('program'))->render();
+            }
+            
+            return view('cms.pages.tambahdana', compact('program'));
+        } catch (\Exception $e) {
+            \Log::error('Error in edit method: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, $id)
     {
-        $program = DanaDesa::findOrFail($id);
+        try {
+            $program = DanaDesa::findOrFail($id);
+            
+            $validated = $request->validate([
+                'nama_program' => 'required|string|max:255',
+                'kategori' => 'required|string',
+                'anggaran' => 'required|numeric',
+                'progress' => 'required|integer|min:0|max:100',
+                'status' => 'required|string',
+                'target' => 'required|string',
+            ]);
 
-        $validated = $request->validate([
-            'nama_program' => 'required|string|max:255',
-            'kategori' => 'required|string',
-            'anggaran' => 'required|numeric',
-            'progress' => 'required|integer|min:0|max:100',
-            'status' => 'required|string',
-            'target' => 'required|string',
-        ]);
-
-        $program->update($validated);
-
-        return redirect()->route('dana.index')->with('success', 'Program berhasil diperbarui');
+            $program->update($validated);
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data berhasil diperbarui'
+                ]);
+            }
+            
+            return redirect()->route('dana.index')->with('success', 'Data berhasil diperbarui');
+        } catch (\Exception $e) {
+            \Log::error('Error in update method: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function destroy($id)
