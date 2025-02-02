@@ -27,9 +27,17 @@ class KeteranganDomisiliController extends Controller
             'kk' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Handle file uploads
-        $ktpPath = $request->file('ktp')->store('public/domicili/ktp');
-        $kkPath = $request->file('kk')->store('public/domicili/kk');
+        if ($request->hasFile('ktp')) {
+            $file = $request->file('ktp');
+            $ktpPath = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $ktpPath);
+        }
+
+        if ($request->hasFile('kk')) {
+            $file = $request->file('kk');
+            $kkPath = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $kkPath);
+        }
 
         // Create request
         KeteranganDomisili::create([

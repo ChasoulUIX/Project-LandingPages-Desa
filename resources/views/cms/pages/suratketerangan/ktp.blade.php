@@ -15,7 +15,6 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RT/RW</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dokumen</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
@@ -35,20 +34,7 @@
                             {{ $surat->status }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <div class="flex space-x-2">
-                            @if($surat->ktp_file)
-                            <a href="{{ asset($surat->ktp_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
-                                <i class="fas fa-id-card"></i>
-                            </a>
-                            @endif
-                            @if($surat->kk_file)
-                            <a href="{{ asset($surat->kk_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
-                                <i class="fas fa-file-alt"></i>
-                            </a>
-                            @endif
-                        </div>
-                    </td>
+                
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <button onclick="openEditModal({{ $surat->id }}, '{{ $surat->status }}')" class="text-yellow-500 hover:text-yellow-600">
                             <i class="fas fa-edit"></i>

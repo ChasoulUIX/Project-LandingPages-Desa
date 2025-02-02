@@ -39,12 +39,12 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <div class="flex space-x-2">
                             @if($domisili->ktp_file)
-                            <a href="{{ asset($domisili->ktp_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                            <a href="{{ asset('images/' . $domisili->ktp_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
                                 <i class="fas fa-id-card"></i>
                             </a>
                             @endif
                             @if($domisili->kk_file)
-                            <a href="{{ asset($domisili->kk_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                            <a href="{{ asset('images/' . $domisili->kk_file) }}" target="_blank" class="text-blue-500 hover:text-blue-600">
                                 <i class="fas fa-file-alt"></i>
                             </a>
                             @endif
