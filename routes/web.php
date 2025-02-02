@@ -19,6 +19,9 @@ use App\Http\Controllers\Cms\DanaDesaController;
 use App\Http\Controllers\Cms\SambutanController;
 use App\Http\Controllers\Cms\CmsPengaduanController;
 use App\Http\Controllers\Cms\CmsSuratTidakMampuController;
+use App\Http\Controllers\Cms\CmsSuratUsahaController;
+use App\Http\Controllers\Cms\CmsSuratKtpController;
+use App\Http\Controllers\Cms\CmsSuratKelahiranController;
 
 // Auth
 // ... existing code ...
@@ -158,11 +161,9 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
-    Route::get('/suratketerangan/usaha', function () {
-        return view('cms.pages.suratketerangan.usaha');
-    });
-    Route::get('/usaha', [SuratKeteranganUsahaController::class, 'indexAdmin'])->name('cms.usaha.index');
-    Route::put('/usaha/{id}/update-status', [SuratKeteranganUsahaController::class, 'updateStatus'])->name('cms.usaha.update-status');
+    Route::get('/suratketerangan/usaha', [CmsSuratUsahaController::class, 'index'])->name('cms.usaha.index');
+    Route::put('/suratketerangan/usaha/{id}/update-status', [CmsSuratUsahaController::class, 'updateStatus'])
+        ->name('cms.usaha.update-status');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -175,20 +176,16 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
     // Surat Keterangan KTP routes
-    Route::get('/suratketerangan/ktp', function () {
-        return view('cms.pages.suratketerangan.ktp');
-    });
-    Route::get('/ktp', [SuratKtpController::class, 'indexAdmin'])->name('cms.ktp.index');
-    Route::put('/ktp/{id}/update-status', [SuratKtpController::class, 'updateStatus'])->name('cms.ktp.update-status');
+    Route::get('/suratketerangan/ktp', [CmsSuratKtpController::class, 'index'])->name('cms.ktp.index');
+    Route::put('/suratketerangan/ktp/{id}/update-status', [CmsSuratKtpController::class, 'updateStatus'])
+        ->name('cms.ktp.update-status');
 });
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
     // Surat Keterangan Kelahiran routes
-    Route::get('/suratketerangan/kelahiran', function () {
-        return view('cms.pages.suratketerangan.kelahiran');
-    });
-    Route::get('/kelahiran', [SuratKelahiranController::class, 'indexAdmin'])->name('cms.kelahiran.index');
-    Route::put('/kelahiran/{id}/update-status', [SuratKelahiranController::class, 'updateStatus'])->name('cms.kelahiran.update-status');
+    Route::get('/suratketerangan/kelahiran', [CmsSuratKelahiranController::class, 'index'])->name('cms.kelahiran.index');
+    Route::put('/suratketerangan/kelahiran/{id}/update-status', [CmsSuratKelahiranController::class, 'updateStatus'])
+        ->name('cms.kelahiran.update-status');
 });
 
 Route::get('/layanan/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
@@ -208,13 +205,9 @@ Route::prefix('cms')->middleware(['auth'])->group(function () {
 Route::resource('struktur', StrukturController::class);
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
-    Route::get('/pengaduan', function () {
-        return view('cms.pages.pengaduan', ['title' => 'Pengaduan']);
-    });
-    
-    // Tambahkan route untuk edit pengaduan
-    Route::get('/pengaduan/{id}/edit', [CmsPengaduanController::class, 'edit'])->name('pengaduan.edit');
-    Route::put('/pengaduan/{id}', [CmsPengaduanController::class, 'update'])->name('pengaduan.update');
+    Route::get('/pengaduan', [CmsPengaduanController::class, 'index'])->name('cms.pengaduan.index');
+    Route::get('/pengaduan/{id}/edit', [CmsPengaduanController::class, 'edit'])->name('cms.pengaduan.edit');
+    Route::put('/pengaduan/{id}', [CmsPengaduanController::class, 'update'])->name('cms.pengaduan.update');
 });
 
 Route::get('/cms/app/kependudukan', function () {

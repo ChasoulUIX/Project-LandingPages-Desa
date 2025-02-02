@@ -32,4 +32,15 @@ class SuratKeteranganUsaha extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getStatusIndonesiaAttribute()
+    {
+        $status = [
+            'pending' => 'Menunggu',
+            'approved' => 'Disetujui',
+            'rejected' => 'Ditolak'
+        ];
+        
+        return $status[$this->status] ?? $this->status;
+    }
 }

@@ -21,4 +21,16 @@ class Pengaduan extends Model
         'status',
         'response'
     ];
+
+    public function getStatusIndonesiaAttribute()
+    {
+        $status = [
+            'pending' => 'Menunggu',
+            'processing' => 'Diproses',
+            'resolved' => 'Selesai',
+            'rejected' => 'Ditolak'
+        ];
+        
+        return $status[$this->status] ?? $this->status;
+    }
 }

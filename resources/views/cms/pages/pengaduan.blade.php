@@ -12,6 +12,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attachment</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
@@ -31,6 +32,13 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {{ $pengaduan->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                               ($pengaduan->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                            {{ $pengaduan->status_indonesia }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <button onclick="openEditModal({{ $pengaduan->id }})" class="text-yellow-500 hover:text-yellow-600">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -46,14 +54,16 @@
 <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg p-8 max-w-md w-full m-4">
         <h2 class="text-xl font-bold mb-4">Update Pengaduan</h2>
-        <form id="editForm" method="POST">
+        <form id="editForm" method="POST" data-base-url="{{ route('cms.pengaduan.update', ['id' => ':id']) }}">
             @csrf
             @method('PUT')
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                 <select id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="Menunggu">Menunggu</option>
-                    <option value="Selesai">Selesai</option>
+                    <option value="pending">Menunggu</option>
+                    <option value="processing">Diproses</option>
+                    <option value="resolved">Selesai</option>
+                    <option value="rejected">Ditolak</option>
                 </select>
             </div>
             <div class="mb-4">
@@ -62,10 +72,10 @@
             </div>
             <div class="flex justify-end space-x-2">
                 <button type="button" onclick="closeEditModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">
-                    Cancel
+                    Batal
                 </button>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    Save
+                    Simpan
                 </button>
             </div>
         </form>
@@ -81,12 +91,15 @@
         modal.classList.remove('hidden');
         modal.style.display = 'flex';
         
+        // Update form action URL menggunakan data-base-url
+        const baseUrl = form.dataset.baseUrl;
+        form.action = baseUrl.replace(':id', id);
+        
         fetch(`/cms/pengaduan/${id}/edit`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('status').value = data.status || 'Menunggu';
+                document.getElementById('status').value = data.status || 'pending';
                 document.getElementById('response').value = data.response || '';
-                form.action = `/cms/pengaduan/${id}`;
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -29,4 +29,16 @@ class SuratKtp extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getStatusIndonesiaAttribute()
+    {
+        $status = [
+            'pending' => 'Menunggu',
+            'processed' => 'Diproses',
+            'completed' => 'Selesai',
+            'rejected' => 'Ditolak'
+        ];
+        
+        return $status[$this->status] ?? $this->status;
+    }
 } 

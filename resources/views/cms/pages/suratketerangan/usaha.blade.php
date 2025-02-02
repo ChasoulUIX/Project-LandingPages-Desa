@@ -56,10 +56,9 @@
 <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg p-8 max-w-md w-full m-4">
         <h2 class="text-xl font-bold mb-4">Ubah Status Surat</h2>
-        <form id="editForm" method="POST" action="">
+        <form id="editForm" method="POST" data-base-url="{{ route('cms.usaha.update-status', ['id' => ':id']) }}">
             @csrf
             @method('PUT')
-            <input type="hidden" id="surat_id" name="surat_id">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                 <select id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -88,8 +87,9 @@
         const form = document.getElementById('editForm');
         const statusSelect = document.getElementById('status');
         
-        form.action = `/cms/usaha/${id}/update-status`;
-        document.getElementById('surat_id').value = id;
+        // Update URL sesuai dengan route baru
+        form.action = `/cms/suratketerangan/usaha/${id}/update-status`;
+        
         statusSelect.value = currentStatus;
         
         modal.classList.remove('hidden');

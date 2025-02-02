@@ -29,9 +29,9 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $surat->rt }}/{{ $surat->rw }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {{ $surat->status === 'Disetujui' ? 'bg-green-100 text-green-800' : 
-                               ($surat->status === 'Ditolak' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                            {{ $surat->status }}
+                            {{ $surat->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                               ($surat->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                            {{ $surat->status_indonesia }}
                         </span>
                     </td>
                 
@@ -51,16 +51,16 @@
 <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg p-8 max-w-md w-full m-4">
         <h2 class="text-xl font-bold mb-4">Ubah Status Surat</h2>
-        <form id="editForm" method="POST" action="">
+        <form id="editForm" method="POST" data-base-url="{{ route('cms.ktp.update-status', ['id' => ':id']) }}">
             @csrf
             @method('PUT')
-            <input type="hidden" id="surat_id" name="surat_id">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                 <select id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="Menunggu">Menunggu</option>
-                    <option value="Disetujui">Disetujui</option>
-                    <option value="Ditolak">Ditolak</option>
+                    <option value="pending">Menunggu</option>
+                    <option value="processed">Diproses</option>
+                    <option value="completed">Selesai</option>
+                    <option value="rejected">Ditolak</option>
                 </select>
             </div>
             <div class="flex justify-end space-x-2">
@@ -83,8 +83,10 @@
         const form = document.getElementById('editForm');
         const statusSelect = document.getElementById('status');
         
-        form.action = `/cms/suratktp/${id}/update-status`;
-        document.getElementById('surat_id').value = id;
+        // Update form action URL menggunakan data-base-url
+        const baseUrl = form.dataset.baseUrl;
+        form.action = baseUrl.replace(':id', id);
+        
         statusSelect.value = currentStatus;
         
         modal.classList.remove('hidden');
