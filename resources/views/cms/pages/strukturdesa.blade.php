@@ -19,7 +19,8 @@
         @foreach($strukturs as $struktur)
         <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
             <div class="relative">
-                <img src="{{ asset('images/' . $struktur->image) }}" alt="{{ $struktur->nama }}" class="w-full h-56 object-cover">
+                <img src="{{ asset('images/' . $struktur->image) }}" alt="{{ $struktur->nama }}" 
+                    class="w-full h-56 object-contain bg-gray-100">
                 <div class="absolute top-0 right-0 p-3 flex space-x-2">
                     <button onclick="openEditModal({{ $struktur->id }})" class="bg-white p-2 rounded-full shadow-md text-blue-600 hover:text-blue-800 transition duration-300">
                         <i class="fas fa-edit"></i>

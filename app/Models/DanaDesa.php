@@ -19,7 +19,8 @@ class DanaDesa extends Model
         'status_pencairan',
         'dana_masuk',
         'dana_terpakai',
-        'nama_program'
+        'nama_program',
+        'photos'
     ];
 
     protected $casts = [
@@ -28,6 +29,7 @@ class DanaDesa extends Model
         'status_pencairan' => 'integer',
         'dana_masuk' => 'decimal:2', 
         'dana_terpakai' => 'decimal:2',
-        'tgl_pencairan' => 'date'
+        'tgl_pencairan' => 'date',
+        'photos' => 'array'
     ];
 }

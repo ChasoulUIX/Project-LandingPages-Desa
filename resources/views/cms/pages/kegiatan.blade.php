@@ -9,32 +9,55 @@
         </button>
     </div>
 
-    <!-- Kegiatan Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach($kegiatan as $item)
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="{{ asset('images/' . $item->image) }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
-            <div class="p-4">
-                <h3 class="text-lg font-semibold mb-2">{{ $item->judul }}</h3>
-                <p class="text-gray-600 text-sm mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">{{ $item->kategori }}</span>
-                    <div class="flex space-x-2">
-                        <button onclick="openEditModal({{ $item->id }})" class="text-blue-600 hover:text-blue-800">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')">
-                                <i class="fas fa-trash"></i>
+    <!-- Replace Kegiatan Grid with Table -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm md:text-base">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($kegiatan as $item)
+                    <tr class="text-gray-700" data-id="{{ $item->id }}">
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->judul }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->deskripsi, 100) }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->kategori }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">
+                            <button onclick="showPhotosModal(['{{ $item->image }}'])" 
+                                    class="text-blue-500 hover:text-blue-700 flex items-center">
+                                📷 <span class="ml-1 text-sm">(1)</span>
                             </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                        </td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">
+                            <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
+                                ✏️
+                            </button>
+                            <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')">
+                                    🗑️
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            Belum ada kegiatan
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-        @endforeach
     </div>
 
     <!-- Add Modal -->
@@ -50,7 +73,7 @@
                 @csrf
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Kegiatan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
                         <input type="text" name="judul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
@@ -65,9 +88,10 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
                         <select name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
-                            <option value="Kegiatan">Kegiatan</option>
-                            <option value="Pembangunan">Pembangunan</option>
-                            <option value="Budaya">Budaya</option>
+                            <option value="Infrastruktur">Infrastruktur</option>
+                            <option value="Sosial">Sosial</option>
+                            <option value="Ekonomi">Ekonomi</option>
+                            <option value="Lingkungan">Lingkungan</option>
                         </select>
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
@@ -107,9 +131,10 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
                         <select name="kategori" id="editKategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
-                            <option value="Kegiatan">Kegiatan</option>
-                            <option value="Pembangunan">Pembangunan</option>
-                            <option value="Budaya">Budaya</option>
+                            <option value="Infrastruktur">Infrastruktur</option>
+                            <option value="Sosial">Sosial</option>
+                            <option value="Ekonomi">Ekonomi</option>
+                            <option value="Lingkungan">Lingkungan</option>
                         </select>
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
@@ -117,6 +142,23 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Add Photos Modal -->
+    <div id="photosModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Photos</h3>
+                <button onclick="closePhotosModal()" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="photosContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Photos will be inserted here -->
+            </div>
         </div>
     </div>
 </div>
@@ -150,5 +192,42 @@ function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
     document.getElementById('editModal').classList.remove('flex');
 }
+
+function showPhotosModal(photos) {
+    const modal = document.getElementById('photosModal');
+    const container = document.getElementById('photosContainer');
+    
+    // Clear previous photos
+    container.innerHTML = '';
+    
+    // Add photos to the modal
+    photos.forEach(photo => {
+        const photoDiv = document.createElement('div');
+        photoDiv.className = 'relative pt-[100%]';
+        photoDiv.innerHTML = `
+            <div class="absolute inset-0 p-1">
+                <img src="/images/${photo}" 
+                     class="w-full h-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity object-contain bg-gray-100"
+                     onclick="window.open('/images/${photo}', '_blank')"
+                     alt="Kegiatan Photo">
+            </div>
+        `;
+        container.appendChild(photoDiv);
+    });
+    
+    // Show modal
+    modal.classList.remove('hidden');
+}
+
+function closePhotosModal() {
+    document.getElementById('photosModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('photosModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closePhotosModal();
+    }
+});
 </script>
 @endsection

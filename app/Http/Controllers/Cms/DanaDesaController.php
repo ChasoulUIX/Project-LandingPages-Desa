@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Cms;
 use App\Models\DanaDesa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class DanaDesaController extends Controller
 {
@@ -39,19 +41,38 @@ class DanaDesaController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'tahun_anggaran' => 'required|integer',
             'sumber_anggaran' => 'required|string',
             'nominal' => 'required|numeric',
             'tgl_pencairan' => 'required|date',
-            'status_pencairan' => 'required|integer|min:0|max:100',
+            'status_pencairan' => 'required|numeric|min:0|max:100',
             'dana_masuk' => 'required|numeric',
-            'dana_terpakai' => 'required|numeric'
+            'dana_terpakai' => 'required|numeric',
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        DanaDesa::create($validated);
+        $data = $request->except('photos');
+        
+        // Handle photo uploads
+        $photoPaths = [];
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                // Generate unique filename
+                $filename = Str::random(20) . '.' . $photo->getClientOriginalExtension();
+                
+                // Move file to public/images
+                $photo->move(public_path('images'), $filename);
+                
+                $photoPaths[] = $filename;
+            }
+        }
+        $data['photos'] = $photoPaths;
 
-        return redirect()->route('dana.index')->with('success', 'Data dana desa berhasil ditambahkan');
+        $danaDesa = DanaDesa::create($data);
+
+        return redirect()->route('dana.index')
+            ->with('success', 'Data dana desa berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -61,7 +82,10 @@ class DanaDesaController extends Controller
             $danaDesa = DanaDesa::findOrFail($id);
             
             if (request()->ajax()) {
-                return view('cms.pages.tambahdana', compact('danaDesa'))->render();
+                return response()->json([
+                    'dana' => $danaDesa,
+                    'photos' => $danaDesa->photos ?? []
+                ]);
             }
             
             return view('cms.pages.tambahdana', compact('danaDesa'));
@@ -83,8 +107,31 @@ class DanaDesaController extends Controller
                 'tgl_pencairan' => 'required|date',
                 'status_pencairan' => 'required|integer|min:0|max:100',
                 'dana_masuk' => 'required|numeric',
-                'dana_terpakai' => 'required|numeric'
+                'dana_terpakai' => 'required|numeric',
+                'photos.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
             ]);
+
+            // Handle photo uploads for update
+            if ($request->hasFile('photos')) {
+                // Delete old photos
+                if (!empty($danaDesa->photos)) {
+                    foreach ($danaDesa->photos as $filename) {
+                        $path = public_path('images/' . $filename);
+                        if (file_exists($path)) {
+                            unlink($path);
+                        }
+                    }
+                }
+
+                // Upload new photos
+                $photoPaths = [];
+                foreach ($request->file('photos') as $photo) {
+                    $filename = Str::random(20) . '.' . $photo->getClientOriginalExtension();
+                    $photo->move(public_path('images'), $filename);
+                    $photoPaths[] = $filename;
+                }
+                $validated['photos'] = $photoPaths;
+            }
 
             $danaDesa->update($validated);
             
@@ -105,11 +152,19 @@ class DanaDesaController extends Controller
     public function destroy($id)
     {
         try {
-            $dana = DanaDesa::findOrFail($id);
+            $danaDesa = DanaDesa::findOrFail($id);
             
-            \Log::info('Menghapus dana desa dengan ID: ' . $id);
+            // Delete photos from public/images
+            if (!empty($danaDesa->photos)) {
+                foreach ($danaDesa->photos as $filename) {
+                    $path = public_path('images/' . $filename);
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+            }
             
-            $result = $dana->delete();
+            $result = $danaDesa->delete();
             
             if (!$result) {
                 throw new \Exception('Gagal menghapus data');

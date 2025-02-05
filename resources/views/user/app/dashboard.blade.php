@@ -349,12 +349,15 @@
                             </div>
                             <div class="mt-6 space-y-3">
                                 @php
-                                    $totalAnggaran = \App\Models\DanaDesa::sum('anggaran');
+                                    $totalDana = \App\Models\DanaDesa::sum('nominal');
                                 @endphp
-                                @foreach(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->get() as $kat)
+                                @foreach(\App\Models\DanaDesa::select('sumber_anggaran')
+                                    ->selectRaw('sum(nominal) as total')
+                                    ->groupBy('sumber_anggaran')
+                                    ->get() as $dana)
                                     <div class="flex items-center justify-between text-sm">
-                                        <span class="text-gray-600">{{ $kat->kategori }}</span>
-                                        <span class="font-medium">{{ round(($kat->total / $totalAnggaran) * 100) }}%</span>
+                                        <span class="text-gray-600">{{ $dana->sumber_anggaran }}</span>
+                                        <span class="font-medium">{{ $totalDana > 0 ? round(($dana->total / $totalDana) * 100) : 0 }}%</span>
                                     </div>
                                 @endforeach
                             </div>
@@ -410,14 +413,20 @@
                 // Data untuk APBDES Chart
                 const apbdesData = {
                     labels: [
-                        @foreach(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->get() as $kat)
-                            '{{ $kat->kategori }}',
+                        @foreach(\App\Models\DanaDesa::select('sumber_anggaran')
+                            ->selectRaw('sum(nominal) as total')
+                            ->groupBy('sumber_anggaran')
+                            ->get() as $dana)
+                            '{{ $dana->sumber_anggaran }}',
                         @endforeach
                     ],
                     datasets: [{
                         data: [
-                            @foreach(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->get() as $kat)
-                                {{ round(($kat->total / $totalAnggaran) * 100) }},
+                            @foreach(\App\Models\DanaDesa::select('sumber_anggaran')
+                                ->selectRaw('sum(nominal) as total')
+                                ->groupBy('sumber_anggaran')
+                                ->get() as $dana)
+                                {{ $totalDana > 0 ? round(($dana->total / $totalDana) * 100) : 0 }},
                             @endforeach
                         ],
                         backgroundColor: [

@@ -25,13 +25,13 @@
     </div>
 
     <!-- Data Grid -->
-    <div class="bg-white rounded-lg shadow-md">
-        <div class="overflow-x-auto">
-            <table class="min-w-full table-auto text-sm">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
+            <table class="w-max md:w-full table-auto">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="sticky left-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
                             <div class="flex items-center gap-1">
                                 NIK
                                 <button onclick="sortTable('nik')" class="text-gray-400 hover:text-gray-600">
@@ -39,7 +39,7 @@
                                 </button>
                             </div>
                         </th>
-                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
                             <div class="flex items-center gap-1">
                                 No KK
                                 <button onclick="sortTable('no_kk')" class="text-gray-400 hover:text-gray-600">
@@ -47,7 +47,7 @@
                                 </button>
                             </div>
                         </th>
-                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
                             <div class="flex items-center gap-1">
                                 Nama Lengkap
                                 <button onclick="sortTable('nama_lengkap')" class="text-gray-400 hover:text-gray-600">
@@ -55,16 +55,16 @@
                                 </button>
                             </div>
                         </th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No HP</th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TTL</th>
-                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">JK</th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gol. Darah</th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agama</th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pendidikan</th>
-                        <th class="hidden md:table-cell px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Keluarga</th>
-                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">No HP</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">TTL</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">JK</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Gol. Darah</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Agama</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Status</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Pekerjaan</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Pendidikan</th>
+                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Status Keluarga</th>
+                        <th class="sticky right-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -72,32 +72,32 @@
                         $kependudukan = App\Models\Kependudukan::paginate(10);
                     @endphp
                     @forelse($kependudukan as $index => $item)
-                    <tr>
-                        <td class="px-2 py-2">{{ ($index + 1) + (request()->get('page', 1) - 1) * 10 }}</td>
-                        <td class="px-2 py-2">{{ $item->nik }}</td>
-                        <td class="px-2 py-2">{{ $item->no_kk }}</td>
-                        <td class="px-2 py-2">{{ $item->nama_lengkap }}</td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->nomor_hp }}</td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->tempat_lahir }}, {{ date('d/m/Y', strtotime($item->tanggal_lahir)) }}</td>
-                        <td class="px-2 py-2">
-                            <span class="px-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->jenis_kelamin == 'Laki-Laki' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
+                    <tr class="hover:bg-gray-50">
+                        <td class="sticky left-0 bg-white px-6 py-4 text-base whitespace-nowrap">{{ ($index + 1) + (request()->get('page', 1) - 1) * 10 }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nik }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->no_kk }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nama_lengkap }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nomor_hp }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->tempat_lahir }}, {{ date('d/m/Y', strtotime($item->tanggal_lahir)) }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->jenis_kelamin == 'Laki-Laki' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
                                 {{ $item->jenis_kelamin == 'Laki-Laki' ? 'L' : 'P' }}
                             </span>
                         </td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->golongan_darah }}</td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->agama }}</td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->status_perkawinan }}</td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->pekerjaan }}</td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->pendidikan_terakhir }}</td>
-                        <td class="hidden md:table-cell px-2 py-2">{{ $item->status_keluarga }}</td>
-                        <td class="px-2 py-2 text-right text-sm font-medium">
-                            <button onclick="openEditModal('{{ $item->nik }}')" class="text-blue-600 hover:text-blue-800 mr-2">
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->golongan_darah }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->agama }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_perkawinan }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->pekerjaan }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->pendidikan_terakhir }}</td>
+                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_keluarga }}</td>
+                        <td class="sticky right-0 bg-white px-6 py-4 text-right text-base font-medium whitespace-nowrap">
+                            <button onclick="openEditModal('{{ $item->nik }}')" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <form action="{{ route('cms.kependudukan.destroy', $item->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                <button type="submit" class="text-red-600 hover:text-red-800 text-lg" onclick="return confirm('Yakin ingin menghapus data ini?')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
@@ -105,7 +105,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="14" class="px-2 py-4 text-center text-gray-500">
+                        <td colspan="14" class="px-6 py-4 text-center text-gray-500 text-lg">
                             Tidak ada data kependudukan
                         </td>
                     </tr>
@@ -608,4 +608,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<style>
+/* Custom scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5); /* gray-400 with 50% opacity */
+    border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(107, 114, 128, 0.5); /* gray-500 with 50% opacity */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+</style>
 @endsection

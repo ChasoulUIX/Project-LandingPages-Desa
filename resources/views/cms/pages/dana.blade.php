@@ -7,11 +7,11 @@
         <div class="flex gap-4">
             <!-- Tahun Filter -->
             <select id="tahunFilter" class="border rounded-lg px-4 py-2">
-                @for($year = date('Y'); $year >= 2020; $year--)
-                    <option value="{{ $year }}" {{ request('tahun', date('Y')) == $year ? 'selected' : '' }}>
-                        {{ $year }}
+                @foreach(App\Models\DanaDesa::select('tahun_anggaran')->distinct()->orderBy('tahun_anggaran', 'desc')->get() as $year)
+                    <option value="{{ $year->tahun_anggaran }}" {{ request('tahun', date('Y')) == $year->tahun_anggaran ? 'selected' : '' }}>
+                        {{ $year->tahun_anggaran }}
                     </option>
-                @endfor
+                @endforeach
             </select>
             <a href="{{ route('dana.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
                 <i class="fas fa-plus mr-2"></i> Tambah Dana
@@ -56,6 +56,7 @@
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dana Masuk</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dana Terpakai</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
@@ -78,6 +79,16 @@
                         </td>
                         <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($dana->dana_masuk, 0, ',', '.') }}</td>
                         <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($dana->dana_terpakai, 0, ',', '.') }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">
+                            @if($dana->photos && count($dana->photos) > 0)
+                                <button onclick="showPhotosModal({{ json_encode($dana->photos) }})" 
+                                        class="text-blue-500 hover:text-blue-700 flex items-center">
+                                    📷 <span class="ml-1 text-sm">({{ count($dana->photos) }})</span>
+                                </button>
+                            @else
+                                <span class="text-gray-400">📷</span>
+                            @endif
+                        </td>
                         <td class="px-3 py-2 md:px-6 md:py-4">
                             <button onclick="openEditModal({{ $dana->id }})" class="text-blue-500 hover:text-blue-700">
                                 ✏️
@@ -172,6 +183,21 @@
                             <input type="text" id="editDanaTerpakai" name="dana_terpakai" 
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
+
+                        <!-- Add this new section for photos -->
+                        <div class="space-y-2 md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700">Foto</label>
+                            
+                            <!-- Current Photos Display -->
+                            <div id="currentPhotos" class="grid grid-cols-3 gap-4 mb-4">
+                                <!-- Photos will be displayed here -->
+                            </div>
+                            
+                            <!-- New Photos Input -->
+                            <input type="file" id="editPhotos" name="photos[]" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   multiple accept="image/*">
+                        </div>
                     </div>
 
                     <div class="flex justify-end space-x-4 mt-8">
@@ -185,6 +211,23 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photos Modal -->
+    <div id="photosModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Photos</h3>
+                <button onclick="closePhotosModal()" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="photosContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Photos will be inserted here -->
             </div>
         </div>
     </div>
@@ -253,6 +296,32 @@ function openEditModal(id) {
     document.getElementById('editDanaMasuk').value = formatRupiahValue(danaMasuk);
     document.getElementById('editDanaTerpakai').value = formatRupiahValue(danaTerpakai);
     
+    // Fetch dana details including photos
+    fetch(`/cms/dana/${id}/edit`)
+        .then(response => response.json())
+        .then(data => {
+            // Display current photos
+            const photosContainer = document.getElementById('currentPhotos');
+            photosContainer.innerHTML = ''; // Clear existing photos
+
+            if (data.photos && data.photos.length > 0) {
+                data.photos.forEach((photo, index) => {
+                    const photoDiv = document.createElement('div');
+                    photoDiv.className = 'relative';
+                    photoDiv.innerHTML = `
+                        <img src="/images/${photo}" class="w-full h-32 object-cover rounded-lg">
+                        <button type="button" onclick="removePhoto(${id}, '${photo}', this)" 
+                                class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 m-1 hover:bg-red-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    `;
+                    photosContainer.appendChild(photoDiv);
+                });
+            }
+        });
+
     // Show modal
     document.getElementById('editModal').classList.remove('hidden');
 }
@@ -289,20 +358,16 @@ function closeModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
 
-// Update form submission untuk handle format Rupiah
+// Update form submission to handle files
 document.getElementById('editForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
     
     // Convert Rupiah format back to number before sending
-    const nominalInput = document.getElementById('editNominal');
-    const danaMasukInput = document.getElementById('editDanaMasuk');
-    const danaTerpakaiInput = document.getElementById('editDanaTerpakai');
-
-    formData.set('nominal', nominalInput.value.replace(/[^\d]/g, ''));
-    formData.set('dana_masuk', danaMasukInput.value.replace(/[^\d]/g, ''));
-    formData.set('dana_terpakai', danaTerpakaiInput.value.replace(/[^\d]/g, ''));
+    formData.set('nominal', document.getElementById('editNominal').value.replace(/[^\d]/g, ''));
+    formData.set('dana_masuk', document.getElementById('editDanaMasuk').value.replace(/[^\d]/g, ''));
+    formData.set('dana_terpakai', document.getElementById('editDanaTerpakai').value.replace(/[^\d]/g, ''));
     
     const url = this.action;
 
@@ -362,6 +427,70 @@ function deleteData(id) {
 // Add year filter functionality
 document.getElementById('tahunFilter').addEventListener('change', function() {
     window.location.href = '{{ route("dana.index") }}?tahun=' + this.value;
+});
+
+// Add function to remove photo
+function removePhoto(danaId, filename, button) {
+    if (confirm('Apakah Anda yakin ingin menghapus foto ini?')) {
+        fetch(`/cms/dana/${danaId}/remove-photo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ filename: filename })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                button.closest('.relative').remove();
+            } else {
+                alert('Gagal menghapus foto');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menghapus foto');
+        });
+    }
+}
+
+// Add these new functions to your existing scripts
+function showPhotosModal(photos) {
+    const modal = document.getElementById('photosModal');
+    const container = document.getElementById('photosContainer');
+    
+    // Clear previous photos
+    container.innerHTML = '';
+    
+    // Add photos to the modal
+    photos.forEach(photo => {
+        const photoDiv = document.createElement('div');
+        photoDiv.className = 'relative pt-[100%]'; // Create 1:1 aspect ratio container
+        photoDiv.innerHTML = `
+            <div class="absolute inset-0 p-1">
+                <img src="/images/${photo}" 
+                     class="w-full h-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity object-contain bg-gray-100"
+                     onclick="window.open('/images/${photo}', '_blank')"
+                     alt="Dana Photo">
+            </div>
+        `;
+        container.appendChild(photoDiv);
+    });
+    
+    // Show modal
+    modal.classList.remove('hidden');
+}
+
+function closePhotosModal() {
+    document.getElementById('photosModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('photosModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closePhotosModal();
+    }
 });
 </script>
 @endpush

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('status_pencairan')->default(0); // Persentase status pencairan
             $table->decimal('dana_masuk', 15, 2)->default(0);
             $table->decimal('dana_terpakai', 15, 2)->default(0);
+            $table->json('photos')->nullable(); // Menyimpan array path foto
             $table->timestamps();
             $table->softDeletes(); // Menambahkan soft delete jika diperlukan
         });
