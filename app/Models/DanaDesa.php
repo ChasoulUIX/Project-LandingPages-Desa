@@ -18,7 +18,8 @@ class DanaDesa extends Model
         'tgl_pencairan',
         'status_pencairan',
         'dana_masuk',
-        'dana_terpakai'
+        'dana_terpakai',
+        'nama_program'
     ];
 
     protected $casts = [

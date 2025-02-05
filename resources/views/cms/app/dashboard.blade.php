@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 text-sm">Total Dana Desa</p>
-                <h3 class="text-xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::sum('anggaran'), 0, ',', '.') }}</h3>
+                <h3 class="text-xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::whereNull('deleted_at')->sum('nominal'), 0, ',', '.') }}</h3>
             </div>
             <div class="bg-blue-100 p-2 rounded-full">
                 <i class="fas fa-money-bill text-blue-500 text-sm"></i>
@@ -178,7 +178,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-gray-900 truncate">
-                        {{ $dana->nama_program }}
+                        {{ $dana->sumber_anggaran }}
                     </p>
                     <p class="text-sm text-gray-500">
                         <i class="far fa-clock mr-1"></i>
@@ -278,9 +278,9 @@
     new Chart(kategoriCtx, {
         type: 'doughnut',
         data: {
-            labels: {!! json_encode(\App\Models\DanaDesa::select('kategori')->groupBy('kategori')->pluck('kategori')) !!},
+            labels: {!! json_encode(\App\Models\DanaDesa::whereNull('deleted_at')->pluck('sumber_anggaran')) !!},
             datasets: [{
-                data: {!! json_encode(\App\Models\DanaDesa::select('kategori')->selectRaw('sum(anggaran) as total')->groupBy('kategori')->pluck('total')) !!},
+                data: {!! json_encode(\App\Models\DanaDesa::whereNull('deleted_at')->groupBy('sumber_anggaran')->selectRaw('sum(nominal) as total')->pluck('total')) !!},
                 backgroundColor: ['#3B82F6', '#EC4899', '#10B981'],
                 borderWidth: 0
             }]
@@ -305,13 +305,17 @@
     new Chart(statusCtx, {
         type: 'polarArea',
         data: {
-            labels: {!! json_encode(\App\Models\DanaDesa::select('status')->groupBy('status')->pluck('status')) !!},
+            labels: ['Belum Dicairkan', 'Sudah Dicairkan', 'Selesai'],
             datasets: [{
-                data: {!! json_encode(\App\Models\DanaDesa::select('status')->selectRaw('count(*) as total')->groupBy('status')->pluck('total')) !!},
+                data: [
+                    {{ App\Models\DanaDesa::whereNull('deleted_at')->where('status_pencairan', 0)->count() }},
+                    {{ App\Models\DanaDesa::whereNull('deleted_at')->where('status_pencairan', 1)->count() }},
+                    {{ App\Models\DanaDesa::whereNull('deleted_at')->where('status_pencairan', 2)->count() }}
+                ],
                 backgroundColor: [
-                    'rgba(59, 130, 246, 0.7)',
-                    'rgba(236, 72, 153, 0.7)', 
-                    'rgba(16, 185, 129, 0.7)'
+                    'rgba(59, 130, 246, 0.7)',  // blue
+                    'rgba(236, 72, 153, 0.7)',   // pink
+                    'rgba(16, 185, 129, 0.7)'    // green
                 ]
             }]
         },

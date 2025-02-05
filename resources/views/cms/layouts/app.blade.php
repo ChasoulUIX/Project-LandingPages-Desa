@@ -23,15 +23,29 @@
                         <i class="fas fa-home mr-2"></i>Dashboard
                     </a>
 
+                     <!-- Profile Desa Dropdown -->
+                     <div class="relative" x-data="{ open: {{ request()->is('cms/sambutan', 'cms/profile-desa') ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="nav-link w-full px-3 py-1.5 text-sm rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
+                            <span><i class="fas fa-building mr-2"></i>Desa</span>
+                            <i class="fas fa-chevron-down ml-2" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" 
+                             class="pl-3 mt-2 space-y-2">
+                            <a href="/cms/sambutan" class="nav-link block px-3 py-1.5 text-sm rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/sambutan') ? 'bg-blue-800' : '' }}" data-page="sambutan">
+                                <i class="fas fa-user-tie mr-2"></i>Sambutan Kepala Desa
+                            </a>
+                            <a href="/cms/profile-desa" class="nav-link block px-3 py-1.5 text-sm rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/profile-desa') ? 'bg-blue-800' : '' }}" data-page="profile">
+                                <i class="fas fa-info-circle mr-2"></i>Profile Desa
+                            </a>
+                        </div>
+                    </div>
+
                     <a href="/cms/app/kependudukan" class="nav-link block px-3 py-1.5 text-sm rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/app/kependudukan') ? 'bg-blue-800' : '' }}" data-page="kependudukan">
                         <i class="fas fa-home mr-2"></i>Kependudukan
                     </a>
 
                     <a href="/cms/strukturdesa" class="nav-link block px-3 py-1.5 text-sm rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/strukturdesa') ? 'bg-blue-800' : '' }}" data-page="layanan">
                         <i class="fas fa-file-alt mr-2"></i>Struktur Desa
-                    </a>
-                    <a href="/cms/sambutan" class="nav-link block px-3 py-1.5 text-sm rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/sambutan') ? 'bg-blue-800' : '' }}" data-page="layanan">
-                        <i class="fas fa-file-alt mr-2"></i>Sambutan
                     </a>
 
                     <a href="/cms/dana" class="nav-link block px-3 py-1.5 text-sm rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/dana') ? 'bg-blue-800' : '' }}" data-page="layanan">

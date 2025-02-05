@@ -22,6 +22,7 @@ use App\Http\Controllers\Cms\CmsSuratTidakMampuController;
 use App\Http\Controllers\Cms\CmsSuratUsahaController;
 use App\Http\Controllers\Cms\CmsSuratKtpController;
 use App\Http\Controllers\Cms\CmsSuratKelahiranController;
+use App\Http\Controllers\Cms\ProfileDesaController;
 
 // Auth
 // ... existing code ...
@@ -245,4 +246,10 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/tidak-mampu', [CmsSuratTidakMampuController::class, 'index'])->name('cms.tidakmampu.index');
     Route::put('/tidak-mampu/{id}/update-status', [CmsSuratTidakMampuController::class, 'updateStatus'])
         ->name('cms.tidakmampu.update-status');
+});
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/profile-desa', [ProfileDesaController::class, 'index'])->name('cms.profile-desa.index');
+    Route::post('/profile-desa', [ProfileDesaController::class, 'store'])->name('cms.profile-desa.store');
+    Route::put('/cms/profiledesa/update', [ProfileDesaController::class, 'update'])->name('cms.profiledesa.update');
 });
