@@ -6,21 +6,28 @@ use App\Models\Struktur;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class StrukturController extends Controller
 {
     public function index()
     {
         $strukturs = Struktur::all();
-        return view('cms.pages.strukturdesa', compact('strukturs')); // Changed view path
+        return view('cms.pages.strukturdesa', compact('strukturs'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'nik' => 'required|unique:strukturs',
+            'password' => 'required',
             'nama' => 'required',
-            'jabatan' => 'required', 
-            'periode' => 'required',
+            'jabatan' => 'required',
+            'no_wa' => 'required',
+            'akses' => 'required|in:full,view',
+            'periode_mulai' => 'required|date',
+            'periode_akhir' => 'required|date|after:periode_mulai',
+            'status' => 'required|in:aktif,non-aktif',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -28,9 +35,15 @@ class StrukturController extends Controller
         $request->image->move(public_path('images'), $imageName);
 
         Struktur::create([
+            'nik' => $request->nik,
+            'password' => Hash::make($request->password),
             'nama' => $request->nama,
             'jabatan' => $request->jabatan,
-            'periode' => $request->periode,
+            'no_wa' => $request->no_wa,
+            'akses' => $request->akses,
+            'periode_mulai' => $request->periode_mulai,
+            'periode_akhir' => $request->periode_akhir,
+            'status' => $request->status,
             'image' => $imageName
         ]);
 
@@ -45,30 +58,41 @@ class StrukturController extends Controller
 
     public function update(Request $request, $id)
     {
+        $struktur = Struktur::findOrFail($id);
+
         $request->validate([
+            'nik' => 'required|unique:strukturs,nik,'.$id,
             'nama' => 'required',
             'jabatan' => 'required',
-            'periode' => 'required',
+            'no_wa' => 'required',
+            'akses' => 'required|in:full,view',
+            'periode_mulai' => 'required|date',
+            'periode_akhir' => 'required|date|after:periode_mulai',
+            'status' => 'required|in:aktif,non-aktif',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
-        $struktur = Struktur::findOrFail($id);
         
         if ($request->hasFile('image')) {
-            // Delete old image
             if (file_exists(public_path('images/'.$struktur->image))) {
                 unlink(public_path('images/'.$struktur->image));
             }
             
-            // Upload new image
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
             $struktur->image = $imageName;
         }
 
+        $struktur->nik = $request->nik;
+        if ($request->filled('password')) {
+            $struktur->password = Hash::make($request->password);
+        }
         $struktur->nama = $request->nama;
         $struktur->jabatan = $request->jabatan;
-        $struktur->periode = $request->periode;
+        $struktur->no_wa = $request->no_wa;
+        $struktur->akses = $request->akses;
+        $struktur->periode_mulai = $request->periode_mulai;
+        $struktur->periode_akhir = $request->periode_akhir;
+        $struktur->status = $request->status;
         $struktur->save();
 
         return redirect()->back()->with('success', 'Anggota berhasil diupdate');
@@ -78,7 +102,6 @@ class StrukturController extends Controller
     {
         $struktur = Struktur::findOrFail($id);
         
-        // Delete image
         if (file_exists(public_path('images/'.$struktur->image))) {
             unlink(public_path('images/'.$struktur->image));
         }

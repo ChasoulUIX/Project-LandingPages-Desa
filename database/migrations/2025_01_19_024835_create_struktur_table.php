@@ -10,9 +10,15 @@ return new class extends Migration
     {
         Schema::create('strukturs', function (Blueprint $table) {
             $table->id();
+            $table->string('nik')->unique();
+            $table->string('password');
             $table->string('nama');
             $table->string('jabatan');
-            $table->string('periode');
+            $table->string('no_wa');
+            $table->string('akses')->default('view'); // 'full' or 'view'
+            $table->date('periode_mulai');
+            $table->date('periode_akhir');
+            $table->string('status')->default('aktif'); // 'aktif' or 'non-aktif'
             $table->string('image');
             $table->timestamps();
         });

@@ -10,13 +10,15 @@ return new class extends Migration
     {
         Schema::create('danadesa', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_program');
-            $table->string('kategori');
-            $table->decimal('anggaran', 15, 2);
-            $table->integer('progress');
-            $table->string('status');
-            $table->string('target');
+            $table->year('tahun_anggaran');
+            $table->string('sumber_anggaran');
+            $table->decimal('nominal', 15, 2);
+            $table->date('tgl_pencairan');
+            $table->integer('status_pencairan')->default(0); // Persentase status pencairan
+            $table->decimal('dana_masuk', 15, 2)->default(0);
+            $table->decimal('dana_terpakai', 15, 2)->default(0);
             $table->timestamps();
+            $table->softDeletes(); // Menambahkan soft delete jika diperlukan
         });
     }
 

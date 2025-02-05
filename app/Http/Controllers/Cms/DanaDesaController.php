@@ -5,70 +5,66 @@ namespace App\Http\Controllers\Cms;
 use App\Models\DanaDesa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 
 class DanaDesaController extends Controller
 {
-    public function __construct()
+    public function index(Request $request)
     {
-        // Create dana_desas table if it doesn't exist
-        if (!Schema::hasTable('dana_desas')) {
-            Schema::create('dana_desas', function (Blueprint $table) {
-                $table->id();
-                $table->string('nama_program');
-                $table->string('kategori');
-                $table->decimal('anggaran', 15, 2);
-                $table->integer('progress');
-                $table->string('status');
-                $table->string('target');
-                $table->timestamps();
-            });
-        }
-    }
-
-    public function index()
-    {
-        $danaPrograms = DanaDesa::all();
-        $totalPrograms = $danaPrograms->count();
+        $tahun = $request->get('tahun', date('Y'));
         
-        return view('cms.pages.dana', compact('danaPrograms', 'totalPrograms'));
+        $danaDesa = DanaDesa::where('tahun_anggaran', $tahun)->get();
+        
+        // Hitung total dana
+        $totalDana = $danaDesa->sum('nominal');
+        $totalDanaMasuk = $danaDesa->sum('dana_masuk');
+        $totalDanaTerpakai = $danaDesa->sum('dana_terpakai');
+        $sisaDana = $totalDanaMasuk - $totalDanaTerpakai;
+        
+        // Hitung persentase
+        $persentaseMasuk = $totalDana > 0 ? ($totalDanaMasuk / $totalDana) * 100 : 0;
+        $persentaseTerpakai = $totalDanaMasuk > 0 ? ($totalDanaTerpakai / $totalDanaMasuk) * 100 : 0;
+        $persentaseSisa = $totalDanaMasuk > 0 ? ($sisaDana / $totalDanaMasuk) * 100 : 0;
+
+        return view('cms.pages.dana', compact(
+            'danaDesa',
+            'totalDana', 
+            'totalDanaMasuk',
+            'totalDanaTerpakai',
+            'sisaDana',
+            'persentaseMasuk',
+            'persentaseTerpakai',
+            'persentaseSisa'
+        ));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_program' => 'required|string|max:255',
-            'kategori' => 'required|string',
-            'anggaran' => 'required|numeric',
-            'progress' => 'required|integer|min:0|max:100',
-            'status' => 'required|string',
-            'target' => 'required|string',
+            'tahun_anggaran' => 'required|integer',
+            'sumber_anggaran' => 'required|string',
+            'nominal' => 'required|numeric',
+            'tgl_pencairan' => 'required|date',
+            'status_pencairan' => 'required|integer|min:0|max:100',
+            'dana_masuk' => 'required|numeric',
+            'dana_terpakai' => 'required|numeric'
         ]);
 
-        $program = new DanaDesa();
-        $program->nama_program = $validated['nama_program'];
-        $program->kategori = $validated['kategori'];
-        $program->anggaran = $validated['anggaran'];
-        $program->progress = $validated['progress'];
-        $program->status = $validated['status'];
-        $program->target = $validated['target'];
-        $program->save();
+        DanaDesa::create($validated);
 
-        return redirect()->route('dana.index')->with('success', 'Program berhasil ditambahkan');
+        return redirect()->route('dana.index')->with('success', 'Data dana desa berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         try {
             \Log::info('Edit method called for ID: ' . $id);
-            $program = DanaDesa::findOrFail($id);
+            $danaDesa = DanaDesa::findOrFail($id);
             
             if (request()->ajax()) {
-                return view('cms.pages.tambahdana', compact('program'))->render();
+                return view('cms.pages.tambahdana', compact('danaDesa'))->render();
             }
             
-            return view('cms.pages.tambahdana', compact('program'));
+            return view('cms.pages.tambahdana', compact('danaDesa'));
         } catch (\Exception $e) {
             \Log::error('Error in edit method: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
@@ -78,18 +74,19 @@ class DanaDesaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $program = DanaDesa::findOrFail($id);
+            $danaDesa = DanaDesa::findOrFail($id);
             
             $validated = $request->validate([
-                'nama_program' => 'required|string|max:255',
-                'kategori' => 'required|string',
-                'anggaran' => 'required|numeric',
-                'progress' => 'required|integer|min:0|max:100',
-                'status' => 'required|string',
-                'target' => 'required|string',
+                'tahun_anggaran' => 'required|integer',
+                'sumber_anggaran' => 'required|string',
+                'nominal' => 'required|numeric',
+                'tgl_pencairan' => 'required|date',
+                'status_pencairan' => 'required|integer|min:0|max:100',
+                'dana_masuk' => 'required|numeric',
+                'dana_terpakai' => 'required|numeric'
             ]);
 
-            $program->update($validated);
+            $danaDesa->update($validated);
             
             if ($request->ajax()) {
                 return response()->json([
@@ -110,7 +107,6 @@ class DanaDesaController extends Controller
         try {
             $dana = DanaDesa::findOrFail($id);
             
-            // Tambahkan log untuk debugging
             \Log::info('Menghapus dana desa dengan ID: ' . $id);
             
             $result = $dana->delete();
@@ -140,7 +136,7 @@ class DanaDesaController extends Controller
 
     public function tambahdana($id)
     {
-        $program = DanaDesa::findOrFail($id);
-        return view('cms.pages.tambahdana', compact('program'));
+        $danaDesa = DanaDesa::findOrFail($id);
+        return view('cms.pages.tambahdana', compact('danaDesa'));
     }
 }

@@ -368,10 +368,10 @@
             datasets: [{
                 label: 'Jumlah Penduduk',
                 data: [
-                    {{ App\Models\Kependudukan::where('usia', '<', 15)->count() }},
-                    {{ App\Models\Kependudukan::whereBetween('usia', [15, 24])->count() }},
-                    {{ App\Models\Kependudukan::whereBetween('usia', [25, 54])->count() }},
-                    {{ App\Models\Kependudukan::where('usia', '>=', 55)->count() }}
+                    {{ App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) < 15')->count() }},
+                    {{ App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) BETWEEN 15 AND 24')->count() }},
+                    {{ App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) BETWEEN 25 AND 54')->count() }},
+                    {{ App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) >= 55')->count() }}
                 ],
                 backgroundColor: '#3B82F6',
                 borderRadius: 4

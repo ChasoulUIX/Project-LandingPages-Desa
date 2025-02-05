@@ -214,9 +214,9 @@ Route::get('/cms/app/kependudukan', function () {
     return view('cms.pages.kependudukan');
 });
 
-Route::group(['prefix' => 'cms', 'as' => 'cms.'], function () {
+Route::prefix('cms')->name('cms.')->middleware(['auth'])->group(function () {
     Route::resource('kependudukan', KependudukanController::class);
-    Route::get('/kependudukan/{id}/edit', [KependudukanController::class, 'edit'])
+    Route::get('/kependudukan/{nik}/edit', [KependudukanController::class, 'edit'])
         ->name('kependudukan.edit');
 });
 

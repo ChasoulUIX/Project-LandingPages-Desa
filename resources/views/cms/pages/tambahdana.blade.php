@@ -1,4 +1,3 @@
-
 @extends('cms.layouts.app')
 
 @section('content')
@@ -12,45 +11,41 @@
             @csrf
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Program</label>
-                <input type="text" name="nama_program" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Anggaran</label>
+                <input type="number" name="tahun_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                <select name="kategori" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-                    <option value="">Pilih Kategori</option>
-                    <option value="Infrastruktur">Infrastruktur</option>
-                    <option value="Pemberdayaan Masyarakat">Pemberdayaan Masyarakat</option>
-                    <option value="Kesehatan">Kesehatan</option>
-                    <option value="Pendidikan">Pendidikan</option>
-                    <option value="Ekonomi">Ekonomi</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Sumber Anggaran</label>
+                <input type="text" name="sumber_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Anggaran</label>
-                <input type="number" name="anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nominal</label>
+                <input type="text" id="nominal_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                <input type="hidden" name="nominal" id="nominal_actual">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Progress (%)</label>
-                <input type="number" name="progress" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pencairan</label>
+                <input type="date" name="tgl_pencairan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Target</label>
-                <input type="text" name="target" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status Pencairan (%)</label>
+                <input type="number" name="status_pencairan" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select name="status" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-                    <option value="">Pilih Status</option>
-                    <option value="Dalam Perencanaan">Dalam Perencanaan</option>
-                    <option value="Berjalan">Berjalan</option>
-                    <option value="Selesai">Selesai</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Dana Masuk</label>
+                <input type="text" id="dana_masuk_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                <input type="hidden" name="dana_masuk" id="dana_masuk_actual">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Dana Terpakai</label>
+                <input type="text" id="dana_terpakai_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                <input type="hidden" name="dana_terpakai" id="dana_terpakai_actual">
             </div>
 
             <div class="flex justify-end space-x-3">
@@ -64,4 +59,41 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(angka);
+    }
+
+    function parseRupiah(rupiahString) {
+        return parseInt(rupiahString.replace(/[^0-9]/g, ''));
+    }
+
+    function setupMoneyInput(displayId, actualId) {
+        const displayInput = document.getElementById(displayId);
+        const actualInput = document.getElementById(actualId);
+
+        displayInput.addEventListener('input', function(e) {
+            let value = parseRupiah(this.value);
+            if (!isNaN(value)) {
+                this.value = formatRupiah(value);
+                actualInput.value = value;
+            }
+        });
+    }
+
+    // Initialize all money inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        setupMoneyInput('nominal_display', 'nominal_actual');
+        setupMoneyInput('dana_masuk_display', 'dana_masuk_actual');
+        setupMoneyInput('dana_terpakai_display', 'dana_terpakai_actual');
+    });
+</script>
+@endpush
 @endsection

@@ -8,22 +8,27 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('kependudukans', function (Blueprint $table) {
+        Schema::create('kependudukan', function (Blueprint $table) {
             $table->id();
-            $table->string('nik')->unique();
-            $table->string('nama');
-            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan']);
-            $table->integer('usia');
-            $table->enum('status_keluarga', ['Kepala Keluarga', 'Istri', 'Anak', 'Lainnya']);
-            $table->enum('mata_pencaharian', ['Petani', 'Pedagang', 'PNS', 'Wiraswasta', 'Buruh', 'Lainnya']);
-            $table->enum('pendidikan', ['Tidak Sekolah', 'SD', 'SMP', 'SMA/SMK', 'D3', 'S1', 'S2', 'S3']);
-            $table->text('alamat');
+            $table->string('nik', 16);
+            $table->string('no_kk', 16);
+            $table->string('nama_lengkap');
+            $table->string('nomor_hp')->nullable();
+            $table->string('tempat_lahir');
+            $table->date('tanggal_lahir');
+            $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
+            $table->string('golongan_darah')->nullable();
+            $table->string('agama');
+            $table->string('status_perkawinan');
+            $table->string('pekerjaan');
+            $table->string('pendidikan_terakhir');
+            $table->string('status_keluarga');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('kependudukans');
+        Schema::dropIfExists('kependudukan');
     }
 };
