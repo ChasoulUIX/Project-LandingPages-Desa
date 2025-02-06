@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto px-6 py-8">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-semibold text-gray-900">Kegiatan Desa</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">Pendanaan Desa</h1>
         <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
             <i class="fas fa-plus mr-2"></i> Tambah Kegiatan
         </button>
@@ -18,6 +18,9 @@
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
@@ -28,6 +31,11 @@
                         <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->judul }}</td>
                         <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->deskripsi, 100) }}</td>
                         <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->kategori }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($item->anggaran, 0, ',', '.') }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->progress }}%</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">
+                            {{ $item->tgl_mulai->format('d/m/Y') }} - {{ $item->tgl_selesai->format('d/m/Y') }}
+                        </td>
                         <td class="px-3 py-2 md:px-6 md:py-4">
                             <button onclick="showPhotosModal(['{{ $item->image }}'])" 
                                     class="text-blue-500 hover:text-blue-700 flex items-center">
@@ -50,7 +58,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">
                             Belum ada kegiatan
                         </td>
                     </tr>
@@ -81,10 +89,6 @@
                         <textarea name="deskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                        <input type="file" name="image" required accept="image/*" class="w-full">
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
                         <select name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
@@ -94,6 +98,47 @@
                             <option value="Lingkungan">Lingkungan</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
+                        <input type="text" id="anggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="hidden" name="anggaran" id="anggaran_actual">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
+                        <select name="sumber_dana" id="sumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Pilih Sumber Dana</option>
+                            @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
+                                <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
+                                    {{ $dana->sumber_anggaran }} - Rp {{ number_format($dana->nominal, 0, ',', '.') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <p id="sisa_dana" class="text-sm text-gray-600 mt-1"></p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                        <input type="date" name="tgl_mulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
+                        <input type="date" name="tgl_selesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
+                        <div class="relative">
+                            <input type="number" name="progress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <span class="absolute right-3 top-2 text-gray-500">%</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
+                        <input type="file" name="image" required accept="image/*" class="w-full">
+                    </div>
+                    
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
                         Simpan Kegiatan
                     </button>
@@ -116,16 +161,12 @@
                 @method('PUT')
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Kegiatan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
                         <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                         <textarea name="deskripsi" id="editDeskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
-                        <input type="file" name="image" accept="image/*" class="w-full">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
@@ -137,6 +178,47 @@
                             <option value="Lingkungan">Lingkungan</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
+                        <input type="text" id="editAnggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="hidden" name="anggaran" id="editAnggaran_actual">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
+                        <select name="sumber_dana" id="editSumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Pilih Sumber Dana</option>
+                            @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
+                                <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
+                                    {{ $dana->sumber_anggaran }} - Rp {{ number_format($dana->nominal, 0, ',', '.') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <p id="editSisa_dana" class="text-sm text-gray-600 mt-1"></p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                        <input type="date" name="tgl_mulai" id="editTglMulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
+                        <input type="date" name="tgl_selesai" id="editTglSelesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
+                        <div class="relative">
+                            <input type="number" name="progress" id="editProgress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <span class="absolute right-3 top-2 text-gray-500">%</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
+                        <input type="file" name="image" accept="image/*" class="w-full">
+                    </div>
+                    
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
                         Update Kegiatan
                     </button>
@@ -175,16 +257,24 @@ function closeAddModal() {
 }
 
 function openEditModal(id) {
-    // Fetch kegiatan data and populate form
     fetch(`/cms/kegiatan/${id}/edit`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('editJudul').value = data.judul;
             document.getElementById('editDeskripsi').value = data.deskripsi;
             document.getElementById('editKategori').value = data.kategori;
+            document.getElementById('editAnggaran_display').value = new Intl.NumberFormat('id-ID').format(data.anggaran);
+            document.getElementById('editAnggaran_actual').value = data.anggaran;
+            document.getElementById('editSumber_dana').value = data.sumber_dana;
+            document.getElementById('editTglMulai').value = data.tgl_mulai;
+            document.getElementById('editTglSelesai').value = data.tgl_selesai;
+            document.getElementById('editProgress').value = data.progress;
             document.getElementById('editForm').action = `/cms/kegiatan/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
+            
+            // Update sisa dana display
+            checkEditAvailableFunds();
         });
 }
 
@@ -227,6 +317,83 @@ function closePhotosModal() {
 document.getElementById('photosModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closePhotosModal();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const anggaranDisplay = document.getElementById('anggaran_display');
+    const anggaranActual = document.getElementById('anggaran_actual');
+    const sumberDana = document.getElementById('sumber_dana');
+    const sisaDana = document.getElementById('sisa_dana');
+
+    // Format currency input
+    anggaranDisplay.addEventListener('input', function(e) {
+        // Remove non-numeric characters
+        let value = this.value.replace(/\D/g, '');
+        
+        // Format the number with thousand separator
+        const formattedValue = new Intl.NumberFormat('id-ID').format(value);
+        this.value = formattedValue;
+        
+        // Store the raw number in hidden input (convert to decimal format)
+        anggaranActual.value = (parseFloat(value) || 0).toFixed(2);
+        
+        // Check available funds
+        checkAvailableFunds();
+    });
+
+    sumberDana.addEventListener('change', checkAvailableFunds);
+
+    function checkAvailableFunds() {
+        const selectedOption = sumberDana.options[sumberDana.selectedIndex];
+        if (selectedOption.value) {
+            const nominal = parseInt(selectedOption.dataset.nominal);
+            const terpakai = parseInt(selectedOption.dataset.terpakai) || 0;
+            const anggaran = parseFloat(anggaranActual.value) || 0;
+            const sisaAnggaran = nominal - terpakai;
+            
+            sisaDana.textContent = `Sisa dana: Rp ${new Intl.NumberFormat('id-ID').format(sisaAnggaran)}`;
+
+            if (anggaran > sisaAnggaran) {
+                alert('Anggaran melebihi sisa dana yang tersedia!');
+                anggaranDisplay.value = '';
+                anggaranActual.value = '';
+            }
+        }
+    }
+
+    // Edit form currency formatting
+    const editAnggaranDisplay = document.getElementById('editAnggaran_display');
+    const editAnggaranActual = document.getElementById('editAnggaran_actual');
+    const editSumberDana = document.getElementById('editSumber_dana');
+    const editSisaDana = document.getElementById('editSisa_dana');
+
+    editAnggaranDisplay.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+        const formattedValue = new Intl.NumberFormat('id-ID').format(value);
+        this.value = formattedValue;
+        editAnggaranActual.value = value;
+        checkEditAvailableFunds();
+    });
+
+    editSumberDana.addEventListener('change', checkEditAvailableFunds);
+
+    function checkEditAvailableFunds() {
+        const selectedOption = editSumberDana.options[editSumberDana.selectedIndex];
+        if (selectedOption.value) {
+            const nominal = parseInt(selectedOption.dataset.nominal);
+            const terpakai = parseInt(selectedOption.dataset.terpakai) || 0;
+            const anggaran = parseFloat(editAnggaranActual.value) || 0;
+            const sisaAnggaran = nominal - terpakai;
+            
+            editSisaDana.textContent = `Sisa dana: Rp ${new Intl.NumberFormat('id-ID').format(sisaAnggaran)}`;
+
+            if (anggaran > sisaAnggaran) {
+                alert('Anggaran melebihi sisa dana yang tersedia!');
+                editAnggaranDisplay.value = '';
+                editAnggaranActual.value = '';
+            }
+        }
     }
 });
 </script>

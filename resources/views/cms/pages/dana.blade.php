@@ -43,70 +43,132 @@
         </div>
     </div>
 
-    <!-- Data Grid -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm md:text-base">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tahun</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sumber Anggaran</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nominal</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tgl Pencairan</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dana Masuk</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dana Terpakai</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
-                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($danaDesa as $dana)
-                    <tr class="text-gray-700" data-id="{{ $dana->id }}">
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $dana->tahun_anggaran }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $dana->sumber_anggaran }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($dana->nominal, 0, ',', '.') }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $dana->tgl_pencairan->format('d/m/Y') }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">
-                            <div class="relative pt-1">
-                                <div class="overflow-hidden h-2 text-xs flex rounded bg-blue-200">
-                                    <div style="width: {{ $dana->status_pencairan }}%" 
-                                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500">
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 relative">
+        <!-- Left Column - Dana Table -->
+        <div id="tableSection" class="lg:col-span-3">
+            <!-- Data Grid -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tahun</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Sumber Anggaran</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Nominal</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tgl Pencairan</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Status</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Dana Masuk</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Dana Terpakai</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Foto</th>
+                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($danaDesa as $dana)
+                            <tr class="text-gray-700 hover:bg-gray-50" data-id="{{ $dana->id }}">
+                                <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tahun_anggaran }}</td>
+                                <td class="px-2 py-2 whitespace-nowrap">{{ $dana->sumber_anggaran }}</td>
+                                <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->nominal, 0, ',', '.') }}</td>
+                                <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tgl_pencairan->format('d/m/Y') }}</td>
+                                <td class="px-2 py-2 whitespace-nowrap">
+                                    <div class="relative pt-1">
+                                        <div class="overflow-hidden h-1.5 text-sm flex rounded bg-blue-200">
+                                            <div style="width: {{ $dana->status_pencairan }}%" 
+                                                 class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500">
+                                            </div>
+                                        </div>
+                                        <div class="text-sm">{{ $dana->status_pencairan }}%</div>
+                                    </div>
+                                </td>
+                                <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->dana_masuk, 0, ',', '.') }}</td>
+                                <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->dana_terpakai, 0, ',', '.') }}</td>
+                                <td class="px-2 py-2 whitespace-nowrap">
+                                    @if($dana->photos && count($dana->photos) > 0)
+                                        <button onclick="showPhotosModal({{ json_encode($dana->photos) }})" 
+                                                class="text-blue-500 hover:text-blue-700 flex items-center">
+                                            📷 <span class="ml-1">({{ count($dana->photos) }})</span>
+                                        </button>
+                                    @else
+                                        <span class="text-gray-400">📷</span>
+                                    @endif
+                                </td>
+                                <td class="px-2 py-2 whitespace-nowrap">
+                                    <button onclick="openEditModal({{ $dana->id }})" class="text-blue-500 hover:text-blue-700">
+                                        ✏️
+                                    </button>
+                                    <button onclick="deleteData({{ $dana->id }})" class="text-red-500 hover:text-red-700 ml-2">
+                                        🗑️
+                                    </button>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="9" class="px-2 py-2 text-center text-gray-500">
+                                    Belum ada data dana desa
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="toggleBtn" onclick="toggleKegiatan()" class="hidden lg:flex absolute -right-3 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full w-6 h-24 items-center justify-center hover:bg-gray-50 focus:outline-none">
+            <svg id="toggleIcon" class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+
+        <!-- Right Column - Kegiatan History -->
+        <div id="kegiatanSection" class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Riwayat Pendanaan</h2>
+                
+                <!-- Kegiatan List -->
+                <div class="space-y-4">
+                    @foreach(App\Models\Kegiatan::orderBy('created_at', 'desc')->limit(5)->get() as $item)
+                        <div class="border-l-4 border-blue-500 pl-4 py-2">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">{{ $item->judul }}</h3>
+                                    <p class="text-sm text-gray-600">{{ $item->deskripsi }}</p>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        Anggaran: Rp {{ number_format($item->anggaran, 0, ',', '.') }}
+                                    </p>
+                                </div>
+                                <span class="text-xs text-gray-500">
+                                    {{ $item->created_at->format('d M Y') }}
+                                </span>
+                            </div>
+                            <div class="mt-2">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" 
+                                         style="width: {{ $item->progress }}%">
                                     </div>
                                 </div>
-                                <div class="text-xs mt-1">{{ $dana->status_pencairan }}%</div>
+                                <p class="text-xs text-gray-600 mt-1">
+                                    Progress: {{ $item->progress }}%
+                                </p>
                             </div>
-                        </td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($dana->dana_masuk, 0, ',', '.') }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($dana->dana_terpakai, 0, ',', '.') }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">
-                            @if($dana->photos && count($dana->photos) > 0)
-                                <button onclick="showPhotosModal({{ json_encode($dana->photos) }})" 
-                                        class="text-blue-500 hover:text-blue-700 flex items-center">
-                                    📷 <span class="ml-1 text-sm">({{ count($dana->photos) }})</span>
-                                </button>
-                            @else
-                                <span class="text-gray-400">📷</span>
-                            @endif
-                        </td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">
-                            <button onclick="openEditModal({{ $dana->id }})" class="text-blue-500 hover:text-blue-700">
-                                ✏️
-                            </button>
-                            <button onclick="deleteData({{ $dana->id }})" class="text-red-500 hover:text-red-700 ml-2">
-                                🗑️
-                            </button>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">
-                            Belum ada data dana desa
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- View All Button -->
+                <div class="mt-4 text-center">
+                    <a href="{{ route('kegiatan.index') }}" 
+                       class="inline-flex items-center text-blue-600 hover:text-blue-700">
+                        Lihat Semua Kegiatan
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -490,6 +552,34 @@ function closePhotosModal() {
 document.getElementById('photosModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closePhotosModal();
+    }
+});
+
+function toggleKegiatan() {
+    const tableSection = document.getElementById('tableSection');
+    const kegiatanSection = document.getElementById('kegiatanSection');
+    const toggleIcon = document.getElementById('toggleIcon');
+    
+    if (kegiatanSection.classList.contains('hidden')) {
+        // Show Kegiatan
+        kegiatanSection.classList.remove('hidden');
+        tableSection.classList.remove('lg:col-span-4');
+        tableSection.classList.add('lg:col-span-3');
+        toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
+    } else {
+        // Hide Kegiatan
+        kegiatanSection.classList.add('hidden');
+        tableSection.classList.remove('lg:col-span-3');
+        tableSection.classList.add('lg:col-span-4');
+        toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />';
+    }
+}
+
+// Add keyboard shortcut
+document.addEventListener('keydown', function(e) {
+    // Alt + K to toggle kegiatan
+    if (e.altKey && e.key === 'k') {
+        toggleKegiatan();
     }
 });
 </script>

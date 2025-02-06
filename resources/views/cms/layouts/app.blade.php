@@ -14,7 +14,7 @@
         <!-- Sidebar -->
         <div id="sidebar" class="bg-blue-900 text-white w-64 py-6 flex flex-col transition-all duration-300">
             <div class="px-6 mb-6">
-                <h1 class="text-2xl font-bold">CMS Admin</h1>
+                <h1 class="text-1xl font-bold">Desa Sumber Secang</h1>
             </div>
             
             <nav class="flex-1">
@@ -48,12 +48,25 @@
                         <i class="fas fa-file-alt mr-3"></i>Struktur Desa
                     </a>
 
-                    <a href="/cms/dana" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/dana') ? 'bg-blue-800' : '' }}" data-page="layanan">
-                        <i class="fas fa-file-alt mr-3"></i>Dana Desa
-                    </a>
+                    <!-- Keuangan Desa Dropdown -->
+                    <div class="relative" x-data="{ open: {{ request()->is('cms/dana', 'cms/kegiatan') ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="nav-link w-full px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
+                            <span><i class="fas fa-money-bill mr-3"></i>Keuangan Desa</span>
+                            <i class="fas fa-chevron-down ml-3" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" 
+                             class="pl-4 mt-2 space-y-2">
+                            <a href="/cms/dana" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/dana') ? 'bg-blue-800' : '' }}" data-page="dana">
+                                <i class="fas fa-file-alt mr-3"></i>Dana Desa
+                            </a>
+                            <a href="/cms/kegiatan" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/kegiatan') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
+                                <i class="fas fa-newspaper mr-3"></i>Pendanaan Desa
+                            </a>
+                        </div>
+                    </div>
                     
                     <!-- Galeri Dropdown -->
-                    <div class="relative" x-data="{ open: {{ request()->is('cms/berita', 'cms/kegiatan', 'cms/produk') ? 'true' : 'false' }} }">
+                    <div class="relative" x-data="{ open: {{ request()->is('cms/berita', 'cms/produk') ? 'true' : 'false' }} }">
                         <button @click="open = !open" class="nav-link w-full px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
                             <span><i class="fas fa-images mr-3"></i>Galeri</span>
                             <i class="fas fa-chevron-down ml-3" :class="{ 'transform rotate-180': open }"></i>
@@ -63,9 +76,7 @@
                              <a href="/cms/berita" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/berita') ? 'bg-blue-800' : '' }}" data-page="berita">
                                 <i class="fas fa-newspaper mr-3"></i>Berita
                             </a>
-                            <a href="/cms/kegiatan" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/kegiatan') ? 'bg-blue-800' : '' }}" data-page="kegiatan">
-                                <i class="fas fa-newspaper mr-3"></i>Kegiatan
-                            </a>
+                           
                             <a href="/cms/produk" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/produk') ? 'bg-blue-800' : '' }}" data-page="produk">
                                 <i class="fas fa-box mr-3"></i>Produk
                             </a>
@@ -149,11 +160,9 @@
                         <button class="text-gray-500 hover:text-gray-700">
                             <i class="fas fa-bell text-xl"></i>
                         </button>
-                        <div class="relative">
-                            <button class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                                <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&size=40" alt="Profile" class="w-10 h-10 rounded-full">
-                                <span class="text-base">{{ auth()->user()->name }}</span>
-                            </button>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-base text-gray-700">{{ auth()->user()->name }}</span>
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&size=40" alt="Profile" class="w-10 h-10 rounded-full">
                         </div>
                     </div>
                 </div>

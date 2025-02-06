@@ -14,7 +14,13 @@ return new class extends Migration
             $table->text('deskripsi');
             $table->string('image');
             $table->string('kategori');
+            $table->decimal('anggaran', 15, 2);
+            $table->foreignId('sumber_dana');
+            $table->date('tgl_mulai');
+            $table->date('tgl_selesai');
+            $table->integer('progress')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
