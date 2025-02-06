@@ -70,7 +70,7 @@
 
     <!-- Add Modal -->
     <div id="addModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+        <div class="bg-white rounded-lg w-full max-w-4xl mx-4">
             <div class="flex justify-between items-center p-6 border-b">
                 <h3 class="text-lg font-semibold">Tambah Kegiatan Baru</h3>
                 <button onclick="closeAddModal()" class="text-gray-600 hover:text-gray-800">
@@ -79,66 +79,72 @@
             </div>
             <form action="{{ route('kegiatan.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                        <input type="text" name="judul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <textarea name="deskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                        <select name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Pilih Kategori</option>
-                            <option value="Infrastruktur">Infrastruktur</option>
-                            <option value="Sosial">Sosial</option>
-                            <option value="Ekonomi">Ekonomi</option>
-                            <option value="Lingkungan">Lingkungan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
-                        <input type="text" id="anggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="hidden" name="anggaran" id="anggaran_actual">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
-                        <select name="sumber_dana" id="sumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            <option value="">Pilih Sumber Dana</option>
-                            @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
-                                <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
-                                    {{ $dana->sumber_anggaran }} - Rp {{ number_format($dana->nominal, 0, ',', '.') }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <p id="sisa_dana" class="text-sm text-gray-600 mt-1"></p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                        <input type="date" name="tgl_mulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                        <input type="date" name="tgl_selesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
-                        <div class="relative">
-                            <input type="number" name="progress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <span class="absolute right-3 top-2 text-gray-500">%</span>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
+                            <input type="text" name="judul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                            <textarea name="deskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                            <select name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Kategori</option>
+                                <option value="Infrastruktur">Infrastruktur</option>
+                                <option value="Sosial">Sosial</option>
+                                <option value="Ekonomi">Ekonomi</option>
+                                <option value="Lingkungan">Lingkungan</option>
+                                <option value="Pemerintahan">Pemerintahan</option>
+                                <option value="Kemasyarakatan">Kemasyarakatan</option>
+                                <option value="Keadaan Darurat">Keadaan Darurat</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
+                            <input type="text" id="anggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="hidden" name="anggaran" id="anggaran_actual">
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                        <input type="file" name="image" required accept="image/*" class="w-full">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
+                            <select name="sumber_dana" id="sumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <option value="">Pilih Sumber Dana</option>
+                                @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
+                                    <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
+                                        {{ $dana->sumber_anggaran }} - Rp {{ number_format($dana->nominal, 0, ',', '.') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p id="sisa_dana" class="text-sm text-gray-600 mt-1"></p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                                <input type="date" name="tgl_mulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
+                                <input type="date" name="tgl_selesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
+                            <div class="relative">
+                                <input type="number" name="progress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <span class="absolute right-3 top-2 text-gray-500">%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
+                            <input type="file" name="image" required accept="image/*" class="w-full">
+                        </div>
                     </div>
-                    
+                </div>
+                <div class="mt-6">
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
                         Simpan Kegiatan
                     </button>
@@ -149,7 +155,7 @@
 
     <!-- Edit Modal -->
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+        <div class="bg-white rounded-lg w-full max-w-4xl mx-4">
             <div class="flex justify-between items-center p-6 border-b">
                 <h3 class="text-lg font-semibold">Edit Kegiatan</h3>
                 <button onclick="closeEditModal()" class="text-gray-600 hover:text-gray-800">
@@ -159,66 +165,72 @@
             <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 @method('PUT')
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                        <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <textarea name="deskripsi" id="editDeskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                        <select name="kategori" id="editKategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Pilih Kategori</option>
-                            <option value="Infrastruktur">Infrastruktur</option>
-                            <option value="Sosial">Sosial</option>
-                            <option value="Ekonomi">Ekonomi</option>
-                            <option value="Lingkungan">Lingkungan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
-                        <input type="text" id="editAnggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="hidden" name="anggaran" id="editAnggaran_actual">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
-                        <select name="sumber_dana" id="editSumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            <option value="">Pilih Sumber Dana</option>
-                            @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
-                                <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
-                                    {{ $dana->sumber_anggaran }} - Rp {{ number_format($dana->nominal, 0, ',', '.') }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <p id="editSisa_dana" class="text-sm text-gray-600 mt-1"></p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                        <input type="date" name="tgl_mulai" id="editTglMulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                        <input type="date" name="tgl_selesai" id="editTglSelesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
-                        <div class="relative">
-                            <input type="number" name="progress" id="editProgress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <span class="absolute right-3 top-2 text-gray-500">%</span>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
+                            <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                            <textarea name="deskripsi" id="editDeskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                            <select name="kategori" id="editKategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Kategori</option>
+                                <option value="Infrastruktur">Infrastruktur</option>
+                                <option value="Sosial">Sosial</option>
+                                <option value="Ekonomi">Ekonomi</option>
+                                <option value="Lingkungan">Lingkungan</option>
+                                <option value="Pemerintahan">Pemerintahan</option>
+                                <option value="Kemasyarakatan">Kemasyarakatan</option>
+                                <option value="Keadaan Darurat">Keadaan Darurat</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
+                            <input type="text" id="editAnggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="hidden" name="anggaran" id="editAnggaran_actual">
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
-                        <input type="file" name="image" accept="image/*" class="w-full">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
+                            <select name="sumber_dana" id="editSumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <option value="">Pilih Sumber Dana</option>
+                                @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
+                                    <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
+                                        {{ $dana->sumber_anggaran }} - Rp {{ number_format($dana->nominal, 0, ',', '.') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p id="editSisa_dana" class="text-sm text-gray-600 mt-1"></p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                                <input type="date" name="tgl_mulai" id="editTglMulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
+                                <input type="date" name="tgl_selesai" id="editTglSelesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
+                            <div class="relative">
+                                <input type="number" name="progress" id="editProgress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <span class="absolute right-3 top-2 text-gray-500">%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
+                            <input type="file" name="image" accept="image/*" class="w-full">
+                        </div>
                     </div>
-                    
+                </div>
+                <div class="mt-6">
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
                         Update Kegiatan
                     </button>

@@ -13,7 +13,8 @@
     <div class="min-h-screen flex">
         <!-- Sidebar -->
         <div id="sidebar" class="bg-blue-900 text-white w-64 py-6 flex flex-col transition-all duration-300">
-            <div class="px-6 mb-6">
+            <div class="px-6 mb-6 flex items-center space-x-3">
+                <img src="{{ asset('images/probolinggo.png') }}" alt="Logo Desa" class="w-10 h-10 object-contain">
                 <h1 class="text-1xl font-bold">Desa Sumber Secang</h1>
             </div>
             
