@@ -17,7 +17,7 @@ class SambutanController extends Controller
         if (!$sambutan) {
             $sambutan = Sambutan::create([
                 'nama' => 'Default Nama',
-                'jabatan' => 'Default Jabatan',
+                'jabatan' => 'Kepala Desa',
                 'sambutan' => 'Default Sambutan',
                 'periode' => 'Default Periode',
                 'image' => 'default.jpg'

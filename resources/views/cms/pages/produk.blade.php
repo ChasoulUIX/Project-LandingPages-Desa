@@ -17,6 +17,7 @@
                     <tr>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                        <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. WA</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
@@ -32,6 +33,7 @@
                             </button>
                         </td>
                         <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->nama }}</td>
+                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->no_wa }}</td>
                         <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->deskripsi, 100) }}</td>
                         <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                         <td class="px-3 py-2 md:px-6 md:py-4">
@@ -78,6 +80,12 @@
                     <input type="text" name="nama" id="nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                 </div>
                 <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="no_wa">
+                        No. WA
+                    </label>
+                    <input type="text" name="no_wa" id="no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">
                         Deskripsi
                     </label>
@@ -122,6 +130,12 @@
                         Nama Produk
                     </label>
                     <input type="text" name="nama" id="edit_nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_no_wa">
+                        No. WA
+                    </label>
+                    <input type="text" name="no_wa" id="edit_no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_deskripsi">
@@ -190,6 +204,7 @@ function openEditModal(id) {
         .then(response => response.json())
         .then(data => {
             document.getElementById('edit_nama').value = data.nama;
+            document.getElementById('edit_no_wa').value = data.no_wa;
             document.getElementById('edit_deskripsi').value = data.deskripsi;
             document.getElementById('edit_harga').value = data.harga;
         });

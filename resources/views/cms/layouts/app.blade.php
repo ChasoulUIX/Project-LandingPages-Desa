@@ -66,7 +66,7 @@
                     </div>
                     
                     <!-- Galeri Dropdown -->
-                    <div class="relative" x-data="{ open: {{ request()->is('cms/berita', 'cms/produk') ? 'true' : 'false' }} }">
+                    <div class="relative" x-data="{ open: {{ request()->is('cms/berita', 'cms/produk', 'cms/aktifitas') ? 'true' : 'false' }} }">
                         <button @click="open = !open" class="nav-link w-full px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-between">
                             <span><i class="fas fa-images mr-3"></i>Galeri</span>
                             <i class="fas fa-chevron-down ml-3" :class="{ 'transform rotate-180': open }"></i>
@@ -76,7 +76,9 @@
                              <a href="/cms/berita" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/berita') ? 'bg-blue-800' : '' }}" data-page="berita">
                                 <i class="fas fa-newspaper mr-3"></i>Berita
                             </a>
-                           
+                            <a href="/cms/aktifitas" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/aktifitas') ? 'bg-blue-800' : '' }}" data-page="aktifitas">
+                                <i class="fas fa-newspaper mr-3"></i>Aktifitas Desa
+                            </a>
                             <a href="/cms/produk" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors {{ request()->is('cms/produk') ? 'bg-blue-800' : '' }}" data-page="produk">
                                 <i class="fas fa-box mr-3"></i>Produk
                             </a>

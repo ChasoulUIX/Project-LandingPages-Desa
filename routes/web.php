@@ -23,6 +23,7 @@ use App\Http\Controllers\Cms\CmsSuratUsahaController;
 use App\Http\Controllers\Cms\CmsSuratKtpController;
 use App\Http\Controllers\Cms\CmsSuratKelahiranController;
 use App\Http\Controllers\Cms\ProfileDesaController;
+use App\Http\Controllers\Cms\CmsAktifitasController;
 
 // Auth
 // ... existing code ...
@@ -252,4 +253,12 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/profile-desa', [ProfileDesaController::class, 'index'])->name('cms.profile-desa.index');
     Route::post('/profile-desa', [ProfileDesaController::class, 'store'])->name('cms.profile-desa.store');
     Route::put('/cms/profiledesa/update', [ProfileDesaController::class, 'update'])->name('cms.profiledesa.update');
+});
+
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/aktifitas', [CmsAktifitasController::class, 'index'])->name('cms.aktifitasdesa.index');
+    Route::post('/aktifitas', [CmsAktifitasController::class, 'store'])->name('cms.aktifitasdesa.store');
+    Route::get('/aktifitas/{id}/edit', [CmsAktifitasController::class, 'edit'])->name('cms.aktifitasdesa.edit');
+    Route::put('/aktifitas/{id}', [CmsAktifitasController::class, 'update'])->name('cms.aktifitasdesa.update');
+    Route::delete('/aktifitas/{id}', [CmsAktifitasController::class, 'destroy'])->name('cms.aktifitasdesa.destroy');
 });

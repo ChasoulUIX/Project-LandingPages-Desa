@@ -116,7 +116,11 @@
                             <div class="mb-6">
                                 <label class="block text-sm font-semibold text-gray-800 mb-2">Logo Desa</label>
                                 <div class="flex">
-                                    <input type="file" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200 text-sm text-gray-700" name="logo_image" accept="image/*" id="logo-input">
+                                    <input type="file" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200 text-sm text-gray-700" 
+                                        name="logo_image" 
+                                        accept="image/*" 
+                                        id="logo-input"
+                                        onchange="previewImage(this)">
                                 </div>
                                 @if(isset($profileDesa) && $profileDesa->logo_image)
                                     <div class="mt-2">
@@ -366,6 +370,24 @@ label {
     }
 
     window.addEventListener('load', initMap);
+
+    function previewImage(input) {
+        const preview = document.getElementById('logo-preview');
+        preview.innerHTML = '';
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('h-20', 'w-auto', 'mt-2');
+                preview.appendChild(img);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 @endpush
 @endsection

@@ -20,7 +20,8 @@ class CmsProdukController extends Controller
             'nama' => 'required',
             'deskripsi' => 'required',
             'harga' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'no_wa' => 'required|string|max:255'
         ]);
 
         $imageName = time().'.'.$request->image->extension();
@@ -30,7 +31,8 @@ class CmsProdukController extends Controller
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
             'harga' => $request->harga,
-            'image' => $imageName
+            'image' => $imageName,
+            'no_wa' => $request->no_wa
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan');
@@ -48,7 +50,8 @@ class CmsProdukController extends Controller
             'nama' => 'required',
             'deskripsi' => 'required',
             'harga' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'no_wa' => 'required|string|max:255'
         ]);
 
         $produk = Produk::findOrFail($id);
@@ -70,7 +73,8 @@ class CmsProdukController extends Controller
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
             'harga' => $request->harga,
-            'image' => $imageName
+            'image' => $imageName,
+            'no_wa' => $request->no_wa
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui');

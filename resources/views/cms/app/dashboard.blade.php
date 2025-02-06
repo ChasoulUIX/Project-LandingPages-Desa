@@ -86,6 +86,60 @@
     </div>
 </div>
 
+<!-- Struktur Desa -->
+<div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
+    <div class="text-center mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-2">Struktur Organisasi Desa</h2>
+        <div class="h-1 w-24 bg-blue-500 mx-auto"></div>
+    </div>
+
+    <div class="flex flex-col items-center">
+        @foreach(App\Models\Struktur::all() as $struktur)
+            @if($struktur->jabatan == 'Kepala Desa')
+                <!-- Kepala Desa -->
+                <div class="bg-blue-900 text-white p-4 rounded-lg shadow-lg mb-8 w-64 text-center">
+                    <img src="{{ asset('images/'.$struktur->image) }}" alt="Kepala Desa" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="font-bold text-base">{{ $struktur->jabatan }}</h3>
+                    <p class="text-sm mt-1">{{ $struktur->nama }}</p>
+                </div>
+            @endif
+        @endforeach
+        
+        <!-- Vertical Line -->
+        <div class="h-12 w-0.5 bg-gray-300"></div>
+
+        <!-- Second Level -->
+        <div class="flex justify-center gap-8 mb-8">
+            @foreach(App\Models\Struktur::all() as $struktur)
+                @if($struktur->jabatan == 'Sekretaris Desa' || $struktur->jabatan == 'Bendahara Desa')
+                    <div class="bg-blue-800 text-white p-4 rounded-lg shadow-lg w-48 text-center">
+                        <img src="{{ asset('images/'.$struktur->image) }}" alt="{{ $struktur->jabatan }}" class="w-20 h-20 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-bold text-base">{{ $struktur->jabatan }}</h3>
+                        <p class="text-sm mt-1">{{ $struktur->nama }}</p>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+
+        <!-- Vertical Line -->
+        <div class="h-12 w-0.5 bg-gray-300"></div>
+
+        <!-- Third Level -->
+        <div class="flex justify-center gap-8 flex-wrap">
+            @foreach(App\Models\Struktur::all() as $struktur)
+                @if(in_array($struktur->jabatan, ['Kaur Umum', 'Kaur Keuangan', 'Kasi Pemerintahan', 'Kasi Kesejahteraan']))
+                    <div class="bg-blue-700 text-white p-4 rounded-lg shadow-lg w-40 text-center">
+                        <img src="{{ asset('images/'.$struktur->image) }}" alt="{{ $struktur->jabatan }}" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-bold text-base">{{ $struktur->jabatan }}</h3>
+                        <p class="text-sm mt-1">{{ $struktur->nama }}</p>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    </div>
+</div>
+
+
 <!-- Recent Activities -->
 <div class="bg-white rounded-lg shadow-lg p-4 border border-gray-100">
     <div class="flex items-center justify-between mb-4">
@@ -94,6 +148,8 @@
             Real-time Updates
         </div>
     </div>
+
+
 
     <div class="divide-y divide-gray-100">
         @foreach(App\Models\Kegiatan::latest()->take(3)->get() as $kegiatan)
@@ -305,16 +361,16 @@
     new Chart(statusCtx, {
         type: 'polarArea',
         data: {
-            labels: ['Belum Dicairkan', 'Sudah Dicairkan', 'Selesai'],
+            labels: ['Belum Dimulai', 'Sedang Berjalan', 'Selesai'],
             datasets: [{
                 data: [
-                    {{ App\Models\DanaDesa::whereNull('deleted_at')->where('status_pencairan', 0)->count() }},
-                    {{ App\Models\DanaDesa::whereNull('deleted_at')->where('status_pencairan', 1)->count() }},
-                    {{ App\Models\DanaDesa::whereNull('deleted_at')->where('status_pencairan', 2)->count() }}
+                    {{ App\Models\Kegiatan::whereNull('deleted_at')->where('progress', 0)->count() }},
+                    {{ App\Models\Kegiatan::whereNull('deleted_at')->whereBetween('progress', [1, 99])->count() }},
+                    {{ App\Models\Kegiatan::whereNull('deleted_at')->where('progress', 100)->count() }}
                 ],
                 backgroundColor: [
-                    'rgba(59, 130, 246, 0.7)',  // blue
-                    'rgba(236, 72, 153, 0.7)',   // pink
+                    'rgba(239, 68, 68, 0.7)',   // red
+                    'rgba(59, 130, 246, 0.7)',   // blue
                     'rgba(16, 185, 129, 0.7)'    // green
                 ]
             }]

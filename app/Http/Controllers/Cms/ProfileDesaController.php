@@ -80,13 +80,13 @@ class ProfileDesaController extends Controller
         // Handle logo image upload
         if ($request->hasFile('logo_image')) {
             // Delete old image if exists
-            if ($profileDesa->logo_image) {
-                Storage::delete('public/images/' . $profileDesa->logo_image);
+            if ($profileDesa->logo_image && file_exists(public_path('images/' . $profileDesa->logo_image))) {
+                unlink(public_path('images/' . $profileDesa->logo_image));
             }
             
             $image = $request->file('logo_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images', $imageName);
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
             $profileDesa->logo_image = $imageName;
         }
 

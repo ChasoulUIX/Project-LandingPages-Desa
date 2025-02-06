@@ -30,7 +30,7 @@
         </div>
         <div class="p-6">
             <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $sambutan->nama }}</h3>
-            <p class="text-blue-600 font-semibold text-md mb-2">{{ $sambutan->jabatan }}</p>
+            <p class="text-blue-600 font-semibold text-md mb-2">Kepala Desa</p>
             <p class="text-gray-600">{{ $sambutan->sambutan }}</p>
             <p class="text-gray-600 mt-4">Periode: {{ $sambutan->periode }}</p>
         </div>
@@ -55,7 +55,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
-                        <input type="text" name="jabatan" id="edit_jabatan" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                        <input type="text" name="jabatan" id="edit_jabatan" value="Kepala Desa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 bg-gray-100" readonly required>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Sambutan</label>
