@@ -1,7 +1,7 @@
 @extends('cms.layouts.app')
 
 @section('content')
-<div class="container mx-auto px-6 py-8">
+<div class="container mx-auto px-2 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-semibold text-gray-900">Data Kependudukan</h1>
         <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
@@ -25,51 +25,50 @@
     </div>
 
     <!-- Data Grid -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
-            <table class="w-max md:w-full table-auto">
+    <div class="bg-white rounded-lg shadow-md">
+        <div class="overflow-x-auto">
+            <table class="min-w-[1600px] w-full table-auto">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="sticky left-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-                            <div class="flex items-center gap-1">
+                        <th class="w-[5%] sticky left-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No</th>
+                        <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('nik')">
                                 NIK
-                                <button onclick="sortTable('nik')" class="text-gray-400 hover:text-gray-600">
-                                    <i class="fas fa-sort"></i>
-                                </button>
+                                <i class="fas fa-sort{{ request()->get('sort') === 'nik' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-                            <div class="flex items-center gap-1">
+                        <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('no_kk')">
                                 No KK
-                                <button onclick="sortTable('no_kk')" class="text-gray-400 hover:text-gray-600">
-                                    <i class="fas fa-sort"></i>
-                                </button>
+                                <i class="fas fa-sort{{ request()->get('sort') === 'no_kk' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
-                            <div class="flex items-center gap-1">
+                        <th class="w-[15%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('nama_lengkap')">
                                 Nama Lengkap
-                                <button onclick="sortTable('nama_lengkap')" class="text-gray-400 hover:text-gray-600">
-                                    <i class="fas fa-sort"></i>
-                                </button>
+                                <i class="fas fa-sort{{ request()->get('sort') === 'nama_lengkap' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">No HP</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">TTL</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">JK</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Gol. Darah</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Agama</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Status</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Pekerjaan</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Pendidikan</th>
-                        <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Status Keluarga</th>
-                        <th class="sticky right-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">Aksi</th>
+                        <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No HP</th>
+                        <th class="w-[12%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">TTL</th>
+                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">JK</th>
+                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Gol. Darah</th>
+                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Agama</th>
+                        <th class="w-[7%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
+                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Pendidikan</th>
+                        <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status Keluarga</th>
+                        <th class="w-[7%] sticky right-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @php
-                        $kependudukan = App\Models\Kependudukan::paginate(10);
+                        $sort = request()->get('sort');
+                        $order = request()->get('order', 'asc');
+                        
+                        $kependudukan = App\Models\Kependudukan::when($sort, function($query) use ($sort, $order) {
+                            return $query->orderBy($sort, $order);
+                        })->paginate(10);
                     @endphp
                     @forelse($kependudukan as $index => $item)
                     <tr class="hover:bg-gray-50">
@@ -410,11 +409,13 @@
 function openAddModal() {
     document.getElementById('addModal').classList.remove('hidden');
     document.getElementById('addModal').classList.add('flex');
+    document.body.classList.add('modal-open');
 }
 
 function closeAddModal() {
     document.getElementById('addModal').classList.add('hidden');
     document.getElementById('addModal').classList.remove('flex');
+    document.body.classList.remove('modal-open');
 }
 
 function openEditModal(nik) {
@@ -466,6 +467,7 @@ function openEditModal(nik) {
         // Tampilkan modal
         document.getElementById('editModal').classList.remove('hidden');
         document.getElementById('editModal').classList.add('flex');
+        document.body.classList.add('modal-open');
     })
     .catch(error => {
         console.error('Error:', error);
@@ -480,6 +482,7 @@ function openEditModal(nik) {
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
     document.getElementById('editModal').classList.remove('flex');
+    document.body.classList.remove('modal-open');
 }
 
 function filterData(searchValue) {
@@ -567,9 +570,20 @@ document.querySelectorAll('form').forEach(form => {
 });
 
 function sortTable(column) {
-    const currentOrder = new URLSearchParams(window.location.search).get('order') || 'asc';
-    const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-    window.location.href = `{{ route('cms.kependudukan.index') }}?sort=${column}&order=${newOrder}`;
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSort = urlParams.get('sort');
+    const currentOrder = urlParams.get('order') || 'asc';
+    
+    let newOrder = 'asc';
+    if (currentSort === column && currentOrder === 'asc') {
+        newOrder = 'desc';
+    }
+    
+    urlParams.set('sort', column);
+    urlParams.set('order', newOrder);
+    
+    // Maintain the current page and any other existing parameters
+    window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
 }
 
 function filterTable(column, value) {
@@ -610,29 +624,94 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-/* Custom scrollbar styling */
-.custom-scrollbar::-webkit-scrollbar {
-    height: 8px;
-    width: 8px;
+/* Container width control */
+.container {
+    max-width: 1380px !important;
+    margin: 0 auto;
+    width: 100%;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+/* Modal styling improvements */
+#addModal,
+#editModal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+    padding: 1rem;
+    overflow-y: auto;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5); /* gray-400 with 50% opacity */
-    border-radius: 20px;
+/* Modal content container */
+#addModal .bg-white,
+#editModal .bg-white {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(107, 114, 128, 0.5); /* gray-500 with 50% opacity */
+/* Form layout adjustments */
+.grid.grid-cols-2 {
+    gap: 1.5rem;
 }
 
-/* For Firefox */
-.custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+/* Input field sizing */
+.px-3.py-2 {
+    height: 2.5rem;
+}
+
+/* Table scrollbar styling */
+.overflow-x-auto {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Table layout */
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* Sticky columns */
+.sticky {
+    position: sticky;
+    z-index: 1;
+    background-color: inherit;
+}
+
+.sticky.left-0 {
+    left: 0;
+    border-right: 1px solid #e5e7eb;
+}
+
+.sticky.right-0 {
+    right: 0;
+    border-left: 1px solid #e5e7eb;
+}
+
+/* Ensure sticky columns have proper background */
+thead .sticky {
+    background-color: #f9fafb;
+}
+
+tbody .sticky {
+    background-color: #ffffff;
+}
+
+/* Modal scroll behavior */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Ensure modals are properly centered */
+#addModal.flex,
+#editModal.flex {
+    display: flex !important;
 }
 </style>
 @endsection

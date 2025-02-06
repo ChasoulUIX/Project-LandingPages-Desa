@@ -8,11 +8,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(156, 163, 175, 0.5);
+        }
+
+        /* For Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
     <div class="min-h-screen flex">
         <!-- Sidebar -->
-        <div id="sidebar" class="bg-blue-900 text-white w-64 py-6 flex flex-col transition-all duration-300">
+        <div id="sidebar" class="bg-blue-900 text-white w-80 py-6 flex flex-col fixed h-screen overflow-y-auto" style="min-width: 320px;">
             <div class="px-6 mb-6 flex items-center space-x-3">
                 <img src="{{ asset('images/probolinggo.png') }}" alt="Logo Desa" class="w-10 h-10 object-contain">
                 <h1 class="text-1xl font-bold">Desa Sumber Secang</h1>
@@ -149,9 +171,9 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1">
+        <div class="flex-1 ml-80 relative">
             <!-- App Bar -->
-            <header class="bg-white shadow-sm">
+            <header class="bg-white shadow-sm sticky top-0 z-10">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center">
                         <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
@@ -181,10 +203,14 @@
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            if(sidebar.style.marginLeft === '-16rem') {
-                sidebar.style.marginLeft = '0';
+            const mainContent = sidebar.nextElementSibling;
+            
+            if(sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                mainContent.classList.add('ml-80');
             } else {
-                sidebar.style.marginLeft = '-16rem';
+                sidebar.classList.add('hidden');
+                mainContent.classList.remove('ml-80');
             }
         }
 
