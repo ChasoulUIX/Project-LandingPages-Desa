@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Main Content -->
-    <main class="pt-20">
+    <main class="pt-0">
         <div class="bg-gradient-to-b from-blue-900 to-blue-800 py-8 sm:py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Back Button and Title -->
@@ -30,7 +30,11 @@
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-3 sm:p-4">
                         <p class="text-xs sm:text-sm text-gray-600">Penduduk Produktif</p>
-                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">{{ App\Models\Kependudukan::whereBetween('usia', [15, 64])->count() }}</h3>
+                        @php
+                            $now = \Carbon\Carbon::now();
+                            $productiveCount = App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, NOW()) BETWEEN 15 AND 64')->count();
+                        @endphp
+                        <h3 class="text-xl sm:text-2xl font-bold text-blue-900">{{ $productiveCount }}</h3>
                     </div>
                     <div class="bg-white/90 backdrop-blur rounded-lg p-3 sm:p-4">
                         <p class="text-xs sm:text-sm text-gray-600">Rasio Gender</p>
@@ -71,10 +75,10 @@
                             <canvas id="ageChart"></canvas>
                         </div>
                         @php
-                            $anak = App\Models\Kependudukan::where('usia', '<', 15)->count();
-                            $remaja = App\Models\Kependudukan::whereBetween('usia', [15, 24])->count();
-                            $dewasa = App\Models\Kependudukan::whereBetween('usia', [25, 54])->count();
-                            $lansia = App\Models\Kependudukan::where('usia', '>=', 55)->count();
+                            $anak = App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, NOW()) < 15')->count();
+                            $remaja = App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, NOW()) BETWEEN 15 AND 24')->count();
+                            $dewasa = App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, NOW()) BETWEEN 25 AND 54')->count();
+                            $lansia = App\Models\Kependudukan::whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, NOW()) >= 55')->count();
                             $total = App\Models\Kependudukan::count();
                         @endphp
                         <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-2 text-xs text-gray-600">
@@ -93,12 +97,12 @@
                         </div>
                         @php
                             $pendidikan = [
-                                'SD' => App\Models\Kependudukan::where('pendidikan', 'SD')->count(),
-                                'SMP' => App\Models\Kependudukan::where('pendidikan', 'SMP')->count(),
-                                'SMA' => App\Models\Kependudukan::where('pendidikan', 'SMA')->count(),
-                                'D3' => App\Models\Kependudukan::where('pendidikan', 'D3')->count(),
-                                'S1' => App\Models\Kependudukan::where('pendidikan', 'S1')->count(),
-                                'S2/S3' => App\Models\Kependudukan::whereIn('pendidikan', ['S2', 'S3'])->count()
+                                'SD' => App\Models\Kependudukan::where('pendidikan_terakhir', 'SD')->count(),
+                                'SMP' => App\Models\Kependudukan::where('pendidikan_terakhir', 'SMP')->count(),
+                                'SMA' => App\Models\Kependudukan::where('pendidikan_terakhir', 'SMA')->count(),
+                                'D3' => App\Models\Kependudukan::where('pendidikan_terakhir', 'D3')->count(),
+                                'S1' => App\Models\Kependudukan::where('pendidikan_terakhir', 'S1')->count(),
+                                'S2/S3' => App\Models\Kependudukan::whereIn('pendidikan_terakhir', ['S2', 'S3'])->count()
                             ];
                             $total = App\Models\Kependudukan::count();
                         @endphp
@@ -119,12 +123,12 @@
                         </div>
                         @php
                             $pekerjaan = [
-                                'Petani' => App\Models\Kependudukan::where('mata_pencaharian', 'Petani')->count(),
-                                'Pedagang' => App\Models\Kependudukan::where('mata_pencaharian', 'Pedagang')->count(),
-                                'PNS' => App\Models\Kependudukan::where('mata_pencaharian', 'PNS')->count(),
-                                'Swasta' => App\Models\Kependudukan::where('mata_pencaharian', 'Swasta')->count(),
-                                'Wirausaha' => App\Models\Kependudukan::where('mata_pencaharian', 'Wirausaha')->count(),
-                                'Lainnya' => App\Models\Kependudukan::whereNotIn('mata_pencaharian', ['Petani', 'Pedagang', 'PNS', 'Swasta', 'Wirausaha'])->count()
+                                'Petani' => App\Models\Kependudukan::where('pekerjaan', 'Petani')->count(),
+                                'Pedagang' => App\Models\Kependudukan::where('pekerjaan', 'Pedagang')->count(),
+                                'PNS' => App\Models\Kependudukan::where('pekerjaan', 'PNS')->count(),
+                                'Swasta' => App\Models\Kependudukan::where('pekerjaan', 'Swasta')->count(),
+                                'Wirausaha' => App\Models\Kependudukan::where('pekerjaan', 'Wirausaha')->count(),
+                                'Lainnya' => App\Models\Kependudukan::whereNotIn('pekerjaan', ['Petani', 'Pedagang', 'PNS', 'Swasta', 'Wirausaha'])->count()
                             ];
                             $total = App\Models\Kependudukan::count();
                         @endphp

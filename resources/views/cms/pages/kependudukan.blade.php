@@ -241,13 +241,27 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label>
-                            <input type="text" name="pekerjaan" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="pekerjaan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Pekerjaan</option>
+                                <option value="Petani">Petani</option>
+                                <option value="PNS">PNS</option>
+                                <option value="Wiraswasta">Wiraswasta</option>
+                                <option value="Swasta">Swasta</option>
+                                <option value="Pedagang">Pedagang</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
-                            <input type="text" name="pendidikan_terakhir" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="pendidikan_terakhir" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Pendidikan</option>
+                                <option value="SD">SD</option>
+                                <option value="SMP">SMP</option>
+                                <option value="SMA">SMA</option>
+                                <option value="D3">D3</option>
+                                <option value="S1">S1</option>
+                                <option value="S2/S3">S2/S3</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Keluarga</label>
@@ -369,13 +383,27 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label>
-                            <input type="text" name="pekerjaan" id="editPekerjaan" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="pekerjaan" id="editPekerjaan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Pekerjaan</option>
+                                <option value="Petani">Petani</option>
+                                <option value="PNS">PNS</option>
+                                <option value="Wiraswasta">Wiraswasta</option>
+                                <option value="Swasta">Swasta</option>
+                                <option value="Pedagang">Pedagang</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
-                            <input type="text" name="pendidikan_terakhir" id="editPendidikanTerakhir" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="pendidikan_terakhir" id="editPendidikanTerakhir" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Pendidikan</option>
+                                <option value="SD">SD</option>
+                                <option value="SMP">SMP</option>
+                                <option value="SMA">SMA</option>
+                                <option value="D3">D3</option>
+                                <option value="S1">S1</option>
+                                <option value="S2/S3">S2/S3</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Keluarga</label>

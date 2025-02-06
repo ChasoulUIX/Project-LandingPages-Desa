@@ -11,7 +11,7 @@
                 </div>
 
                 <!-- Filter Categories -->
-                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <!-- <div class="flex flex-wrap justify-center gap-4 mb-8">
                     <button onclick="filterGallery('all')" class="filter-btn active bg-yellow-500 text-gray-900 px-4 py-2 rounded-full hover:bg-yellow-400 transition duration-300" data-category="all">
                         Semua
                     </button>
@@ -24,18 +24,19 @@
                     <button onclick="filterGallery('Budaya')" class="filter-btn bg-gray-100 text-gray-900 px-4 py-2 rounded-full hover:bg-gray-200 transition duration-300" data-category="Budaya">
                         Budaya
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Gallery Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-container">
-                    @foreach(App\Models\Kegiatan::latest()->get() as $item)
-                    <div class="gallery-item group relative overflow-hidden rounded-xl" data-category="{{ $item->kategori }}">
+                    @foreach(App\Models\Aktifitas::latest()->get() as $item)
+                    <div class="gallery-item group relative overflow-hidden rounded-xl" data-category="Kegiatan">
                         <img src="{{ asset('images/'.$item->image) }}" alt="{{ $item->judul }}" 
                              class="w-full h-64 object-cover transform group-hover:scale-110 transition duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-100 transition duration-300">
                             <div class="absolute bottom-0 p-6">
                                 <h3 class="text-white text-xl font-semibold mb-2">{{ $item->judul }}</h3>
                                 <p class="text-gray-200 text-sm">{{ $item->deskripsi }}</p>
+                                <p class="text-gray-300 text-xs mt-2">{{ $item->tgl_mulai->format('d M Y') }}</p>
                             </div>
                         </div>
                     </div>

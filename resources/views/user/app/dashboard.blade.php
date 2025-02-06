@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Main Content -->
-    <main class="pt-10 overflow-x-hidden">
+    <main class="pt-0 overflow-x-hidden">
         <!-- Hero Section -->
         <div class="relative min-h-screen">
             <!-- Slideshow container -->
@@ -164,6 +164,10 @@
                     <p class="text-gray-200 text-base sm:text-lg">Komitmen kami dalam membangun desa yang maju, mandiri dan sejahtera</p>
                 </div>
 
+                @php
+                    $profile = App\Models\ProfileDesa::first();
+                @endphp
+
                 <div class="grid md:grid-cols-2 gap-8">
                     <!-- Visi Card -->
                     <div class="bg-white/10 backdrop-blur-lg rounded-xl p-8 shadow-lg hover:shadow-xl hover:bg-white/20 transition-all duration-300 border border-white/20">
@@ -173,9 +177,25 @@
                             </div>
                             <h3 class="text-2xl font-bold text-white">Visi</h3>
                         </div>
-                        <p class="text-gray-200 leading-relaxed">
-                            "Terwujudnya Desa yang Maju, Mandiri, dan Sejahtera Berbasis Pertanian dan Teknologi Digital dengan Tetap Menjaga Nilai-nilai Budaya dan Kearifan Lokal"
-                        </p>
+                        <ul class="space-y-4 text-gray-200">
+                            @if($profile && is_array($profile->visi))
+                                @foreach($profile->visi as $visiItem)
+                                    <li class="flex items-start space-x-4">
+                                        <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                            <i class="fas fa-check text-green-400"></i>
+                                        </div>
+                                        <span>{{ $visiItem }}</span>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li class="flex items-start space-x-4">
+                                    <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                        <i class="fas fa-check text-green-400"></i>
+                                    </div>
+                                    <span>Visi belum diisi</span>
+                                </li>
+                            @endif
+                        </ul>
                     </div>
 
                     <!-- Misi Card -->
@@ -187,36 +207,23 @@
                             <h3 class="text-2xl font-bold text-white">Misi</h3>
                         </div>
                         <ul class="space-y-4 text-gray-200">
-                            <li class="flex items-start space-x-4">
-                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
-                                    <i class="fas fa-check text-green-400"></i>
-                                </div>
-                                <span>Meningkatkan kualitas pelayanan publik melalui digitalisasi administrasi desa</span>
-                            </li>
-                            <li class="flex items-start space-x-4">
-                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
-                                    <i class="fas fa-check text-green-400"></i>
-                                </div>
-                                <span>Mengembangkan sektor pertanian dengan teknologi modern dan ramah lingkungan</span>
-                            </li>
-                            <li class="flex items-start space-x-4">
-                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
-                                    <i class="fas fa-check text-green-400"></i>
-                                </div>
-                                <span>Memberdayakan UMKM dan potensi ekonomi lokal untuk kesejahteraan masyarakat</span>
-                            </li>
-                            <li class="flex items-start space-x-4">
-                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
-                                    <i class="fas fa-check text-green-400"></i>
-                                </div>
-                                <span>Melestarikan dan mengembangkan nilai-nilai budaya serta kearifan lokal</span>
-                            </li>
-                            <li class="flex items-start space-x-4">
-                                <div class="bg-green-500/20 p-2 rounded-lg mt-1">
-                                    <i class="fas fa-check text-green-400"></i>
-                                </div>
-                                <span>Meningkatkan kualitas sumber daya manusia melalui pendidikan dan pelatihan</span>
-                            </li>
+                            @if($profile && is_array($profile->misi))
+                                @foreach($profile->misi as $misiItem)
+                                    <li class="flex items-start space-x-4">
+                                        <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                            <i class="fas fa-check text-green-400"></i>
+                                        </div>
+                                        <span>{{ $misiItem }}</span>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li class="flex items-start space-x-4">
+                                    <div class="bg-green-500/20 p-2 rounded-lg mt-1">
+                                        <i class="fas fa-check text-green-400"></i>
+                                    </div>
+                                    <span>Misi belum diisi</span>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -268,31 +275,57 @@
                     </div>
                     @endforeach
                    
-                  <!-- Berita Card -->
-                    @foreach(App\Models\Berita::latest()->take(1)->get() as $berita)
+                  <!-- Aktivitas Card -->
+                    @foreach(App\Models\Aktifitas::latest()->take(1)->get() as $aktivitas)
                     <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
                         <div class="relative h-64">
-                            <img src="{{ asset('images/' . $berita->image) }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
+                            <img src="{{ asset('images/' . $aktivitas->image) }}" alt="{{ $aktivitas->judul }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">{{ $berita->judul }}</h3>
-                                <p class="text-sm opacity-90">{{ $berita->konten }}</p>
+                                <h3 class="text-xl font-bold">{{ $aktivitas->judul }}</h3>
+                                <p class="text-sm opacity-90">{{ $aktivitas->deskripsi }}</p>
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-4">
-                                    <i class="fas fa-newspaper text-yellow-500"></i>
-                                    <p class="text-gray-600">{{ \Carbon\Carbon::parse($berita->tanggal)->format('F j, Y') }}</p>
+                                    <i class="fas fa-calendar-alt text-yellow-500"></i>
+                                    <p class="text-gray-600">{{ \Carbon\Carbon::parse($aktivitas->tgl_mulai)->format('F j, Y') }}</p>
                                 </div>
                             </div>
-                            <a href="{{ url('/berita') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
-                                <span>Lihat Semua Berita</span>
+                            <a href="{{ url('/aktivitas') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
+                                <span>Lihat Semua Aktivitas</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
                     </div>
                     @endforeach
+
+                        <!-- Berita Card -->
+                        @foreach(App\Models\Berita::latest()->take(1)->get() as $berita)
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
+                            <div class="relative h-64">
+                                <img src="{{ asset('images/' . $berita->image) }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <h3 class="text-xl font-bold">{{ $berita->judul }}</h3>
+                                    <p class="text-sm opacity-90">{{ $berita->konten }}</p>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="space-y-4">
+                                    <div class="flex items-center space-x-4">
+                                        <i class="fas fa-newspaper text-yellow-500"></i>
+                                        <p class="text-gray-600">{{ \Carbon\Carbon::parse($berita->tanggal)->format('F j, Y') }}</p>
+                                    </div>
+                                </div>
+                                <a href="{{ url('/berita') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
+                                    <span>Lihat Semua Berita</span>
+                                    <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                        @endforeach
 
                         <!-- Produk Card -->
                         @foreach(App\Models\Produk::latest()->take(1)->get() as $produk)
@@ -311,10 +344,10 @@
                                         <i class="fas fa-store text-yellow-500"></i>
                                         <p class="text-gray-600">Kategori: {{ $produk->kategori }}</p>
                                     </div>
-                                    <div class="flex items-center space-x-4">
+                                    <!-- <div class="flex items-center space-x-4">
                                         <i class="fas fa-calculator text-yellow-500"></i>
                                         <p class="text-gray-600">Harga: {{ $produk->harga }}</p>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <a href="{{ url('/produk') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
                                     <span>Lihat Semua Produk</span>
@@ -761,7 +794,7 @@
                 <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
                     <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Tentang Kami</h2>
                     <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
-                    <p class="text-gray-600 text-base sm:text-lg">Hubungi kami untuk informasi lebih lanjut tentang Desa Sumber Secang</p>
+                    <p class="text-gray-600 text-base sm:text-lg">{{ $profile->synopsis ?? 'Hubungi kami untuk informasi lebih lanjut tentang Desa Sumber Secang' }}</p>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-6 mb-12">
@@ -771,7 +804,7 @@
                             <i class="fas fa-envelope text-blue-900 text-xl"></i>
                         </div>
                         <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Email</h3>
-                        <p class="text-gray-600 text-center">desa.sumbersecang@gmail.com</p>
+                        <p class="text-gray-600 text-center">{{ $profile->email ?? 'Email belum diisi' }}</p>
                     </div>
 
                     <!-- Telepon Card -->
@@ -780,7 +813,7 @@
                             <i class="fas fa-phone text-blue-900 text-xl"></i>
                         </div>
                         <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Telepon</h3>
-                        <p class="text-gray-600 text-center">(0335) 123456</p>
+                        <p class="text-gray-600 text-center">{{ $profile->telephone ?? 'Telepon belum diisi' }}</p>
                     </div>
 
                     <!-- Alamat Card -->
@@ -789,25 +822,28 @@
                             <i class="fas fa-map-marker-alt text-blue-900 text-xl"></i>
                         </div>
                         <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Alamat</h3>
-                        <p class="text-gray-600 text-center">Jl. Raya Sumber Secang No. 123, Kec. Sumber, Kab. Probolinggo</p>
+                        <p class="text-gray-600 text-center">{{ $profile->alamat ?? 'Alamat belum diisi' }}</p>
                     </div>
                 </div>
 
                 <!-- Google Maps -->
                 <div class="w-full rounded-xl overflow-hidden shadow-lg">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15810.927876840095!2d113.37544673476563!3d-7.837782099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6ff7e322d8fe3%3A0x761642564682d2ab!2sSumbersecang%2C%20Kec.%20Gading%2C%20Kabupaten%20Probolinggo%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1709799051099!5m2!1sid!2sid"
-                        width="100%" 
-                        height="450" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy"
-                        class="w-full">
-                    </iframe>
+                    <div id="map" style="width:100%; height:450px;">
+                        <iframe 
+                            src="https://www.google.com/maps?q=Sumbersecang,+Kec.+Gading,+Kabupaten+Probolinggo,+Jawa+Timur&output=embed"
+                            width="100%" 
+                            height="450" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="w-full">
+                        </iframe>
+                    </div>
                     <div class="bg-white p-4">
                         <p class="text-gray-600 text-sm">
                             <i class="fas fa-map-marked-alt text-red-500 mr-2"></i>
-                            Luas wilayah Desa Sumber Secang adalah 486,2 hektar
+                            {{ $profile->deskripsi ?? 'Luas wilayah Desa Sumber Secang adalah 486,2 hektar' }}
                         </p>
                     </div>
                 </div>

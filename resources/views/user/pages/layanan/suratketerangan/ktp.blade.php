@@ -1,7 +1,7 @@
 @extends('user.layouts.app')
 
 @section('content')
-    <main class="pt-10">
+    <main class="pt-0">
         <div class="bg-gradient-to-b from-blue-900 to-blue-800 py-12">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Back Button and Title -->
