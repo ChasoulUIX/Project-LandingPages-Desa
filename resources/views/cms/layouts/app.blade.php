@@ -185,10 +185,14 @@
                         <button class="text-gray-500 hover:text-gray-700">
                             <i class="fas fa-bell text-xl"></i>
                         </button>
-                        <div class="flex items-center space-x-3">
+                        <a href="/cms/editprofile" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
                             <span class="text-base text-gray-700">{{ auth()->user()->name }}</span>
-                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&size=40" alt="Profile" class="w-10 h-10 rounded-full">
-                        </div>
+                            @if(auth()->user()->photo_profile)
+                                <img src="{{ asset('images/' . auth()->user()->photo_profile) }}" alt="Profile" class="w-10 h-10 rounded-full object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&size=40" alt="Profile" class="w-10 h-10 rounded-full">
+                            @endif
+                        </a>
                     </div>
                 </div>
             </header>

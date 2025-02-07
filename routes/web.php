@@ -24,6 +24,7 @@ use App\Http\Controllers\Cms\CmsSuratKtpController;
 use App\Http\Controllers\Cms\CmsSuratKelahiranController;
 use App\Http\Controllers\Cms\ProfileDesaController;
 use App\Http\Controllers\Cms\CmsAktifitasController;
+use App\Http\Controllers\Cms\ProfileController;
 
 // Auth
 // ... existing code ...
@@ -261,4 +262,13 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/aktifitas/{id}/edit', [CmsAktifitasController::class, 'edit'])->name('cms.aktifitasdesa.edit');
     Route::put('/aktifitas/{id}', [CmsAktifitasController::class, 'update'])->name('cms.aktifitasdesa.update');
     Route::delete('/aktifitas/{id}', [CmsAktifitasController::class, 'destroy'])->name('cms.aktifitasdesa.destroy');
+});
+
+Route::get('/cms/editprofile', function () {
+    return view('cms.pages.editprofile');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
