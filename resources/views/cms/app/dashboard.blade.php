@@ -1,6 +1,12 @@
 @extends('cms.layouts.app')
 
 @section('content')
+<div class="container mx-auto px-4">
+    <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+    
+   
+</div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
     <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">

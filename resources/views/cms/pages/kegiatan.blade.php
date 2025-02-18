@@ -46,11 +46,11 @@
                             <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
                                 ✏️
                             </button>
-                            <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST" class="inline">
+                            <form action="{{ route('cms.kegiatan.destroy', $item->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')">
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                     🗑️
                                 </button>
                             </form>
@@ -77,7 +77,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('kegiatan.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('cms.kegiatan.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">

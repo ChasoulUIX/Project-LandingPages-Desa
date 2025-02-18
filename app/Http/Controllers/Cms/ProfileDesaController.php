@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ProfileDesa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Sambutan;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileDesaController extends Controller
 {
@@ -105,5 +107,44 @@ class ProfileDesaController extends Controller
         $profileDesa->save();
 
         return redirect()->back()->with('success', 'Profil desa berhasil diperbarui');
+    }
+
+    public function sambutan()
+    {
+        // Ambil data sambutan jika ada
+        $sambutan = Sambutan::first();
+        
+        return view('cms.pages.sambutan', compact('sambutan'));
+    }
+
+    // Method untuk user biasa yang bisa edit
+    public function updateSambutan(Request $request)
+    {
+        if (Auth::guard('struktur')->check()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah data');
+        }
+
+        $validated = $request->validate([
+            'judul' => 'required',
+            'isi' => 'required',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        // ... logika update sambutan ...
+    }
+
+    public function updateProfile(Request $request)
+    {
+        if (Auth::guard('struktur')->check()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah data');
+        }
+
+        $validated = $request->validate([
+            'nama_desa' => 'required',
+            'deskripsi' => 'required',
+            // ... validasi field lainnya
+        ]);
+
+        // ... logika update profile desa ...
     }
 }

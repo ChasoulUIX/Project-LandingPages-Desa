@@ -29,15 +29,41 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $request->validate([
+            'email' => ['required'],  // This field will accept either email or NIK
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        // Try regular user authentication first
+        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            if (Auth::guard('web')->attempt([
+                'email' => $request->email,
+                'password' => $request->password
+            ], $request->boolean('remember'))) {
+                $request->session()->regenerate();
+                return redirect()->intended('/cms/app/dashboard');
+            }
+        }
+
+        // Try Struktur authentication
+        $struktur = \App\Models\Struktur::where('nik', $request->email)->first();
+
+        if ($struktur && password_verify($request->password, $struktur->password)) {
+            // Check if all required fields are filled
+            $requiredFields = ['nama', 'jabatan', 'no_wa', 'akses', 'periode_mulai', 'periode_akhir', 'status', 'image'];
+            $isComplete = !collect($requiredFields)->contains(function ($field) use ($struktur) {
+                return empty($struktur->$field);
+            });
+
+            // Login the Struktur user using struktur guard
+            Auth::guard('struktur')->login($struktur);
             $request->session()->regenerate();
 
-            return redirect()->intended('/cms/app/dashboard');
+            if ($isComplete) {
+                return redirect()->intended('/cms/app/dashboard');
+            } else {
+                return redirect()->route('profile.edit')->with('warning', 'Silakan lengkapi data profil Anda terlebih dahulu.');
+            }
         }
 
         throw ValidationException::withMessages([
@@ -53,7 +79,9 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::logout();
+        // Logout from both guards
+        Auth::guard('web')->logout();
+        Auth::guard('struktur')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

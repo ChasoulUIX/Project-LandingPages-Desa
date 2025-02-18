@@ -13,7 +13,17 @@ class CmsSuratUsahaController extends Controller
      */
     public function index()
     {
-        return view('cms.pages.suratketerangan.usaha');
+        $suratUsahas = SuratKeteranganUsaha::latest()->get();
+        return view('cms.pages.suratketerangan.usaha', compact('suratUsahas'));
+    }
+
+    /**
+     * Display surat usaha page.
+     */
+    public function usaha()
+    {
+        $suratUsahas = SuratKeteranganUsaha::latest()->get();
+        return view('cms.pages.suratketerangan.usaha', compact('suratUsahas'));
     }
 
     /**

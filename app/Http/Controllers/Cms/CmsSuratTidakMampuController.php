@@ -13,7 +13,17 @@ class CmsSuratTidakMampuController extends Controller
      */
     public function index()
     {
-        return view('cms.pages.suratketerangan.tidakmampu');
+        $suratTidakMampus = SuratTidakMampu::all(); // Ambil semua data surat tidak mampu
+        return view('cms.pages.suratketerangan.tidakmampu', compact('suratTidakMampus'));
+    }
+
+    /**
+     * Display surat tidak mampu page.
+     */
+    public function tidakMampu()
+    {
+        $suratTidakMampus = SuratTidakMampu::all(); // Ambil semua data surat tidak mampu
+        return view('cms.pages.suratketerangan.tidakmampu', compact('suratTidakMampus'));
     }
 
     /**

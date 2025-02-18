@@ -11,9 +11,10 @@ class CmsSuratKtpController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function ktp()
     {
-        return view('cms.pages.suratketerangan.ktp');
+        $suratKtps = SuratKtp::latest()->get();
+        return view('cms.pages.suratketerangan.ktp', compact('suratKtps'));
     }
 
     /**

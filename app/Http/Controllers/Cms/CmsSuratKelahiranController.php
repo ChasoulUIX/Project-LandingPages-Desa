@@ -8,15 +8,22 @@ use Illuminate\Http\Request;
 
 class CmsSuratKelahiranController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function kelahiran()  // Menggunakan nama method yang sesuai dengan route
     {
-        return view('cms.pages.suratketerangan.kelahiran');
+        $suratKelahirans = SuratKelahiran::latest()->get();
+        return view('cms.pages.suratketerangan.kelahiran', compact('suratKelahirans'));
     }
 
+    /**
+     * Update the status of the specified resource.
+     */
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,approved,rejected',
+            'status' => 'required|in:pending,processed,completed,rejected',
         ]);
 
         $surat = SuratKelahiran::findOrFail($id);

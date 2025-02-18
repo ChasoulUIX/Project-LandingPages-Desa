@@ -159,7 +159,7 @@
 
                 <!-- View All Button -->
                 <div class="mt-4 text-center">
-                    <a href="{{ route('kegiatan.index') }}" 
+                    <a href="/cms/kegiatan" 
                        class="inline-flex items-center text-blue-600 hover:text-blue-700">
                         Lihat Semua Kegiatan
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -488,7 +488,7 @@ function deleteData(id) {
 
 // Add year filter functionality
 document.getElementById('tahunFilter').addEventListener('change', function() {
-    window.location.href = '{{ route("dana.index") }}?tahun=' + this.value;
+    window.location.href = '/cms/dana?tahun=' + this.value;
 });
 
 // Add function to remove photo

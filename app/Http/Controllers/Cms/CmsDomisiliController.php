@@ -13,7 +13,17 @@ class CmsDomisiliController extends Controller
      */
     public function index()
     {
-        return view('cms.pages.suratketerangan.domisili');
+        $domisilis = KeteranganDomisili::all(); // Ambil semua data domisili
+        return view('cms.pages.suratketerangan.domisili', compact('domisilis'));
+    }
+
+    /**
+     * Display domisili page.
+     */
+    public function domisili()
+    {
+        $domisilis = KeteranganDomisili::all(); // Ambil semua data domisili
+        return view('cms.pages.suratketerangan.domisili', compact('domisilis'));
     }
 
     /**

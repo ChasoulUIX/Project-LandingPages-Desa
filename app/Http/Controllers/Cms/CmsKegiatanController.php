@@ -42,7 +42,7 @@ class CmsKegiatanController extends Controller
 
         Kegiatan::create($validated);
 
-        return redirect()->route('kegiatan.index')
+        return redirect()->route('cms.kegiatan.index')
             ->with('success', 'Kegiatan berhasil ditambahkan');
     }
 

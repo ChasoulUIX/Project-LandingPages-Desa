@@ -25,6 +25,9 @@ use App\Http\Controllers\Cms\CmsSuratKelahiranController;
 use App\Http\Controllers\Cms\ProfileDesaController;
 use App\Http\Controllers\Cms\CmsAktifitasController;
 use App\Http\Controllers\Cms\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Cms\DanaController;
+use App\Http\Controllers\Cms\CmsDomisiliController;
 
 // Auth
 // ... existing code ...
@@ -137,25 +140,26 @@ Route::get('/cms/app/dashboard', function () {
 });
 
 //pages
-Route::get('/cms/kegiatan', function () {
-    return view('cms.pages.kegiatan');
+Route::middleware(['auth'])->prefix('cms')->name('cms.')->group(function () {
+    Route::resource('kegiatan', CmsKegiatanController::class);
 });
-Route::resource('cms/kegiatan', CmsKegiatanController::class);
 
 Route::prefix('cms')->group(function () {
     Route::resource('berita', CmsBeritaController::class);
 });
 
-Route::resource('cms/produk', CmsProdukController::class);
-
-Route::get('/cms/suratketerangan/domisili', function () {
-    return view('cms.pages.suratketerangan.domisili');
-});
-
 Route::middleware(['auth'])->prefix('cms')->group(function () {
-    Route::get('/domisili', [KeteranganDomisiliController::class, 'index'])->name('cms.domisili.index');
-    Route::put('/domisili/{id}/update-status', [KeteranganDomisiliController::class, 'updateStatus'])->name('cms.domisili.update-status');
+    // Produk Routes
+    Route::get('/produk', [CmsProdukController::class, 'index'])->name('cms.produk.index');
+    Route::post('/produk', [CmsProdukController::class, 'store'])->name('cms.produk.store');
+    Route::get('/produk/{id}/edit', [CmsProdukController::class, 'edit'])->name('cms.produk.edit');
+    Route::put('/produk/{id}', [CmsProdukController::class, 'update'])->name('cms.produk.update');
+    Route::delete('/produk/{id}', [CmsProdukController::class, 'destroy'])->name('cms.produk.destroy');
 });
+
+Route::get('/cms/suratketerangan/domisili', [CmsDomisiliController::class, 'index'])->name('suratketerangan.domisili');
+Route::put('/cms/suratketerangan/domisili/{id}/status', [CmsDomisiliController::class, 'updateStatus'])->name('suratketerangan.domisili.update-status');
+
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
     Route::get('/suratketerangan/tidakmampu', function () {
@@ -178,22 +182,25 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
-    // Surat Keterangan KTP routes
-    Route::get('/suratketerangan/ktp', [CmsSuratKtpController::class, 'index'])->name('cms.ktp.index');
+    // Route untuk surat KTP
+    Route::get('/suratketerangan/ktp', [CmsSuratKtpController::class, 'ktp'])
+        ->name('suratketerangan.ktp');
+    
     Route::put('/suratketerangan/ktp/{id}/update-status', [CmsSuratKtpController::class, 'updateStatus'])
         ->name('cms.ktp.update-status');
 });
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
-    // Surat Keterangan Kelahiran routes
-    Route::get('/suratketerangan/kelahiran', [CmsSuratKelahiranController::class, 'index'])->name('cms.kelahiran.index');
+    // Route untuk surat kelahiran
+    Route::get('/suratketerangan/kelahiran', [CmsSuratKelahiranController::class, 'kelahiran'])
+        ->name('suratketerangan.kelahiran');
+    
     Route::put('/suratketerangan/kelahiran/{id}/update-status', [CmsSuratKelahiranController::class, 'updateStatus'])
         ->name('cms.kelahiran.update-status');
 });
 
-Route::get('/layanan/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
+Route::get('/layanan/pengaduan', [PengaduanController::class, 'index'])->name('layanan.pengaduan');
 Route::post('/layanan/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
-
 
 // CMS Struktur Desa Routes
 Route::prefix('cms')->middleware(['auth'])->group(function () {
@@ -208,6 +215,7 @@ Route::prefix('cms')->middleware(['auth'])->group(function () {
 Route::resource('struktur', StrukturController::class);
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
+    // Route untuk halaman pengaduan
     Route::get('/pengaduan', [CmsPengaduanController::class, 'index'])->name('cms.pengaduan.index');
     Route::get('/pengaduan/{id}/edit', [CmsPengaduanController::class, 'edit'])->name('cms.pengaduan.edit');
     Route::put('/pengaduan/{id}', [CmsPengaduanController::class, 'update'])->name('cms.pengaduan.update');
@@ -221,6 +229,8 @@ Route::prefix('cms')->name('cms.')->middleware(['auth'])->group(function () {
     Route::resource('kependudukan', KependudukanController::class);
     Route::get('/kependudukan/{nik}/edit', [KependudukanController::class, 'edit'])
         ->name('kependudukan.edit');
+    Route::delete('/cms/app/kependudukan/{nik}', [KependudukanController::class, 'destroy'])
+        ->name('cms.kependudukan.destroy');
 });
 
 Route::get('/cms/dana', function () {
@@ -272,3 +282,93 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+// Routes untuk user biasa
+Route::middleware(['auth:web'])->group(function () {
+    // Routes dengan akses penuh
+});
+
+// Routes untuk struktur
+Route::middleware(['auth:struktur'])->group(function () {
+    // Routes dengan akses terbatas
+    Route::get('/cms/app/dashboard', 'DashboardController@index');
+    Route::get('/cms/app/kependudukan', 'KependudukanController@index');
+});
+
+// Routes untuk kedua tipe user
+Route::middleware(['auth:web,struktur'])->group(function () {
+    Route::get('/cms/app/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/cms/app/kependudukan', [KependudukanController::class, 'index'])->name('cms.kependudukan.index');
+    Route::get('/cms/app/kependudukan/create', [KependudukanController::class, 'create'])->name('kependudukan.create');
+    Route::post('/cms/app/kependudukan', [KependudukanController::class, 'store'])->name('kependudukan.store');
+    Route::get('/cms/app/kependudukan/{id}/edit', [KependudukanController::class, 'edit'])->name('kependudukan.edit');
+    Route::put('/cms/app/kependudukan/{id}', [KependudukanController::class, 'update'])->name('kependudukan.update');
+    Route::delete('/cms/app/kependudukan/{id}', [KependudukanController::class, 'destroy'])->name('kependudukan.destroy');
+});
+
+// Routes yang bisa diakses oleh kedua tipe user
+Route::middleware(['auth:web,struktur'])->prefix('cms')->name('cms.')->group(function () {
+    // Dashboard
+    Route::get('/app/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Profile Desa
+    Route::get('/sambutan', [ProfileDesaController::class, 'sambutan'])->name('sambutan');
+    Route::get('/profile-desa', [ProfileDesaController::class, 'index'])->name('profile-desa');
+    
+    // Kependudukan
+    Route::get('/app/kependudukan', [KependudukanController::class, 'index'])->name('kependudukan.index');
+    Route::middleware('auth:web')->group(function () {
+        Route::post('/app/kependudukan', [KependudukanController::class, 'store'])->name('kependudukan.store');
+        Route::put('/app/kependudukan/{id}', [KependudukanController::class, 'update'])->name('kependudukan.update');
+        Route::delete('/app/kependudukan/{id}', [KependudukanController::class, 'destroy'])->name('kependudukan.destroy');
+    });
+    
+    // Struktur Desa
+    Route::get('/strukturdesa', [StrukturController::class, 'index'])->name('strukturdesa.index');
+    
+    // Keuangan Desa
+    Route::get('/dana', [DanaDesaController::class, 'index'])->name('dana.index');
+    Route::get('/kegiatan', [CmsKegiatanController::class, 'index'])->name('kegiatan.index');
+    
+    // Galeri
+    Route::get('/berita', [CmsBeritaController::class, 'index'])->name('berita.index');
+    Route::get('/aktifitas', [CmsAktifitasController::class, 'index'])->name('aktifitas.index');
+    Route::get('/produk', [CmsProdukController::class, 'index'])->name('produk.index');
+    
+    // Layanan
+    Route::prefix('suratketerangan')->name('suratketerangan.')->group(function () {
+        Route::get('/domisili', [CmsDomisiliController::class, 'domisili'])->name('domisili');
+        Route::get('/tidakmampu', [CmsSuratTidakMampuController::class, 'tidakMampu'])->name('tidakmampu');
+        Route::get('/usaha', [CmsSuratUsahaController::class, 'usaha'])->name('usaha');
+        Route::get('/ktp', [CmsSuratKtpController::class, 'ktp'])->name('ktp');
+        Route::get('/kelahiran', [CmsSuratKelahiranController::class, 'kelahiran'])->name('kelahiran');
+    });
+    
+    Route::get('/pengaduan', [CmsPengaduanController::class, 'index'])->name('pengaduan.index');
+});
+
+// Routes khusus untuk operasi CRUD yang hanya bisa diakses user biasa
+Route::middleware(['auth:web'])->prefix('cms')->name('cms.')->group(function () {
+    // Tambahkan route untuk operasi CRUD lainnya di sini
+});
+
+// Di dalam group middleware auth:web,struktur
+Route::post('/berita', [CmsBeritaController::class, 'store'])->name('berita.store');
+Route::put('/berita/{id}', [CmsBeritaController::class, 'update'])->name('berita.update');
+Route::delete('/berita/{id}', [CmsBeritaController::class, 'destroy'])->name('berita.destroy');
+
+// Tambahkan route untuk update status domisili
+Route::middleware(['auth'])->prefix('cms')->group(function () {
+    Route::get('/suratketerangan/domisili', [CmsDomisiliController::class, 'index'])->name('suratketerangan.domisili');
+    Route::put('/suratketerangan/domisili/{id}/update-status', [CmsDomisiliController::class, 'updateStatus'])
+        ->name('cms.domisili.update-status');
+});
+
+// Routes untuk admin pengaduan
+Route::middleware(['auth'])->prefix('cms/admin')->group(function () {
+    Route::get('/pengaduan', [CmsPengaduanController::class, 'index'])->name('cms.pengaduan.index');
+    Route::get('/pengaduan/{id}/edit', [CmsPengaduanController::class, 'edit'])->name('cms.pengaduan.edit');
+    Route::put('/pengaduan/{id}', [CmsPengaduanController::class, 'update'])->name('cms.pengaduan.update');
+});
+
+Route::resource('dana', DanaDesaController::class);

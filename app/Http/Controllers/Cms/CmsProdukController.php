@@ -35,13 +35,23 @@ class CmsProdukController extends Controller
             'no_wa' => $request->no_wa
         ]);
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan');
+        return redirect()->route('cms.produk.index')->with('success', 'Produk berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        $produk = Produk::findOrFail($id);
-        return response()->json($produk);
+        try {
+            $produk = Produk::findOrFail($id);
+            return response()->json([
+                'status' => 'success',
+                'data' => $produk
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Produk tidak ditemukan'
+            ], 404);
+        }
     }
 
     public function update(Request $request, $id)
@@ -77,7 +87,7 @@ class CmsProdukController extends Controller
             'no_wa' => $request->no_wa
         ]);
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui');
+        return redirect()->route('cms.produk.index')->with('success', 'Produk berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -91,6 +101,6 @@ class CmsProdukController extends Controller
         
         $produk->delete();
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus');
+        return redirect()->route('cms.produk.index')->with('success', 'Produk berhasil dihapus');
     }
 }

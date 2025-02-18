@@ -4,9 +4,11 @@
 <div class="container mx-auto px-2 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-semibold text-gray-900">Data Kependudukan</h1>
-        <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
-            <i class="fas fa-plus mr-2"></i> Tambah Data
-        </button>
+        @if(!Auth::guard('struktur')->check())
+            <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i> Tambah Data
+            </button>
+        @endif
     </div>
 
     <!-- Search Bar -->
@@ -26,113 +28,139 @@
 
     <!-- Data Grid -->
     <div class="bg-white rounded-lg shadow-md">
-        <div class="overflow-x-auto">
-            <table class="min-w-[1600px] w-full table-auto">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="w-[5%] sticky left-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('nik')">
-                                NIK
-                                <i class="fas fa-sort{{ request()->get('sort') === 'nik' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
-                            </div>
-                        </th>
-                        <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('no_kk')">
-                                No KK
-                                <i class="fas fa-sort{{ request()->get('sort') === 'no_kk' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
-                            </div>
-                        </th>
-                        <th class="w-[15%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('nama_lengkap')">
-                                Nama Lengkap
-                                <i class="fas fa-sort{{ request()->get('sort') === 'nama_lengkap' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
-                            </div>
-                        </th>
-                        <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No HP</th>
-                        <th class="w-[12%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">TTL</th>
-                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">JK</th>
-                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Gol. Darah</th>
-                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Agama</th>
-                        <th class="w-[7%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
-                        <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Pendidikan</th>
-                        <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status Keluarga</th>
-                        <th class="w-[7%] sticky right-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @php
-                        $sort = request()->get('sort');
-                        $order = request()->get('order', 'asc');
-                        
-                        $kependudukan = App\Models\Kependudukan::when($sort, function($query) use ($sort, $order) {
-                            return $query->orderBy($sort, $order);
-                        })->paginate(10);
-                    @endphp
-                    @forelse($kependudukan as $index => $item)
-                    <tr class="hover:bg-gray-50">
-                        <td class="sticky left-0 bg-white px-6 py-4 text-base whitespace-nowrap">{{ ($index + 1) + (request()->get('page', 1) - 1) * 10 }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nik }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->no_kk }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nama_lengkap }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nomor_hp }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->tempat_lahir }}, {{ date('d/m/Y', strtotime($item->tanggal_lahir)) }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->jenis_kelamin == 'Laki-Laki' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
-                                {{ $item->jenis_kelamin == 'Laki-Laki' ? 'L' : 'P' }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->golongan_darah }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->agama }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_perkawinan }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->pekerjaan }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->pendidikan_terakhir }}</td>
-                        <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_keluarga }}</td>
-                        <td class="sticky right-0 bg-white px-6 py-4 text-right text-base font-medium whitespace-nowrap">
-                            <button onclick="openEditModal('{{ $item->nik }}')" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <form action="{{ route('cms.kependudukan.destroy', $item->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-800 text-lg" onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="14" class="px-6 py-4 text-center text-gray-500 text-lg">
-                            Tidak ada data kependudukan
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+        @if(App\Models\Kependudukan::count() == 0)
+            <div class="flex flex-col items-center justify-center py-12">
+                <img src="https://illustrations.popsy.co/gray/falling-files.svg" 
+                     alt="No Data" 
+                     class="w-64 h-64 mb-6"
+                >
+                <h3 class="text-xl font-medium text-gray-900 mb-2">
+                    Data Kependudukan Kosong
+                </h3>
+                <p class="text-gray-500 text-center mb-6">
+                    Belum ada data kependudukan yang tersedia. Mulai tambahkan data sekarang!
+                </p>
+                @if(!Auth::guard('struktur')->check())
+                    <button onclick="openAddModal()" 
+                            class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-150 ease-in-out">
+                        <i class="fas fa-plus mr-2"></i>
+                        Tambah Data Kependudukan
+                    </button>
+                @endif
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="min-w-[1600px] w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="w-[5%] sticky left-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No</th>
+                            <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('nik')">
+                                    NIK
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'nik' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
+                            <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('no_kk')">
+                                    No KK
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'no_kk' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
+                            <th class="w-[15%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('nama_lengkap')">
+                                    Nama Lengkap
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'nama_lengkap' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
+                            <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No HP</th>
+                            <th class="w-[12%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">TTL</th>
+                            <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">JK</th>
+                            <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Gol. Darah</th>
+                            <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Agama</th>
+                            <th class="w-[7%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
+                            <th class="w-[5%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Pendidikan</th>
+                            <th class="w-[8%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status Keluarga</th>
+                            <th class="w-[7%] sticky right-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @php
+                            $sort = request()->get('sort');
+                            $order = request()->get('order', 'asc');
+                            
+                            $kependudukan = App\Models\Kependudukan::when($sort, function($query) use ($sort, $order) {
+                                return $query->orderBy($sort, $order);
+                            })->paginate(10);
+                        @endphp
+                        @forelse($kependudukan as $index => $item)
+                        <tr class="hover:bg-gray-50">
+                            <td class="sticky left-0 bg-white px-6 py-4 text-base whitespace-nowrap">{{ ($index + 1) + (request()->get('page', 1) - 1) * 10 }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nik }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->no_kk }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nama_lengkap }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->nomor_hp }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->tempat_lahir }}, {{ date('d/m/Y', strtotime($item->tanggal_lahir)) }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $item->jenis_kelamin == 'Laki-Laki' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
+                                    {{ $item->jenis_kelamin == 'Laki-Laki' ? 'L' : 'P' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->golongan_darah }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->agama }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_perkawinan }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->pekerjaan }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->pendidikan_terakhir }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_keluarga }}</td>
+                            @if(!Auth::guard('struktur')->check())
+                                <td class="sticky right-0 bg-white px-6 py-4 text-right text-base font-medium whitespace-nowrap">
+                                    <button onclick="openEditModal('{{ $item->nik }}')" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteData('{{ $item->nik }}')" class="text-red-600 hover:text-red-800 text-lg">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            @endif
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="14" class="px-6 py-4 text-center text-gray-500 text-lg">
+                                Tidak ada data kependudukan
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
 
     <!-- Pagination - Moved completely outside -->
     <div class="flex justify-center mt-6">
         <div class="flex items-center gap-4">
-            @if($kependudukan->previousPageUrl())
+            @if(App\Models\Kependudukan::count() > 0 && $kependudukan->previousPageUrl())
                 <a href="{{ $kependudukan->previousPageUrl() }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
                     Previous
                 </a>
             @endif
 
             <div class="flex items-center gap-2">
-                @for($i = 1; $i <= $kependudukan->lastPage(); $i++)
-                    <a href="{{ $kependudukan->url($i) }}" 
+                @if(App\Models\Kependudukan::count() > 0)
+                    @for($i = 1; $i <= $kependudukan->lastPage(); $i++)
+                        <a href="{{ $kependudukan->url($i) }}" 
                        class="px-4 py-2 text-sm font-medium {{ $kependudukan->currentPage() == $i ? 'text-white bg-blue-600' : 'text-gray-700 bg-white' }} border border-gray-300 rounded-md hover:bg-gray-50">
                         {{ $i }}
                     </a>
                 @endfor
+                @else
+                    <p class="text-gray-500 text-center mb-6">
+                        Belum ada data kependudukan yang tersedia. Mulai tambahkan data sekarang!
+                    </p>
+                @endif
             </div>
 
-            @if($kependudukan->nextPageUrl())
+            @if(App\Models\Kependudukan::count() > 0 && $kependudukan->nextPageUrl())
                 <a href="{{ $kependudukan->nextPageUrl() }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
                     Next
                 </a>
@@ -143,11 +171,11 @@
     <div class="flex justify-center mt-2">
         <p class="text-sm text-gray-700">
             Showing
-            <span class="font-medium">{{ $kependudukan->firstItem() }}</span>
+            <span class="font-medium">{{ App\Models\Kependudukan::count() > 0 ? $kependudukan->firstItem() : 0 }}</span>
             to
-            <span class="font-medium">{{ $kependudukan->lastItem() }}</span>
+            <span class="font-medium">{{ App\Models\Kependudukan::count() > 0 ? $kependudukan->lastItem() : 0 }}</span>
             of
-            <span class="font-medium">{{ $kependudukan->total() }}</span>
+            <span class="font-medium">{{ App\Models\Kependudukan::count() > 0 ? $kependudukan->total() : 0 }}</span>
             results
         </p>
     </div>
@@ -303,42 +331,47 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">NIK</label>
                             <input type="text" name="nik" id="editNik" required 
                                    pattern="[0-9]{16}" title="NIK harus 16 digit angka"
+                                   value="{{ old('nik') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">No KK</label>
                             <input type="text" name="no_kk" id="editNoKK" required 
                                    pattern="[0-9]{16}" title="No KK harus 16 digit angka"
+                                   value="{{ old('no_kk') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
                             <input type="text" name="nama_lengkap" id="editNamaLengkap" required 
+                                   value="{{ old('nama_lengkap') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
                             <input type="text" name="nomor_hp" id="editNomorHP" required 
                                    pattern="[0-9]{10,15}" title="Nomor HP harus 10-15 digit angka"
+                                   value="{{ old('nomor_hp') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir</label>
                             <input type="text" name="tempat_lahir" id="editTempatLahir" required 
+                                   value="{{ old('tempat_lahir') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
                             <input type="date" name="tanggal_lahir" id="editTanggalLahir" required 
+                                   value="{{ old('tanggal_lahir') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
                             <select name="jenis_kelamin" id="editJenisKelamin" required 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Pilih Jenis Kelamin</option>
-                                <option value="Laki-Laki">Laki-Laki</option>
-                                <option value="Perempuan">Perempuan</option>
+                                <option value="Laki-Laki" {{ old('jenis_kelamin') == 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                             </select>
                         </div>
                     </div>
@@ -348,74 +381,70 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Golongan Darah</label>
                             <select name="golongan_darah" id="editGolonganDarah" required 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Pilih Golongan Darah</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="AB">AB</option>
-                                <option value="O">O</option>
-                                <option value="-">-</option>
+                                <option value="A" {{ old('golongan_darah') == 'A' ? 'selected' : '' }}>A</option>
+                                <option value="B" {{ old('golongan_darah') == 'B' ? 'selected' : '' }}>B</option>
+                                <option value="AB" {{ old('golongan_darah') == 'AB' ? 'selected' : '' }}>AB</option>
+                                <option value="O" {{ old('golongan_darah') == 'O' ? 'selected' : '' }}>O</option>
+                                <option value="-" {{ old('golongan_darah') == '-' ? 'selected' : '' }}>-</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Agama</label>
                             <select name="agama" id="editAgama" required 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Pilih Agama</option>
-                                <option value="Islam">Islam</option>
-                                <option value="Kristen">Kristen</option>
-                                <option value="Katolik">Katolik</option>
-                                <option value="Hindu">Hindu</option>
-                                <option value="Buddha">Buddha</option>
-                                <option value="Konghucu">Konghucu</option>
-                                <option value="Lainnya">Lainnya</option>
+                                <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                                <option value="Katolik" {{ old('agama') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
+                                <option value="Hindu" {{ old('agama') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                                <option value="Buddha" {{ old('agama') == 'Buddha' ? 'selected' : '' }}>Buddha</option>
+                                <option value="Konghucu" {{ old('agama') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option>
+                                <option value="Lainnya" {{ old('agama') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Perkawinan</label>
                             <select name="status_perkawinan" id="editStatusPerkawinan" required 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Pilih Status Perkawinan</option>
-                                <option value="Belum Kawin">Belum Kawin</option>
-                                <option value="Kawin">Kawin</option>
-                                <option value="Cerai Hidup">Cerai Hidup</option>
-                                <option value="Cerai Mati">Cerai Mati</option>
+                                <option value="Belum Kawin" {{ old('status_perkawinan') == 'Belum Kawin' ? 'selected' : '' }}>Belum Kawin</option>
+                                <option value="Kawin" {{ old('status_perkawinan') == 'Kawin' ? 'selected' : '' }}>Kawin</option>
+                                <option value="Cerai Hidup" {{ old('status_perkawinan') == 'Cerai Hidup' ? 'selected' : '' }}>Cerai Hidup</option>
+                                <option value="Cerai Mati" {{ old('status_perkawinan') == 'Cerai Mati' ? 'selected' : '' }}>Cerai Mati</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label>
-                            <select name="pekerjaan" id="editPekerjaan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Pilih Pekerjaan</option>
-                                <option value="Petani">Petani</option>
-                                <option value="PNS">PNS</option>
-                                <option value="Wiraswasta">Wiraswasta</option>
-                                <option value="Swasta">Swasta</option>
-                                <option value="Pedagang">Pedagang</option>
-                                <option value="Lainnya">Lainnya</option>
+                            <select name="pekerjaan" id="editPekerjaan" required 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="Petani" {{ old('pekerjaan') == 'Petani' ? 'selected' : '' }}>Petani</option>
+                                <option value="PNS" {{ old('pekerjaan') == 'PNS' ? 'selected' : '' }}>PNS</option>
+                                <option value="Wiraswasta" {{ old('pekerjaan') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
+                                <option value="Swasta" {{ old('pekerjaan') == 'Swasta' ? 'selected' : '' }}>Swasta</option>
+                                <option value="Pedagang" {{ old('pekerjaan') == 'Pedagang' ? 'selected' : '' }}>Pedagang</option>
+                                <option value="Lainnya" {{ old('pekerjaan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
-                            <select name="pendidikan_terakhir" id="editPendidikanTerakhir" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Pilih Pendidikan</option>
-                                <option value="SD">SD</option>
-                                <option value="SMP">SMP</option>
-                                <option value="SMA">SMA</option>
-                                <option value="D3">D3</option>
-                                <option value="S1">S1</option>
-                                <option value="S2/S3">S2/S3</option>
+                            <select name="pendidikan_terakhir" id="editPendidikanTerakhir" required 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="SD" {{ old('pendidikan_terakhir') == 'SD' ? 'selected' : '' }}>SD</option>
+                                <option value="SMP" {{ old('pendidikan_terakhir') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                                <option value="SMA" {{ old('pendidikan_terakhir') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                                <option value="D3" {{ old('pendidikan_terakhir') == 'D3' ? 'selected' : '' }}>D3</option>
+                                <option value="S1" {{ old('pendidikan_terakhir') == 'S1' ? 'selected' : '' }}>S1</option>
+                                <option value="S2/S3" {{ old('pendidikan_terakhir') == 'S2/S3' ? 'selected' : '' }}>S2/S3</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Keluarga</label>
                             <select name="status_keluarga" id="editStatusKeluarga" required 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Pilih Status Keluarga</option>
-                                <option value="Kepala Keluarga">Kepala Keluarga</option>
-                                <option value="Suami">Suami</option>
-                                <option value="Istri">Istri</option>
-                                <option value="Anak">Anak</option>
-                                <option value="Orang Tua">Orang Tua</option>
-                                <option value="Lainnya">Lainnya</option>
+                                <option value="Kepala Keluarga" {{ old('status_keluarga') == 'Kepala Keluarga' ? 'selected' : '' }}>Kepala Keluarga</option>
+                                <option value="Suami" {{ old('status_keluarga') == 'Suami' ? 'selected' : '' }}>Suami</option>
+                                <option value="Istri" {{ old('status_keluarga') == 'Istri' ? 'selected' : '' }}>Istri</option>
+                                <option value="Anak" {{ old('status_keluarga') == 'Anak' ? 'selected' : '' }}>Anak</option>
+                                <option value="Orang Tua" {{ old('status_keluarga') == 'Orang Tua' ? 'selected' : '' }}>Orang Tua</option>
+                                <option value="Lainnya" {{ old('status_keluarga') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
                     </div>
@@ -447,6 +476,7 @@ function closeAddModal() {
 }
 
 function openEditModal(nik) {
+    // Tampilkan loading dengan SweetAlert2
     Swal.fire({
         title: 'Loading...',
         allowOutsideClick: false,
@@ -455,56 +485,50 @@ function openEditModal(nik) {
         }
     });
 
-    fetch(`/cms/kependudukan/${nik}/edit`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        Swal.close();
-        
-        if (!data) {
-            throw new Error('Data tidak ditemukan');
-        }
+    // Ambil data dengan fetch
+    fetch(`/cms/app/kependudukan/${nik}/edit`)
+        .then(response => response.json())
+        .then(data => {
+            Swal.close();
+            
+            if (data.penduduk) {
+                // Isi form dengan data yang diterima
+                document.getElementById('editNik').value = data.penduduk.nik;
+                document.getElementById('editNoKK').value = data.penduduk.no_kk;
+                document.getElementById('editNamaLengkap').value = data.penduduk.nama_lengkap;
+                document.getElementById('editNomorHP').value = data.penduduk.nomor_hp;
+                document.getElementById('editTempatLahir').value = data.penduduk.tempat_lahir;
+                document.getElementById('editTanggalLahir').value = data.penduduk.tanggal_lahir;
+                document.getElementById('editJenisKelamin').value = data.penduduk.jenis_kelamin;
+                document.getElementById('editGolonganDarah').value = data.penduduk.golongan_darah;
+                document.getElementById('editAgama').value = data.penduduk.agama;
+                document.getElementById('editStatusPerkawinan').value = data.penduduk.status_perkawinan;
+                document.getElementById('editPekerjaan').value = data.penduduk.pekerjaan;
+                document.getElementById('editPendidikanTerakhir').value = data.penduduk.pendidikan_terakhir;
+                document.getElementById('editStatusKeluarga').value = data.penduduk.status_keluarga;
 
-        // Mengisi form dengan data yang diterima
-        document.getElementById('editNik').value = data.nik || '';
-        document.getElementById('editNoKK').value = data.no_kk || '';
-        document.getElementById('editNamaLengkap').value = data.nama_lengkap || '';
-        document.getElementById('editNomorHP').value = data.nomor_hp || '';
-        document.getElementById('editTempatLahir').value = data.tempat_lahir || '';
-        // Format tanggal lahir ke format YYYY-MM-DD untuk input type="date"
-        if (data.tanggal_lahir) {
-            const date = new Date(data.tanggal_lahir);
-            const formattedDate = date.toISOString().split('T')[0];
-            document.getElementById('editTanggalLahir').value = formattedDate;
-        }
-        document.getElementById('editJenisKelamin').value = data.jenis_kelamin || '';
-        document.getElementById('editGolonganDarah').value = data.golongan_darah || '';
-        document.getElementById('editAgama').value = data.agama || '';
-        document.getElementById('editStatusPerkawinan').value = data.status_perkawinan || '';
-        document.getElementById('editPekerjaan').value = data.pekerjaan || '';
-        document.getElementById('editPendidikanTerakhir').value = data.pendidikan_terakhir || '';
-        document.getElementById('editStatusKeluarga').value = data.status_keluarga || '';
-        
-        // Set action URL untuk form menggunakan NIK
-        document.getElementById('editForm').action = `/cms/kependudukan/${nik}`;
-        
-        // Tampilkan modal
-        document.getElementById('editModal').classList.remove('hidden');
-        document.getElementById('editModal').classList.add('flex');
-        document.body.classList.add('modal-open');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Terjadi kesalahan saat mengambil data'
+                // Set action URL form
+                document.getElementById('editForm').action = `/cms/app/kependudukan/${nik}`;
+                
+                // Tampilkan modal
+                document.getElementById('editModal').classList.remove('hidden');
+                document.getElementById('editModal').classList.add('flex');
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Data tidak ditemukan'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Terjadi kesalahan saat mengambil data'
+            });
         });
-    });
 }
 
 function closeEditModal() {
@@ -649,6 +673,55 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+function deleteData(nik) {
+    Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const token = document.querySelector('meta[name="csrf-token"]').content;
+            
+            fetch(`/cms/app/kependudukan/${nik}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: error.message || 'Terjadi kesalahan saat menghapus data'
+                });
+            });
+        }
+    });
+}
 </script>
 
 <style>

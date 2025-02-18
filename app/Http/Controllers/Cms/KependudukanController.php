@@ -3,106 +3,162 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kependudukan;
 use Illuminate\Http\Request;
+use App\Models\Kependudukan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class KependudukanController extends Controller
 {
     public function index()
     {
-        $kependudukan = Kependudukan::query();
+        return view('cms.pages.kependudukan');
+    }
 
-        // Apply search if provided
-        if (request()->has('search')) {
-            $search = request()->get('search');
-            $kependudukan->where(function($query) use ($search) {
-                $query->where('nik', 'like', "%{$search}%")
-                      ->orWhere('nama_lengkap', 'like', "%{$search}%");
-            });
-        }
-
-        // Apply sorting if provided
-        if (request()->has('sort')) {
-            $sortBy = request()->get('sort');
-            $sortOrder = request()->get('order', 'asc');
-            $kependudukan->orderBy($sortBy, $sortOrder);
-        }
-
-        // Paginate the results
-        $kependudukan = $kependudukan->paginate(15);
-
-        return view('cms.pages.kependudukan', compact('kependudukan'));
+    public function create()
+    {
+        return view('cms.app.kependudukan.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nik' => 'required|string|size:16|unique:kependudukan,nik',
-            'no_kk' => 'required|string|size:16',
-            'nama_lengkap' => 'required|string|max:100',
-            'nomor_hp' => 'required|string|max:15',
-            'tempat_lahir' => 'required|string|max:50',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
-            'golongan_darah' => 'required|in:A,B,AB,O,-',
-            'agama' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Konghucu,Lainnya',
-            'status_perkawinan' => 'required|in:Belum Kawin,Kawin,Cerai Hidup,Cerai Mati',
-            'pekerjaan' => 'required|string|max:50',
-            'pendidikan_terakhir' => 'required|string|max:50',
-            'status_keluarga' => 'required|in:Kepala Keluarga,Suami,Istri,Anak,Orang Tua,Lainnya'
-        ]);
+        // Hanya user biasa yang bisa menambah data
+        if (Auth::guard('struktur')->check()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk menambah data');
+        }
 
-        Kependudukan::create($request->all());
+        try {
+            $validated = $request->validate([
+                'nik' => 'required|unique:kependudukan',
+                'nama_lengkap' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required|date',
+                'jenis_kelamin' => 'required',
+                'no_kk' => 'required',
+                'nomor_hp' => 'required',
+                'golongan_darah' => 'required',
+                'agama' => 'required',
+                'status_perkawinan' => 'required',
+                'pekerjaan' => 'required',
+                'pendidikan_terakhir' => 'required',
+                'status_keluarga' => 'required'
+            ]);
 
-        return redirect()->route('cms.kependudukan.index')
-            ->with('success', 'Data kependudukan berhasil ditambahkan.');
+            $result = Kependudukan::create($validated);
+
+            if ($result) {
+                return redirect('/cms/app/kependudukan')
+                    ->with('success', 'Data penduduk berhasil ditambahkan');
+            }
+
+            return redirect()->back()
+                ->with('error', 'Gagal menambahkan data penduduk')
+                ->withInput();
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function edit($nik)
     {
         try {
-            $kependudukan = Kependudukan::where('nik', $nik)->firstOrFail();
-            return response()->json($kependudukan);
+            $penduduk = Kependudukan::where('nik', $nik)->first();
+            
+            if (!$penduduk) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data penduduk tidak ditemukan'
+                ], 404);
+            }
+
+            // Format tanggal lahir jika perlu
+            if ($penduduk->tanggal_lahir) {
+                $penduduk->tanggal_lahir = date('Y-m-d', strtotime($penduduk->tanggal_lahir));
+            }
+
+            return response()->json([
+                'success' => true,
+                'penduduk' => $penduduk
+            ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Data tidak ditemukan'
-            ], 404);
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
     }
 
     public function update(Request $request, $nik)
     {
-        $kependudukan = Kependudukan::findOrFail($nik);
-        
-        $request->validate([
-            'nik' => 'required|string|size:16|unique:kependudukan,nik,' . $nik . ',nik',
-            'no_kk' => 'required|string|size:16',
-            'nama_lengkap' => 'required|string|max:100',
-            'nomor_hp' => 'required|string|max:15',
-            'tempat_lahir' => 'required|string|max:50',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
-            'golongan_darah' => 'required|in:A,B,AB,O,-',
-            'agama' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Konghucu,Lainnya',
-            'status_perkawinan' => 'required|in:Belum Kawin,Kawin,Cerai Hidup,Cerai Mati',
-            'pekerjaan' => 'required|string|max:50',
-            'pendidikan_terakhir' => 'required|string|max:50',
-            'status_keluarga' => 'required|in:Kepala Keluarga,Suami,Istri,Anak,Orang Tua,Lainnya'
-        ]);
+        // Hanya user biasa yang bisa mengubah data
+        if (Auth::guard('struktur')->check()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah data');
+        }
 
-        $kependudukan->update($request->all());
+        try {
+            $penduduk = Kependudukan::where('nik', $nik)->first();
+            
+            if (!$penduduk) {
+                return redirect('/cms/app/kependudukan')
+                    ->with('error', 'Data penduduk tidak ditemukan');
+            }
 
-        return redirect()->route('cms.kependudukan.index')
-            ->with('success', 'Data kependudukan berhasil diperbarui.');
+            $validated = $request->validate([
+                'nik' => 'required|unique:kependudukan,nik,' . $nik . ',nik',
+                'nama_lengkap' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required|date',
+                'jenis_kelamin' => 'required',
+                'no_kk' => 'required',
+                'nomor_hp' => 'required',
+                'golongan_darah' => 'required',
+                'agama' => 'required',
+                'status_perkawinan' => 'required',
+                'pekerjaan' => 'required',
+                'pendidikan_terakhir' => 'required',
+                'status_keluarga' => 'required'
+            ]);
+
+            $penduduk->update($validated);
+
+            return redirect('/cms/app/kependudukan')
+                ->with('success', 'Data penduduk berhasil diperbarui');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function destroy($nik)
     {
-        $kependudukan = Kependudukan::findOrFail($nik);
-        $kependudukan->delete();
+        try {
+            $penduduk = Kependudukan::where('nik', $nik)->first();
+            
+            if (!$penduduk) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data penduduk tidak ditemukan'
+                ], 404);
+            }
 
-        return redirect()->route('cms.kependudukan.index')
-            ->with('success', 'Data kependudukan berhasil dihapus.');
+            $penduduk->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data penduduk berhasil dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

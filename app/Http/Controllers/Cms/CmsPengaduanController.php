@@ -10,7 +10,8 @@ class CmsPengaduanController extends Controller
 {
     public function index()
     {
-        return view('cms.pages.pengaduan');
+        $pengaduans = Pengaduan::latest()->get();
+        return view('cms.pages.pengaduan', compact('pengaduans'));
     }
 
     public function edit($id)
@@ -23,7 +24,7 @@ class CmsPengaduanController extends Controller
     {
         $request->validate([
             'status' => 'required|in:pending,processing,resolved,rejected',
-            'response' => 'nullable|string'
+            'response' => 'nullable|string',
         ]);
 
         $pengaduan = Pengaduan::findOrFail($id);
@@ -31,6 +32,6 @@ class CmsPengaduanController extends Controller
         $pengaduan->response = $request->response;
         $pengaduan->save();
 
-        return redirect()->back()->with('success', 'Pengaduan berhasil diperbarui');
+        return redirect()->back()->with('success', 'Status pengaduan berhasil diperbarui');
     }
 }

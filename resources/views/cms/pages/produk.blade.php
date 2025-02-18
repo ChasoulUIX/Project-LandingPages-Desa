@@ -40,7 +40,7 @@
                             <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
                                 ✏️
                             </button>
-                            <form action="{{ route('produk.destroy', $item->id) }}" method="POST" class="inline">
+                            <form action="{{ route('cms.produk.destroy', $item->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
@@ -71,7 +71,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('cms.produk.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="nama">
@@ -195,18 +195,52 @@ function closeAddModal() {
 }
 
 function openEditModal(id) {
-    document.getElementById('editModal').classList.remove('hidden');
-    document.getElementById('editModal').classList.add('flex');
-    document.getElementById('editForm').action = `/cms/produk/${id}`;
+    // Show modal
+    const modal = document.getElementById('editModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
     
-    // Fetch produk data and populate form
+    // Set form action URL
+    const form = document.getElementById('editForm');
+    form.action = `/cms/produk/${id}`;
+    
+    // Fetch data
     fetch(`/cms/produk/${id}/edit`)
         .then(response => response.json())
-        .then(data => {
-            document.getElementById('edit_nama').value = data.nama;
-            document.getElementById('edit_no_wa').value = data.no_wa;
-            document.getElementById('edit_deskripsi').value = data.deskripsi;
-            document.getElementById('edit_harga').value = data.harga;
+        .then(result => {
+            if (result.status === 'success') {
+                const data = result.data;
+                // Populate form dengan data yang ada
+                document.getElementById('edit_nama').value = data.nama || '';
+                document.getElementById('edit_no_wa').value = data.no_wa || '';
+                document.getElementById('edit_deskripsi').value = data.deskripsi || '';
+                document.getElementById('edit_harga').value = data.harga || '';
+                
+                // Tampilkan preview gambar jika ada
+                if (data.image) {
+                    const imagePreview = document.createElement('div');
+                    imagePreview.className = 'mt-2 mb-2';
+                    imagePreview.innerHTML = `
+                        <p class="text-sm text-gray-600">Gambar Saat Ini:</p>
+                        <img src="/images/${data.image}" alt="Preview" class="w-32 h-32 object-cover rounded">
+                    `;
+                    
+                    const imageContainer = document.getElementById('edit_image').parentElement;
+                    // Hapus preview lama jika ada
+                    const oldPreview = imageContainer.querySelector('.mt-2');
+                    if (oldPreview) {
+                        oldPreview.remove();
+                    }
+                    imageContainer.insertBefore(imagePreview, document.getElementById('edit_image'));
+                }
+            } else {
+                throw new Error(result.message || 'Terjadi kesalahan');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Gagal mengambil data produk');
+            closeEditModal();
         });
 }
 
