@@ -16,35 +16,46 @@
 
     <!-- Struktur Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        @foreach($strukturs as $struktur)
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
-            <div class="relative">
-                <img src="{{ asset('images/' . $struktur->image) }}" alt="{{ $struktur->nama }}" 
-                    class="w-full h-56 object-contain bg-gray-100">
-                <div class="absolute top-0 right-0 p-3 flex space-x-2">
-                    <button onclick="openEditModal({{ $struktur->id }})" class="bg-white p-2 rounded-full shadow-md text-blue-600 hover:text-blue-800 transition duration-300">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <form action="{{ route('struktur.destroy', $struktur->id) }}" method="POST" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="bg-white p-2 rounded-full shadow-md text-red-600 hover:text-red-800 transition duration-300" onclick="return confirm('Apakah Anda yakin ingin menghapus anggota ini?')">
-                            <i class="fas fa-trash"></i>
+        @if($strukturs->count() > 0)
+            @foreach($strukturs as $struktur)
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                <div class="relative">
+                    <img src="{{ asset('images/' . $struktur->image) }}" alt="{{ $struktur->nama }}" 
+                        class="w-full h-56 object-contain bg-gray-100">
+                    <div class="absolute top-0 right-0 p-3 flex space-x-2">
+                        <button onclick="openEditModal({{ $struktur->id }})" class="bg-white p-2 rounded-full shadow-md text-blue-600 hover:text-blue-800 transition duration-300">
+                            <i class="fas fa-edit"></i>
                         </button>
-                    </form>
+                        <form action="{{ route('struktur.destroy', $struktur->id) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-white p-2 rounded-full shadow-md text-red-600 hover:text-red-800 transition duration-300" onclick="return confirm('Apakah Anda yakin ingin menghapus anggota ini?')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $struktur->nama }}</h3>
+                    <p class="text-blue-600 font-semibold text-md mb-2">{{ $struktur->jabatan }}</p>
+                    <p class="text-gray-600 text-sm">Periode: {{ $struktur->periode_mulai }} - {{ $struktur->periode_akhir }}</p>
+                    <p class="text-gray-600 text-sm">Status: {{ ucfirst($struktur->status) }}</p>
+                    <p class="text-gray-600 text-sm">NIK: {{ $struktur->nik }}</p>
+                    <p class="text-gray-600 text-sm">WhatsApp: {{ $struktur->no_wa }}</p>
+                    <p class="text-gray-600 text-sm">Hak Akses: {{ ucfirst($struktur->akses) }}</p>
                 </div>
             </div>
-            <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $struktur->nama }}</h3>
-                <p class="text-blue-600 font-semibold text-md mb-2">{{ $struktur->jabatan }}</p>
-                <p class="text-gray-600 text-sm">Periode: {{ $struktur->periode_mulai }} - {{ $struktur->periode_akhir }}</p>
-                <p class="text-gray-600 text-sm">Status: {{ ucfirst($struktur->status) }}</p>
-                <p class="text-gray-600 text-sm">NIK: {{ $struktur->nik }}</p>
-                <p class="text-gray-600 text-sm">WhatsApp: {{ $struktur->no_wa }}</p>
-                <p class="text-gray-600 text-sm">Hak Akses: {{ ucfirst($struktur->akses) }}</p>
+            @endforeach
+        @else
+            <div class="col-span-full flex flex-col items-center justify-center py-12">
+                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20Facing%20Up.png" 
+                     alt="No Data" 
+                     class="w-64 h-64 mb-6"
+                >
+                <h3 class="text-xl font-medium text-gray-600 mb-2">Tidak ada data</h3>
+                <p class="text-gray-500">Belum ada anggota struktur desa yang ditambahkan</p>
             </div>
-        </div>
-        @endforeach
+        @endif
     </div>
 
     <!-- Add Modal -->

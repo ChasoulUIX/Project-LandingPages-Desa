@@ -65,50 +65,59 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($danaDesa as $dana)
-                            <tr class="text-gray-700 hover:bg-gray-50" data-id="{{ $dana->id }}">
-                                <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tahun_anggaran }}</td>
-                                <td class="px-2 py-2 whitespace-nowrap">{{ $dana->sumber_anggaran }}</td>
-                                <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->nominal, 0, ',', '.') }}</td>
-                                <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tgl_pencairan->format('d/m/Y') }}</td>
-                                <td class="px-2 py-2 whitespace-nowrap">
-                                    <div class="relative pt-1">
-                                        <div class="overflow-hidden h-1.5 text-sm flex rounded bg-blue-200">
-                                            <div style="width: {{ $dana->status_pencairan }}%" 
-                                                 class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500">
+                            @if($danaDesa->count() > 0)
+                                @foreach($danaDesa as $dana)
+                                <tr class="text-gray-700 hover:bg-gray-50" data-id="{{ $dana->id }}">
+                                    <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tahun_anggaran }}</td>
+                                    <td class="px-2 py-2 whitespace-nowrap">{{ $dana->sumber_anggaran }}</td>
+                                    <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->nominal, 0, ',', '.') }}</td>
+                                    <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tgl_pencairan->format('d/m/Y') }}</td>
+                                    <td class="px-2 py-2 whitespace-nowrap">
+                                        <div class="relative pt-1">
+                                            <div class="overflow-hidden h-1.5 text-sm flex rounded bg-blue-200">
+                                                <div style="width: {{ $dana->status_pencairan }}%" 
+                                                     class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500">
+                                                </div>
                                             </div>
+                                            <div class="text-sm">{{ $dana->status_pencairan }}%</div>
                                         </div>
-                                        <div class="text-sm">{{ $dana->status_pencairan }}%</div>
-                                    </div>
-                                </td>
-                                <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->dana_masuk, 0, ',', '.') }}</td>
-                                <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->dana_terpakai, 0, ',', '.') }}</td>
-                                <td class="px-2 py-2 whitespace-nowrap">
-                                    @if($dana->photos && count($dana->photos) > 0)
-                                        <button onclick="showPhotosModal({{ json_encode($dana->photos) }})" 
-                                                class="text-blue-500 hover:text-blue-700 flex items-center">
-                                            📷 <span class="ml-1">({{ count($dana->photos) }})</span>
+                                    </td>
+                                    <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->dana_masuk, 0, ',', '.') }}</td>
+                                    <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->dana_terpakai, 0, ',', '.') }}</td>
+                                    <td class="px-2 py-2 whitespace-nowrap">
+                                        @if($dana->photos && count($dana->photos) > 0)
+                                            <button onclick="showPhotosModal({{ json_encode($dana->photos) }})" 
+                                                    class="text-blue-500 hover:text-blue-700 flex items-center">
+                                                📷 <span class="ml-1">({{ count($dana->photos) }})</span>
+                                            </button>
+                                        @else
+                                            <span class="text-gray-400">📷</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-2 py-2 whitespace-nowrap">
+                                        <button onclick="openEditModal({{ $dana->id }})" class="text-blue-500 hover:text-blue-700">
+                                            ✏️
                                         </button>
-                                    @else
-                                        <span class="text-gray-400">📷</span>
-                                    @endif
-                                </td>
-                                <td class="px-2 py-2 whitespace-nowrap">
-                                    <button onclick="openEditModal({{ $dana->id }})" class="text-blue-500 hover:text-blue-700">
-                                        ✏️
-                                    </button>
-                                    <button onclick="deleteData({{ $dana->id }})" class="text-red-500 hover:text-red-700 ml-2">
-                                        🗑️
-                                    </button>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="9" class="px-2 py-2 text-center text-gray-500">
-                                    Belum ada data dana desa
-                                </td>
-                            </tr>
-                            @endforelse
+                                        <button onclick="deleteData({{ $dana->id }})" class="text-red-500 hover:text-red-700 ml-2">
+                                            🗑️
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="9">
+                                        <div class="flex flex-col items-center justify-center py-12">
+                                            <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Money%20Bag.png" 
+                                                 alt="No Data" 
+                                                 class="w-64 h-64 mb-6"
+                                            >
+                                            <h3 class="text-xl font-medium text-gray-600 mb-2">Data Kosong</h3>
+                                            <p class="text-gray-500">Belum ada data dana desa yang tercatat</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>

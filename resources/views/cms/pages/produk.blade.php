@@ -24,39 +24,48 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($produk as $item)
-                    <tr class="text-gray-700" data-id="{{ $item->id }}">
-                        <td class="px-3 py-2 md:px-6 md:py-4">
-                            <button onclick="showPhotosModal(['{{ $item->image }}'])" 
-                                    class="text-blue-500 hover:text-blue-700 flex items-center">
-                                📷 <span class="ml-1 text-sm">(1)</span>
-                            </button>
-                        </td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->nama }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->no_wa }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->deskripsi, 100) }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">
-                            <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
-                                ✏️
-                            </button>
-                            <form action="{{ route('cms.produk.destroy', $item->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
-                                    🗑️
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                            Belum ada produk
-                        </td>
-                    </tr>
-                    @endforelse
+                    @if($produk->count() > 0)
+                        @foreach($produk as $item)
+                            <tr class="text-gray-700" data-id="{{ $item->id }}">
+                                <td class="px-3 py-2 md:px-6 md:py-4">
+                                    <button onclick="showPhotosModal(['{{ $item->image }}'])" 
+                                            class="text-blue-500 hover:text-blue-700 flex items-center">
+                                        📷 <span class="ml-1 text-sm">(1)</span>
+                                    </button>
+                                </td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->nama }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->no_wa }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->deskripsi, 100) }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">
+                                    <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
+                                        ✏️
+                                    </button>
+                                    <form action="{{ route('cms.produk.destroy', $item->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="6">
+                                <div class="flex flex-col items-center justify-center py-12">
+                                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Shopping%20Bags.png" 
+                                         alt="No Data" 
+                                         class="w-64 h-64 mb-6"
+                                    >
+                                    <h3 class="text-xl font-medium text-gray-600 mb-2">Belum Ada Produk</h3>
+                                    <p class="text-gray-500">Silakan tambah produk UMKM baru dengan klik tombol di atas</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -23,38 +23,47 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($berita as $item)
-                    <tr class="text-gray-700" data-id="{{ $item->id }}">
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->tanggal }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->judul }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->konten, 100) }}</td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">
-                            <button onclick="showPhotosModal(['{{ $item->image }}'])" 
-                                    class="text-blue-500 hover:text-blue-700 flex items-center">
-                                📷 <span class="ml-1 text-sm">(1)</span>
-                            </button>
-                        </td>
-                        <td class="px-3 py-2 md:px-6 md:py-4">
-                            <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
-                                ✏️
-                            </button>
-                            <form action="{{ route('berita.destroy', $item->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
-                                    🗑️
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                            Belum ada berita
-                        </td>
-                    </tr>
-                    @endforelse
+                    @if($berita->count() > 0)
+                        @foreach($berita as $item)
+                            <tr class="text-gray-700" data-id="{{ $item->id }}">
+                                <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->tanggal }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->judul }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->konten, 100) }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">
+                                    <button onclick="showPhotosModal(['{{ $item->image }}'])" 
+                                            class="text-blue-500 hover:text-blue-700 flex items-center">
+                                        📷 <span class="ml-1 text-sm">(1)</span>
+                                    </button>
+                                </td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">
+                                    <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
+                                        ✏️
+                                    </button>
+                                    <form action="{{ route('berita.destroy', $item->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="5">
+                                <div class="flex flex-col items-center justify-center py-12">
+                                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Loudspeaker.png" 
+                                         alt="No Data" 
+                                         class="w-64 h-64 mb-6"
+                                    >
+                                    <h3 class="text-xl font-medium text-gray-600 mb-2">Belum Ada Berita</h3>
+                                    <p class="text-gray-500">Silakan tambah berita baru dengan klik tombol di atas</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -69,7 +78,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form id="addForm" action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 <div class="space-y-4">
                     <div>
@@ -172,6 +181,10 @@ function openEditModal(id) {
             document.getElementById('editForm').action = `/cms/berita/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengambil data berita');
         });
 }
 
@@ -216,6 +229,65 @@ document.getElementById('photosModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closePhotosModal();
     }
+});
+
+document.getElementById('addForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Terjadi kesalahan saat menyimpan berita');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menyimpan berita: ' + error.message);
+    });
+});
+
+// Add event listener for edit form submission
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch(this.action, {
+        method: 'POST', // Laravel akan menangani method PUT melalui _method field
+        body: formData,
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Terjadi kesalahan saat mengupdate berita');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengupdate berita: ' + error.message);
+    });
 });
 </script>
 @endsection

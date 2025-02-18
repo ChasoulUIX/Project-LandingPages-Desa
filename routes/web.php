@@ -28,6 +28,7 @@ use App\Http\Controllers\Cms\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Cms\DanaController;
 use App\Http\Controllers\Cms\CmsDomisiliController;
+use App\Http\Controllers\Cms\StrukturProfileController;
 
 // Auth
 // ... existing code ...
@@ -293,6 +294,10 @@ Route::middleware(['auth:struktur'])->group(function () {
     // Routes dengan akses terbatas
     Route::get('/cms/app/dashboard', 'DashboardController@index');
     Route::get('/cms/app/kependudukan', 'KependudukanController@index');
+    Route::get('/struktur/profile/edit', [StrukturProfileController::class, 'edit'])
+        ->name('struktur.profile.edit');
+    Route::put('/struktur/profile/update', [StrukturProfileController::class, 'update'])
+        ->name('struktur.profile.update');
 });
 
 // Routes untuk kedua tipe user

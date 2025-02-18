@@ -19,31 +19,45 @@ class CmsBeritaController extends Controller
 
     public function store(Request $request)
     {
-        if (Auth::guard('struktur')->check()) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk menambah berita');
+        try {
+            \Log::info('Received berita store request', $request->all());
+            
+            $validated = $request->validate([
+                'judul' => 'required|string|max:255',
+                'konten' => 'required|string',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'tanggal' => 'required|date',
+            ]);
+
+            if (!$request->hasFile('image')) {
+                throw new \Exception('File gambar tidak ditemukan');
+            }
+
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+
+            $berita = Berita::create([
+                'judul' => $validated['judul'],
+                'konten' => $validated['konten'],
+                'image' => $imageName,
+                'tanggal' => $validated['tanggal'],
+            ]);
+
+            \Log::info('Berita created successfully', ['berita_id' => $berita->id]);
+
+            return response()->json([
+                'success' => true, 
+                'message' => 'Berita berhasil disimpan',
+                'data' => $berita
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error creating berita: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false, 
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
-
-        $validated = $request->validate([
-            'judul' => 'required|max:255',
-            'isi' => 'required',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'kategori' => 'required'
-        ]);
-
-        if ($request->hasFile('gambar')) {
-            $gambar = $request->file('gambar');
-            $nama_gambar = time() . '.' . $gambar->getClientOriginalExtension();
-            $gambar->storeAs('public/berita', $nama_gambar);
-            $validated['gambar'] = 'berita/' . $nama_gambar;
-        }
-
-        $validated['slug'] = Str::slug($validated['judul']);
-        $validated['user_id'] = Auth::id();
-
-        Berita::create($validated);
-
-        return redirect()->route('cms.berita.index')
-            ->with('success', 'Berita berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -54,36 +68,56 @@ class CmsBeritaController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (Auth::guard('struktur')->check()) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah berita');
-        }
+        try {
+            \Log::info('Received berita update request', $request->all());
 
-        $berita = Berita::findOrFail($id);
+            $berita = Berita::findOrFail($id);
 
-        $validated = $request->validate([
-            'judul' => 'required|max:255',
-            'isi' => 'required',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'kategori' => 'required'
-        ]);
+            $validated = $request->validate([
+                'judul' => 'required|string|max:255',
+                'konten' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'tanggal' => 'required|date',
+            ]);
 
-        if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
-            if ($berita->gambar) {
-                Storage::delete('public/' . $berita->gambar);
+            $updateData = [
+                'judul' => $validated['judul'],
+                'konten' => $validated['konten'],
+                'tanggal' => $validated['tanggal'],
+            ];
+
+            if ($request->hasFile('image')) {
+                // Hapus gambar lama
+                if ($berita->image) {
+                    $oldImagePath = public_path('images/' . $berita->image);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                // Upload gambar baru
+                $imageName = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images'), $imageName);
+                $updateData['image'] = $imageName;
             }
+
+            $berita->update($updateData);
+
+            \Log::info('Berita updated successfully', ['berita_id' => $berita->id]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berita berhasil diperbarui',
+                'data' => $berita
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error updating berita: ' . $e->getMessage());
             
-            $gambar = $request->file('gambar');
-            $nama_gambar = time() . '.' . $gambar->getClientOriginalExtension();
-            $gambar->storeAs('public/berita', $nama_gambar);
-            $validated['gambar'] = 'berita/' . $nama_gambar;
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
-
-        $validated['slug'] = Str::slug($validated['judul']);
-        $berita->update($validated);
-
-        return redirect()->route('cms.berita.index')
-            ->with('success', 'Berita berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -95,8 +129,11 @@ class CmsBeritaController extends Controller
         $berita = Berita::findOrFail($id);
         
         // Hapus gambar jika ada
-        if ($berita->gambar) {
-            Storage::delete('public/' . $berita->gambar);
+        if ($berita->image) {
+            $imagePath = public_path('images/' . $berita->image);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
         }
         
         $berita->delete();

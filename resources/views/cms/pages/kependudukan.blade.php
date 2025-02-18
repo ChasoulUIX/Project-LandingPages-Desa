@@ -30,7 +30,7 @@
     <div class="bg-white rounded-lg shadow-md">
         @if(App\Models\Kependudukan::count() == 0)
             <div class="flex flex-col items-center justify-center py-12">
-                <img src="https://illustrations.popsy.co/gray/falling-files.svg" 
+                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20Facing%20Up.png" 
                      alt="No Data" 
                      class="w-64 h-64 mb-6"
                 >

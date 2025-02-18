@@ -250,7 +250,7 @@
             <div class="px-6 py-3">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="w-full px-4 py-2 text-sm rounded-lg hover:bg-blue-800 transition-colors">
+                    <button type="submit" class="w-full flex items-center justify-center px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors">
                         <i class="fas fa-sign-out-alt mr-3"></i>Logout
                     </button>
                 </form>
