@@ -34,7 +34,7 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        // Try regular user authentication first
+        // Try regular user (admin) authentication first
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             if (Auth::guard('web')->attempt([
                 'email' => $request->email,
@@ -48,21 +48,30 @@ class LoginController extends Controller
         // Try Struktur authentication
         $struktur = \App\Models\Struktur::where('nik', $request->email)->first();
 
-        if ($struktur && password_verify($request->password, $struktur->password)) {
-            // Check if all required fields are filled
-            $requiredFields = ['nama', 'jabatan', 'no_wa', 'akses', 'periode_mulai', 'periode_akhir', 'status', 'image'];
-            $isComplete = !collect($requiredFields)->contains(function ($field) use ($struktur) {
-                return empty($struktur->$field);
-            });
+        if ($struktur) {
+            // Cek apakah jabatan adalah Operator Desa
+            if ($struktur->jabatan !== 'Operator Desa') {
+                throw ValidationException::withMessages([
+                    'email' => ['Hanya Operator Desa yang diizinkan untuk login menggunakan NIK.'],
+                ]);
+            }
 
-            // Login the Struktur user using struktur guard
-            Auth::guard('struktur')->login($struktur);
-            $request->session()->regenerate();
+            if (password_verify($request->password, $struktur->password)) {
+                // Check if all required fields are filled
+                $requiredFields = ['nama', 'jabatan', 'no_wa', 'akses', 'periode_mulai', 'periode_akhir', 'status', 'image'];
+                $isComplete = !collect($requiredFields)->contains(function ($field) use ($struktur) {
+                    return empty($struktur->$field);
+                });
 
-            if ($isComplete) {
-                return redirect()->intended('/cms/app/dashboard');
-            } else {
-                return redirect()->route('profile.edit')->with('warning', 'Silakan lengkapi data profil Anda terlebih dahulu.');
+                // Login the Struktur user using struktur guard
+                Auth::guard('struktur')->login($struktur);
+                $request->session()->regenerate();
+
+                if ($isComplete) {
+                    return redirect()->intended('/cms/app/dashboard');
+                } else {
+                    return redirect()->route('profile.edit')->with('warning', 'Silakan lengkapi data profil Anda terlebih dahulu.');
+                }
             }
         }
 

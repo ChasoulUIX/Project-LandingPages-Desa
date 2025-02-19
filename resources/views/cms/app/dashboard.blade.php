@@ -111,6 +111,135 @@
     </div>
 </div>
 
+<!-- Grafik Pendidikan, Pekerjaan, Status Keluarga -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <!-- Grafik Pendidikan -->
+    <div class="bg-white rounded-xl shadow-lg p-4">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">Distribusi Pendidikan</h3>
+        <div class="h-48">
+            <canvas id="pendidikanChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Grafik Pekerjaan -->
+    <div class="bg-white rounded-xl shadow-lg p-4">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">Distribusi Pekerjaan</h3>
+        <div class="h-48">
+            <canvas id="pekerjaanChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Grafik Status Keluarga -->
+    <div class="bg-white rounded-xl shadow-lg p-4">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">Status dalam Keluarga</h3>
+        <div class="h-48">
+            <canvas id="statusKeluargaChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Data untuk Grafik Pendidikan
+    const pendidikanData = {
+        labels: {!! json_encode(App\Models\Kependudukan::select('pendidikan_terakhir')
+            ->groupBy('pendidikan_terakhir')
+            ->pluck('pendidikan_terakhir')) !!},
+        datasets: [{
+            data: {!! json_encode(App\Models\Kependudukan::select('pendidikan_terakhir')
+                ->groupBy('pendidikan_terakhir')
+                ->selectRaw('count(*) as total')
+                ->pluck('total')) !!},
+            backgroundColor: ['#1E40AF', '#EAB308', '#059669', '#DC2626', '#7C3AED', '#2563EB'],
+            borderWidth: 0
+        }]
+    };
+
+    // Data untuk Grafik Pekerjaan
+    const pekerjaanData = {
+        labels: {!! json_encode(App\Models\Kependudukan::select('pekerjaan')
+            ->groupBy('pekerjaan')
+            ->pluck('pekerjaan')) !!},
+        datasets: [{
+            data: {!! json_encode(App\Models\Kependudukan::select('pekerjaan')
+                ->groupBy('pekerjaan')
+                ->selectRaw('count(*) as total')
+                ->pluck('total')) !!},
+            backgroundColor: ['#1E40AF', '#EAB308', '#059669', '#DC2626', '#7C3AED', '#2563EB'],
+            borderWidth: 0
+        }]
+    };
+
+    // Data untuk Grafik Status Keluarga
+    const statusKeluargaData = {
+        labels: {!! json_encode(App\Models\Kependudukan::select('status_keluarga')
+            ->groupBy('status_keluarga')
+            ->pluck('status_keluarga')) !!},
+        datasets: [{
+            data: {!! json_encode(App\Models\Kependudukan::select('status_keluarga')
+                ->groupBy('status_keluarga')
+                ->selectRaw('count(*) as total')
+                ->pluck('total')) !!},
+            backgroundColor: ['#1E40AF', '#EAB308', '#059669', '#DC2626', '#7C3AED', '#2563EB'],
+            borderWidth: 0
+        }]
+    };
+
+    // Konfigurasi chart yang sama untuk ketiga grafik
+    const chartConfig = {
+        type: 'pie',
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 12
+                        },
+                        padding: 10
+                    }
+                },
+                tooltip: {
+                    padding: 12,
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    }
+                }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true,
+                duration: 2000
+            }
+        }
+    };
+
+    // Inisialisasi ketiga chart
+    document.addEventListener('DOMContentLoaded', function() {
+        new Chart(document.getElementById('pendidikanChart').getContext('2d'), {
+            ...chartConfig,
+            data: pendidikanData
+        });
+
+        new Chart(document.getElementById('pekerjaanChart').getContext('2d'), {
+            ...chartConfig,
+            data: pekerjaanData
+        });
+
+        new Chart(document.getElementById('statusKeluargaChart').getContext('2d'), {
+            ...chartConfig,
+            data: statusKeluargaData
+        });
+    });
+</script>
+
+
 <!-- Struktur Desa -->
 <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
     <div class="text-center mb-8">

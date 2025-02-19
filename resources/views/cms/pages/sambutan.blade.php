@@ -9,9 +9,9 @@
     @endif
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Sambutan Kepala Desa</h1>
-        <button onclick="openEditModal({{ $sambutan->id }})" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105">
+        <!-- <button onclick="openEditModal({{ $sambutan->id }})" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105">
             <i class="fas fa-edit mr-2"></i> Edit Sambutan
-        </button>
+        </button> -->
     </div>
 
     <!-- Sambutan Display -->
