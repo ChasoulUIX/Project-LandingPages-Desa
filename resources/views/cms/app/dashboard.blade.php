@@ -2,9 +2,24 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
-    
-   
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">Dashboard</h1>
+        <form id="yearForm" class="m-0">
+            <select name="year" onchange="this.form.submit()" class="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                @php
+                    $years = \App\Models\DanaDesa::distinct()
+                        ->orderBy('tahun_anggaran', 'desc')
+                        ->pluck('tahun_anggaran');
+                    $selectedYear = request('year', date('Y'));
+                @endphp
+                @foreach($years as $year)
+                    <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
+                        {{ $year }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -12,13 +27,17 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 text-sm">Total Dana Desa</p>
-                <h3 class="text-xl font-bold">Rp {{ number_format(\App\Models\DanaDesa::whereNull('deleted_at')->sum('nominal'), 0, ',', '.') }}</h3>
+                <h3 class="text-xl font-bold">
+                    Rp {{ number_format(\App\Models\DanaDesa::whereNull('deleted_at')
+                        ->where('tahun_anggaran', $selectedYear)
+                        ->sum('nominal'), 0, ',', '.') }}
+                </h3>
             </div>
             <div class="bg-blue-100 p-2 rounded-full">
                 <i class="fas fa-money-bill text-blue-500 text-sm"></i>
             </div>
         </div>
-    </div>
+    </div>  
 
     <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
@@ -340,9 +359,15 @@
     new Chart(kategoriCtx, {
         type: 'doughnut',
         data: {
-            labels: {!! json_encode(\App\Models\DanaDesa::whereNull('deleted_at')->pluck('sumber_anggaran')) !!},
+            labels: {!! json_encode(\App\Models\DanaDesa::whereNull('deleted_at')
+                ->where('tahun_anggaran', $selectedYear)
+                ->pluck('sumber_anggaran')) !!},
             datasets: [{
-                data: {!! json_encode(\App\Models\DanaDesa::whereNull('deleted_at')->groupBy('sumber_anggaran')->selectRaw('sum(nominal) as total')->pluck('total')) !!},
+                data: {!! json_encode(\App\Models\DanaDesa::whereNull('deleted_at')
+                    ->where('tahun_anggaran', $selectedYear)
+                    ->groupBy('sumber_anggaran')
+                    ->selectRaw('sum(nominal) as total')
+                    ->pluck('total')) !!},
                 backgroundColor: ['#3B82F6', '#EC4899', '#10B981'],
                 borderWidth: 0
             }]
@@ -370,9 +395,18 @@
             labels: ['Belum Dimulai', 'Sedang Berjalan', 'Selesai'],
             datasets: [{
                 data: [
-                    {{ App\Models\Kegiatan::whereNull('deleted_at')->where('progress', 0)->count() }},
-                    {{ App\Models\Kegiatan::whereNull('deleted_at')->whereBetween('progress', [1, 99])->count() }},
-                    {{ App\Models\Kegiatan::whereNull('deleted_at')->where('progress', 100)->count() }}
+                    {{ App\Models\Kegiatan::whereNull('deleted_at')
+                        ->whereYear('tgl_mulai', $selectedYear)
+                        ->where('progress', 0)
+                        ->count() }},
+                    {{ App\Models\Kegiatan::whereNull('deleted_at')
+                        ->whereYear('tgl_mulai', $selectedYear)
+                        ->whereBetween('progress', [1, 99])
+                        ->count() }},
+                    {{ App\Models\Kegiatan::whereNull('deleted_at')
+                        ->whereYear('tgl_mulai', $selectedYear)
+                        ->where('progress', 100)
+                        ->count() }}
                 ],
                 backgroundColor: [
                     'rgba(239, 68, 68, 0.7)',   // red
