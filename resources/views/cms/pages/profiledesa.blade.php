@@ -92,6 +92,47 @@
                 <h3 class="text-lg font-semibold mb-3">Lokasi</h3>
                 <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
             </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold mb-3">Galeri Foto</h3>
+                <div class="relative">
+                    <!-- Main Slider -->
+                    <div class="swiper mainSwiper mb-4">
+                        <div class="swiper-wrapper">
+                            @if(isset($profileDesa) && !empty($profileDesa->gallery_images))
+                                @foreach(is_array($profileDesa->gallery_images) ? $profileDesa->gallery_images : json_decode($profileDesa->gallery_images, true) as $image)
+                                    <div class="swiper-slide bg-gray-100">
+                                        <div class="relative w-full h-[500px]">
+                                            <img src="{{ asset('images/' . $image) }}" 
+                                                alt="Gallery Image" 
+                                                class="absolute inset-0 w-full h-full object-contain">
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <div class="swiper-button-next !text-white !bg-black/50 hover:!bg-black/70 transition-colors"></div>
+                        <div class="swiper-button-prev !text-white !bg-black/50 hover:!bg-black/70 transition-colors"></div>
+                    </div>
+
+                    <!-- Thumbnail Slider -->
+                    <div class="swiper thumbSwiper">
+                        <div class="swiper-wrapper">
+                            @if(isset($profileDesa) && !empty($profileDesa->gallery_images))
+                                @foreach(is_array($profileDesa->gallery_images) ? $profileDesa->gallery_images : json_decode($profileDesa->gallery_images, true) as $image)
+                                    <div class="swiper-slide bg-gray-100">
+                                        <div class="relative w-full h-24">
+                                            <img src="{{ asset('images/' . $image) }}" 
+                                                alt="Gallery Thumbnail" 
+                                                class="absolute inset-0 w-full h-full object-cover rounded-lg cursor-pointer">
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -218,6 +259,42 @@
                         <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
                     </div>
 
+                    <!-- New Multiple Images Section -->
+                    <div class="mb-8">
+                        <label class="block font-bold mb-3">Galeri Foto</label>
+                        <div class="flex items-center gap-4 mb-4">
+                            <input type="file" 
+                                class="hidden" 
+                                name="gallery_images[]" 
+                                id="gallery-input"
+                                accept="image/*"
+                                multiple
+                                onchange="previewMultipleImages(this)">
+                            <label for="gallery-input" 
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer flex items-center gap-2 text-sm font-medium">
+                                <i class="fas fa-images"></i>
+                                <span>Pilih Foto</span>
+                            </label>
+                        </div>
+                        <div id="gallery-preview" class="flex flex-wrap gap-4">
+                            @if(isset($profileDesa) && $profileDesa->gallery_images)
+                                @foreach(json_decode($profileDesa->gallery_images) as $image)
+                                    <div class="relative group">
+                                        <img src="{{ asset('images/' . $image) }}" 
+                                            alt="Gallery Image" 
+                                            class="h-32 w-32 object-cover rounded-lg">
+                                        <button type="button" 
+                                            onclick="removeExistingImage(this, '{{ $image }}')"
+                                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <input type="hidden" name="removed_images" id="removed-images" value="">
+                    </div>
+
                     <div class="flex justify-end mt-8">
                         <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
                             <i class="fas fa-save"></i>
@@ -231,6 +308,7 @@
 </div>
 
 @push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <style>
 .form-control:focus {
     @apply ring-2 ring-blue-200 border-blue-300;
@@ -244,10 +322,67 @@ label {
 #map {
     @apply rounded-xl shadow-lg;
 }
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.mainSwiper {
+    height: 500px;
+    width: 100%;
+    background: #f3f4f6;
+    border-radius: 0.75rem;
+}
+
+.thumbSwiper {
+    height: 100px;
+    box-sizing: border-box;
+    padding: 10px 0;
+}
+
+.thumbSwiper .swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+.thumbSwiper .swiper-slide-thumb-active {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    --swiper-navigation-size: 20px;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 20px;
+}
+
+.swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+/* Add hover effect for thumbnails */
+.thumbSwiper .swiper-slide:hover {
+    opacity: 0.8;
+    transform: scale(1.02);
+}
 </style>
 @endpush
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     function addField(type) {
         const container = document.getElementById(`${type}-container`);
@@ -297,50 +432,64 @@ label {
     function handleMapsUrlChange(url) {
         if (!url) return;
         
-        // Check if it's a My Maps URL (contains "google.com/maps/d/embed" or "google.com/maps/d/u/0/embed")
-        if (url.includes('google.com/maps/d/')) {
-            const mapContainer = document.getElementById('map');
-            mapContainer.innerHTML = `<iframe 
-                src="${url}" 
-                width="100%" 
-                height="400" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>`;
-            return;
-        }
-        
-        // Convert regular Google Maps URL to embed URL with polygon styling
         let embedUrl = '';
         
-        if (url.includes('!3d') && url.includes('!4d')) {
-            const lat = url.split('!3d')[1].split('!')[0];
-            const lng = url.split('!4d')[1].split('!')[0];
-            embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6ff7e322d8fe3%3A0x761642564682d2ab!2sSumbersecang%2C%20Gading%2C%20Probolinggo%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid`;
-        } else if (url.includes('@')) {
-            const coords = url.split('@')[1].split(',');
-            if (coords.length >= 2) {
-                const lat = coords[0];
-                const lng = coords[1].split(',')[0];
-                embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6ff7e322d8fe3%3A0x761642564682d2ab!2sSumbersecang%2C%20Gading%2C%20Probolinggo%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid`;
+        // Cek jika URL adalah dari Google My Maps
+        if (url.includes('google.com/maps/d/')) {
+            // Jika URL sudah dalam format embed, gunakan langsung
+            if (url.includes('/embed')) {
+                embedUrl = url;
+            } else {
+                // Jika URL dalam format edit atau view, konversi ke format embed
+                embedUrl = url.replace('/edit', '/embed').replace('/viewer', '/embed');
+                
+                // Pastikan mid parameter ada
+                if (!embedUrl.includes('mid=')) {
+                    const midMatch = url.match(/[?&]mid=([^&]+)/);
+                    if (midMatch) {
+                        embedUrl = `https://www.google.com/maps/d/embed?mid=${midMatch[1]}`;
+                    }
+                }
+            }
+        } else {
+            // Untuk URL Google Maps biasa, ekstrak koordinat
+            const pattern = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+            const matches = url.match(pattern);
+            
+            if (matches) {
+                const [, lat, lng] = matches;
+                embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.0!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sid!4v1`;
             }
         }
         
+        // Update iframe jika ada valid URL
         if (embedUrl) {
             const mapContainer = document.getElementById('map');
-            mapContainer.innerHTML = `<iframe 
-                src="${embedUrl}" 
-                width="100%" 
-                height="400" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>`;
+            mapContainer.innerHTML = `
+                <iframe 
+                    src="${embedUrl}"
+                    width="100%" 
+                    height="400" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>`;
         }
     }
+
+    // Initialize map when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const locationInput = document.querySelector('input[name="lokasi"]');
+        if (locationInput && locationInput.value) {
+            handleMapsUrlChange(locationInput.value);
+        }
+    });
+
+    // Handle map URL changes
+    document.querySelector('input[name="lokasi"]')?.addEventListener('change', function(e) {
+        handleMapsUrlChange(e.target.value);
+    });
 
     function initMap() {
         const locationInput = document.querySelector('input[name="lokasi"]');
@@ -369,8 +518,6 @@ label {
         }
     }
 
-    window.addEventListener('load', initMap);
-
     function previewImage(input) {
         const preview = document.getElementById('logo-preview');
         preview.innerHTML = '';
@@ -388,6 +535,86 @@ label {
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    function previewMultipleImages(input) {
+        const preview = document.getElementById('gallery-preview');
+        
+        if (input.files) {
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'relative group';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" 
+                            alt="Gallery Preview" 
+                            class="h-32 w-32 object-cover rounded-lg">
+                        <button type="button" 
+                            onclick="removeNewImage(this)"
+                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    preview.appendChild(div);
+                }
+                
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    function removeNewImage(button) {
+        button.closest('.relative').remove();
+    }
+
+    function removeExistingImage(button, imageName) {
+        const removedInput = document.getElementById('removed-images');
+        const currentRemoved = removedInput.value ? JSON.parse(removedInput.value) : [];
+        currentRemoved.push(imageName);
+        removedInput.value = JSON.stringify(currentRemoved);
+        
+        button.closest('.relative').remove();
+    }
+
+    // Initialize Swiper
+    var thumbSwiper = new Swiper(".thumbSwiper", {
+        spaceBetween: 10,
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesProgress: true,
+        breakpoints: {
+            // when window width is >= 320px
+            320: {
+                slidesPerView: 2,
+                spaceBetween: 10
+            },
+            // when window width is >= 480px
+            480: {
+                slidesPerView: 3,
+                spaceBetween: 10
+            },
+            // when window width is >= 640px
+            640: {
+                slidesPerView: 4,
+                spaceBetween: 10
+            }
+        }
+    });
+    
+    var mainSwiper = new Swiper(".mainSwiper", {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        thumbs: {
+            swiper: thumbSwiper,
+        },
+        keyboard: {
+            enabled: true,
+        },
+    });
 </script>
 @endpush
 @endsection

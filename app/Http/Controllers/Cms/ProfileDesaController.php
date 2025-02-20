@@ -73,7 +73,8 @@ class ProfileDesaController extends Controller
             'lokasi' => 'nullable|string',
             'visi' => 'nullable|array',
             'misi' => 'nullable|array',
-            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Get or create profile desa
@@ -90,6 +91,60 @@ class ProfileDesaController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('images'), $imageName);
             $profileDesa->logo_image = $imageName;
+        }
+
+        // Handle gallery images
+        if ($request->hasFile('gallery_images')) {
+            $galleryImages = [];
+            
+            // Get existing gallery images or empty array
+            $existingImages = $profileDesa->gallery_images ? json_decode($profileDesa->gallery_images, true) : [];
+            
+            // Handle removed images
+            if ($request->has('removed_images')) {
+                $removedImages = json_decode($request->removed_images, true);
+                if (is_array($removedImages)) {
+                    foreach ($removedImages as $removedImage) {
+                        // Remove from existing images array
+                        $existingImages = array_diff($existingImages, [$removedImage]);
+                        
+                        // Delete file from storage
+                        $imagePath = public_path('images/' . $removedImage);
+                        if (file_exists($imagePath)) {
+                            unlink($imagePath);
+                        }
+                    }
+                }
+            }
+            
+            // Add new images
+            foreach ($request->file('gallery_images') as $image) {
+                $imageName = time() . '_' . uniqid() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
+                $galleryImages[] = $imageName;
+            }
+            
+            // Merge existing and new images
+            $profileDesa->gallery_images = json_encode(array_values(array_merge($existingImages, $galleryImages)));
+        } elseif ($request->has('removed_images')) {
+            // Handle case where images were only removed but no new ones added
+            $existingImages = $profileDesa->gallery_images ? json_decode($profileDesa->gallery_images, true) : [];
+            $removedImages = json_decode($request->removed_images, true);
+            
+            if (is_array($removedImages)) {
+                foreach ($removedImages as $removedImage) {
+                    // Remove from existing images array
+                    $existingImages = array_diff($existingImages, [$removedImage]);
+                    
+                    // Delete file from storage
+                    $imagePath = public_path('images/' . $removedImage);
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
+                }
+                
+                $profileDesa->gallery_images = json_encode(array_values($existingImages));
+            }
         }
 
         // Update other fields

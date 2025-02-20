@@ -22,11 +22,13 @@ class ProfileDesa extends Model
         'lokasi',
         'visi',
         'misi',
-        'logo_image'
+        'logo_image',
+        'gallery_images'
     ];
 
     protected $casts = [
         'visi' => 'array',
-        'misi' => 'array'
+        'misi' => 'array',
+        'gallery_images' => 'array'
     ];
 }

@@ -213,8 +213,10 @@
                             </select>
                         </div>
                         <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Saat Ini</label>
+                            <img id="current_image" src="" alt="Current Image" class="w-48 h-48 object-contain bg-gray-100 rounded-lg mb-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Baru (Opsional)</label>
-                            <input type="file" name="image" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <input type="file" name="image" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onchange="previewImage(this)">
                         </div>
                     </div>
                 </div>
@@ -251,6 +253,7 @@ function openEditModal(id) {
             document.getElementById('edit_periode_mulai').value = data.periode_mulai;
             document.getElementById('edit_periode_akhir').value = data.periode_akhir;
             document.getElementById('edit_status').value = data.status;
+            document.getElementById('current_image').src = '/images/' + data.image;
             document.getElementById('editForm').action = `/struktur/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
@@ -260,6 +263,16 @@ function openEditModal(id) {
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
     document.getElementById('editModal').classList.remove('flex');
+}
+
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('current_image').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 </script>
 @endsection

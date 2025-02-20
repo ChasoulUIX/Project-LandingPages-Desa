@@ -200,12 +200,12 @@
                     <!-- <a href="{{ url('/kontak') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-1 text-sm">
                         <i class="fas fa-phone"></i><span>Kontak</span>
                     </a> -->
-                    <div class="flex items-center">
+                    <!-- <div class="flex items-center">
                         <a href="{{ url('/login') }}" class="bg-yellow-500 text-blue-900 px-4 py-2 rounded-lg hover:bg-yellow-400 transition duration-300 font-medium flex items-center space-x-2 text-sm">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>Masuk</span>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -295,10 +295,10 @@
                         </div>
                     </div>
 
-                    <a href="{{ url('/login') }}" class="bg-yellow-500 text-blue-900 px-4 py-2 rounded-lg hover:bg-yellow-400 transition duration-300 font-medium flex items-center justify-center space-x-2 text-sm">
+                    <!-- <a href="{{ url('/login') }}" class="bg-yellow-500 text-blue-900 px-4 py-2 rounded-lg hover:bg-yellow-400 transition duration-300 font-medium flex items-center justify-center space-x-2 text-sm">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Masuk</span>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>

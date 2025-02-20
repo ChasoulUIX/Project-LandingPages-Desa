@@ -38,7 +38,7 @@
 
     <!-- Edit Modal -->
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-xl w-full max-w-md mx-4 shadow-2xl transform transition-all">
+        <div class="bg-white rounded-xl w-full max-w-4xl mx-4 shadow-2xl transform transition-all">
             <div class="flex justify-between items-center p-6 border-b">
                 <h3 class="text-2xl font-bold text-gray-900">Edit Sambutan</h3>
                 <button onclick="closeEditModal()" class="text-gray-600 hover:text-gray-800 transition duration-300">
@@ -48,32 +48,40 @@
             <form id="editForm" method="POST" action="{{ route('sambutan.update', $sambutan->id) }}" enctype="multipart/form-data" class="p-6">
                 @csrf
                 @method('PUT')
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama</label>
-                        <input type="text" name="nama" id="edit_nama" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama</label>
+                            <input type="text" name="nama" id="edit_nama" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
+                            <input type="text" name="jabatan" id="edit_jabatan" value="Kepala Desa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 bg-gray-100" readonly required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Sambutan</label>
+                            <textarea name="sambutan" id="edit_sambutan" rows="6" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Periode</label>
+                            <input type="text" name="periode" id="edit_periode" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
-                        <input type="text" name="jabatan" id="edit_jabatan" value="Kepala Desa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 bg-gray-100" readonly required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Sambutan</label>
-                        <textarea name="sambutan" id="edit_sambutan" rows="6" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Periode</label>
-                        <input type="text" name="periode" id="edit_periode" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Baru (Opsional)</label>
-                        <input type="file" name="image" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        @if($sambutan->image)
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-600">Current image: {{ $sambutan->image }}</p>
-                                <input type="hidden" name="old_image" value="{{ $sambutan->image }}">
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Foto</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                                <img id="imagePreview" src="{{ asset('images/' . $sambutan->image) }}" alt="Preview" class="w-full h-64 object-contain mb-4">
+                                <input type="file" name="image" id="imageInput" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onchange="previewImage(this)">
+                                @if($sambutan->image)
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-600">Current image: {{ $sambutan->image }}</p>
+                                        <input type="hidden" name="old_image" value="{{ $sambutan->image }}">
+                                    </div>
+                                @endif
                             </div>
-                        @endif
+                        </div>
                     </div>
                 </div>
                 <div class="mt-8">
@@ -87,6 +95,16 @@
 </div>
 
 <script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('imagePreview').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 function openEditModal(id) {
     fetch(`/cms/sambutan/${id}/edit`)
         .then(response => response.json())
@@ -95,6 +113,7 @@ function openEditModal(id) {
             document.getElementById('edit_jabatan').value = data.jabatan;
             document.getElementById('edit_sambutan').value = data.sambutan;
             document.getElementById('edit_periode').value = data.periode;
+            document.getElementById('imagePreview').src = `/images/${data.image}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
         });

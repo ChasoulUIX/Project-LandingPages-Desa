@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('jabatan');
             $table->text('sambutan');
             $table->string('periode');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

@@ -232,7 +232,8 @@
                             <div class="flex items-center space-x-4">
                                 <input type="number" id="editStatusPencairan" name="status_pencairan" 
                                        min="0" max="100" step="1"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       readonly>
                                 <div class="w-32">
                                     <div class="overflow-hidden h-2 text-xs flex rounded bg-blue-200">
                                         <div id="editStatusBar" style="width: 0%" 
@@ -261,7 +262,22 @@
                             
                             <!-- Current Photos Display -->
                             <div id="currentPhotos" class="grid grid-cols-3 gap-4 mb-4">
-                                <!-- Photos will be displayed here -->
+                                @if(isset($dana->photos))
+                                    @foreach($dana->photos as $photo)
+                                        <div class="relative w-full aspect-square">
+                                            <img src="/images/{{ $photo }}" 
+                                                 class="w-full h-full object-cover rounded-lg">
+                                            <input type="hidden" name="old_photos[]" value="{{ $photo }}">
+                                            <button type="button"
+                                                    onclick="removePhoto({{ $dana->id }}, '{{ $photo }}', this)"
+                                                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                             
                             <!-- New Photos Input -->
@@ -367,28 +383,30 @@ function openEditModal(id) {
     document.getElementById('editDanaMasuk').value = formatRupiahValue(danaMasuk);
     document.getElementById('editDanaTerpakai').value = formatRupiahValue(danaTerpakai);
     
-    // Fetch dana details including photos
+    // Clear previous previews
+    const photosContainer = document.getElementById('currentPhotos');
+    photosContainer.innerHTML = '';
+    document.getElementById('editPhotos').value = '';
+
+    // Fetch and display existing photos
     fetch(`/cms/dana/${id}/edit`)
         .then(response => response.json())
         .then(data => {
-            // Display current photos
-            const photosContainer = document.getElementById('currentPhotos');
-            photosContainer.innerHTML = ''; // Clear existing photos
-
             if (data.photos && data.photos.length > 0) {
-                data.photos.forEach((photo, index) => {
-                    const photoDiv = document.createElement('div');
-                    photoDiv.className = 'relative';
-                    photoDiv.innerHTML = `
-                        <img src="/images/${photo}" class="w-full h-32 object-cover rounded-lg">
-                        <button type="button" onclick="removePhoto(${id}, '${photo}', this)" 
-                                class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 m-1 hover:bg-red-600">
+                data.photos.forEach(photo => {
+                    const div = document.createElement('div');
+                    div.className = 'relative w-full aspect-square';
+                    div.innerHTML = `
+                        <img src="/images/${photo}" class="w-full h-full object-cover rounded-lg">
+                        <button type="button" 
+                                onclick="removePhoto(${id}, '${photo}', this)" 
+                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
                     `;
-                    photosContainer.appendChild(photoDiv);
+                    photosContainer.appendChild(div);
                 });
             }
         });
@@ -410,23 +428,31 @@ function formatRupiahValue(value) {
 // Add input event listeners for all currency fields
 document.getElementById('editNominal').addEventListener('input', function() {
     formatRupiah(this);
-});
-document.getElementById('editDanaMasuk').addEventListener('input', function() {
-    formatRupiah(this);
-});
-document.getElementById('editDanaTerpakai').addEventListener('input', function() {
-    formatRupiah(this);
+    const danaMasuk = document.getElementById('editDanaMasuk').value;
+    const status = calculateStatus(this.value, danaMasuk);
+    
+    // Update status input and progress bar
+    document.getElementById('editStatusPencairan').value = status;
+    document.getElementById('editStatusBar').style.width = `${status}%`;
 });
 
-// Add event listener for status pencairan input
-document.getElementById('editStatusPencairan').addEventListener('input', function() {
-    const value = Math.min(Math.max(this.value, 0), 100); // Clamp between 0 and 100
-    this.value = value;
-    document.getElementById('editStatusBar').style.width = `${value}%`;
+document.getElementById('editDanaMasuk').addEventListener('input', function() {
+    formatRupiah(this);
+    const nominal = document.getElementById('editNominal').value;
+    const status = calculateStatus(nominal, this.value);
+    
+    // Update status input and progress bar
+    document.getElementById('editStatusPencairan').value = status;
+    document.getElementById('editStatusBar').style.width = `${status}%`;
 });
+
+// Disable manual input for status pencairan
+document.getElementById('editStatusPencairan').readOnly = true;
 
 function closeModal() {
     document.getElementById('editModal').classList.add('hidden');
+    document.getElementById('currentPhotos').innerHTML = '';
+    document.getElementById('editPhotos').value = '';
 }
 
 // Update form submission to handle files
@@ -589,6 +615,51 @@ document.addEventListener('keydown', function(e) {
     // Alt + K to toggle kegiatan
     if (e.altKey && e.key === 'k') {
         toggleKegiatan();
+    }
+});
+
+// Add this function to automatically calculate status
+function calculateStatus(nominal, danaMasuk) {
+    // Remove currency formatting and convert to numbers
+    const nominalValue = parseInt(nominal.replace(/[^\d]/g, '')) || 0;
+    const danaMasukValue = parseInt(danaMasuk.replace(/[^\d]/g, '')) || 0;
+    
+    // Calculate percentage
+    let percentage = 0;
+    if (nominalValue > 0) {
+        percentage = Math.round((danaMasukValue / nominalValue) * 100);
+    }
+    
+    // Ensure percentage is between 0 and 100
+    return Math.min(Math.max(percentage, 0), 100);
+}
+
+// Add preview functionality for image uploads
+document.getElementById('editPhotos').addEventListener('change', function(e) {
+    const files = e.target.files;
+    const container = document.getElementById('currentPhotos');
+    
+    // Create preview for each selected file
+    for (const file of files) {
+        if (!file.type.startsWith('image/')) continue;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const div = document.createElement('div');
+            div.className = 'relative w-full aspect-square';
+            div.innerHTML = `
+                <img src="${e.target.result}" class="w-full h-full object-cover rounded-lg">
+                <button type="button" 
+                        class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                        onclick="this.parentElement.remove()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            `;
+            container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
     }
 });
 </script>

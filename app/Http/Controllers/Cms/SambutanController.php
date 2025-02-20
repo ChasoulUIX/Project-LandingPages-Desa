@@ -11,19 +11,19 @@ class SambutanController extends Controller
 {
     public function index()
     {
+        // Ambil data sambutan yang ada, atau buat data default jika belum ada
         $sambutan = Sambutan::first();
         
-        // Jika belum ada data, buat data default
         if (!$sambutan) {
             $sambutan = Sambutan::create([
-                'nama' => 'Default Nama',
+                'nama' => 'Nama Kepala Desa',
                 'jabatan' => 'Kepala Desa',
-                'sambutan' => 'Default Sambutan',
-                'periode' => 'Default Periode',
+                'sambutan' => 'Selamat datang di website desa kami...',
+                'periode' => '2024-2029',
                 'image' => 'default.jpg'
             ]);
         }
-        
+
         return view('cms.pages.sambutan', compact('sambutan'));
     }
 
