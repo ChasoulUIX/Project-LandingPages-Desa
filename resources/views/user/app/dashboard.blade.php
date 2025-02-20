@@ -13,6 +13,9 @@
                     $images = $profile && $profile->gallery_images ? 
                              (is_array($profile->gallery_images) ? $profile->gallery_images : json_decode($profile->gallery_images, true)) : 
                              $defaultImages;
+                    $texts = $profile && $profile->gallery_texts ? 
+                             (is_array($profile->gallery_texts) ? $profile->gallery_texts : json_decode($profile->gallery_texts, true)) : 
+                             [];
                 @endphp
 
                 @if(is_array($images) && count($images) > 0)
@@ -24,15 +27,21 @@
                                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                                         <div class="text-center space-y-8">
                                             <div class="animate-fade-in-down">
-                                                <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
-                                                    Selamat Datang di
-                                                    <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-                                                        Desa Sumber Secang
-                                                    </span>
-                                                </h1>
-                                                <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
-                                                    Bangga dengan Desa tercinta kita
-                                                </p>
+                                                @if(isset($texts[$index]) && !empty($texts[$index]))
+                                                    <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                                        {{ $texts[$index] }}
+                                                    </h1>
+                                                @else
+                                                    <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                                        Selamat Datang di
+                                                        <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                                                            Desa Sumber Secang
+                                                        </span>
+                                                    </h1>
+                                                    <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+                                                        Bangga dengan Desa tercinta kita
+                                                    </p>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -89,38 +98,83 @@
 
         <script>
             let slideIndex = 1;
+            let autoSlideInterval;
             showSlides(slideIndex);
 
             function currentSlide(n) {
                 showSlides(slideIndex = n);
+                // Reset interval when manually changing slides
+                clearInterval(autoSlideInterval);
+                startAutoSlide();
             }
 
             function showSlides(n) {
-                let i;
                 let slides = document.getElementsByClassName("slide");
                 let dots = document.getElementsByClassName("dot");
                 
                 if (n > slides.length) {slideIndex = 1}
                 if (n < 1) {slideIndex = slides.length}
                 
-                for (i = 0; i < slides.length; i++) {
-                    slides[i].style.opacity = "0";
-                }
-                for (i = 0; i < dots.length; i++) {
-                    dots[i].classList.remove("bg-white");
-                    dots[i].classList.add("bg-white/30");
-                }
-                
-                slides[slideIndex-1].style.opacity = "1";
-                dots[slideIndex-1].classList.remove("bg-white/30");
-                dots[slideIndex-1].classList.add("bg-white");
+                // Use requestAnimationFrame for smoother transitions
+                requestAnimationFrame(() => {
+                    for (let i = 0; i < slides.length; i++) {
+                        slides[i].style.opacity = "0";
+                        if (dots[i]) {
+                            dots[i].classList.remove("bg-white");
+                            dots[i].classList.add("bg-white/30");
+                        }
+                    }
+                    
+                    slides[slideIndex-1].style.opacity = "1";
+                    if (dots[slideIndex-1]) {
+                        dots[slideIndex-1].classList.remove("bg-white/30");
+                        dots[slideIndex-1].classList.add("bg-white");
+                    }
+                });
             }
 
-            // Auto slide with fade effect
-            setInterval(() => {
-                currentSlide(slideIndex + 1);
-            }, 5000);
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(() => {
+                    slideIndex++;
+                    if (slideIndex > document.getElementsByClassName("slide").length) {
+                        slideIndex = 1;
+                    }
+                    showSlides(slideIndex);
+                }, 5000);
+            }
+
+            // Start auto-sliding when the page loads
+            document.addEventListener('DOMContentLoaded', startAutoSlide);
+
+            // Pause auto-sliding when the user interacts with the slider
+            document.querySelector('.slideshow-container').addEventListener('mouseover', () => {
+                clearInterval(autoSlideInterval);
+            });
+
+            // Resume auto-sliding when the user stops interacting
+            document.querySelector('.slideshow-container').addEventListener('mouseout', startAutoSlide);
         </script>
+
+        <style>
+            .animate-fade-in-down {
+                animation: fadeInDown 1s ease-out;
+            }
+
+            @keyframes fadeInDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .slide {
+                transition: opacity 1s ease-in-out;
+            }
+        </style>
 
         <!-- Sambutan Kepala Desa Section -->
         <div class="bg-gray-50 py-20 sm:py-32">

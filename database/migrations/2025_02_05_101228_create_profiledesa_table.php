@@ -22,6 +22,7 @@ return new class extends Migration
             $table->json('misi')->nullable();
             $table->string('logo_image')->nullable();
             $table->json('gallery_images')->nullable();
+            $table->json('gallery_texts')->nullable();
             $table->timestamps();
         });
     }

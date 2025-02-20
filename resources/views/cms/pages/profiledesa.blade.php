@@ -94,18 +94,23 @@
             </div>
 
             <div class="mt-8">
-                <h3 class="text-lg font-semibold mb-3">Galeri Foto</h3>
+                <h3 class="text-lg font-semibold mb-3">Galeri Slider</h3>
                 <div class="relative">
                     <!-- Main Slider -->
                     <div class="swiper mainSwiper mb-4">
                         <div class="swiper-wrapper">
-                            @if(isset($profileDesa) && !empty($profileDesa->gallery_images))
-                                @foreach(is_array($profileDesa->gallery_images) ? $profileDesa->gallery_images : json_decode($profileDesa->gallery_images, true) as $image)
+                            @if($profileDesa && !empty($profileDesa->gallery_images))
+                                @foreach($profileDesa->gallery_images as $index => $image)
                                     <div class="swiper-slide bg-gray-100">
                                         <div class="relative w-full h-[500px]">
                                             <img src="{{ asset('images/' . $image) }}" 
-                                                alt="Gallery Image" 
+                                                alt="Gallery Image {{ $index + 1 }}" 
                                                 class="absolute inset-0 w-full h-full object-contain">
+                                            @if(isset($profileDesa->gallery_texts[$index]))
+                                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                                                    <p class="text-lg">{{ $profileDesa->gallery_texts[$index] }}</p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -118,12 +123,12 @@
                     <!-- Thumbnail Slider -->
                     <div class="swiper thumbSwiper">
                         <div class="swiper-wrapper">
-                            @if(isset($profileDesa) && !empty($profileDesa->gallery_images))
-                                @foreach(is_array($profileDesa->gallery_images) ? $profileDesa->gallery_images : json_decode($profileDesa->gallery_images, true) as $image)
+                            @if($profileDesa && !empty($profileDesa->gallery_images))
+                                @foreach($profileDesa->gallery_images as $index => $image)
                                     <div class="swiper-slide bg-gray-100">
                                         <div class="relative w-full h-24">
                                             <img src="{{ asset('images/' . $image) }}" 
-                                                alt="Gallery Thumbnail" 
+                                                alt="Gallery Thumbnail {{ $index + 1 }}" 
                                                 class="absolute inset-0 w-full h-full object-cover rounded-lg cursor-pointer">
                                         </div>
                                     </div>
@@ -138,170 +143,191 @@
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-    <div class="relative top-20 mx-auto p-5 w-full max-w-4xl">
-        <div class="bg-white rounded-xl shadow-lg">
-            <div class="px-6 py-4 border-b flex items-center justify-between">
-                <h4 class="text-xl font-bold text-gray-800">Edit Profil Desa</h4>
-                <button onclick="closeEditModal()" class="text-gray-600 hover:text-gray-800">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <form action="{{ route('cms.profiledesa.update') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <div class="mb-6">
-                                <label class="block text-sm font-semibold text-gray-800 mb-2">Logo Desa</label>
-                                <div class="flex">
-                                    <input type="file" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200 text-sm text-gray-700" 
-                                        name="logo_image" 
-                                        accept="image/*" 
-                                        id="logo-input"
-                                        onchange="previewImage(this)">
+<div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+    <div class="relative min-h-screen py-6 flex flex-col justify-center sm:py-12">
+        <div class="relative py-3 sm:mx-auto w-full max-w-4xl">
+            <div class="bg-white rounded-xl shadow-lg max-h-[90vh] overflow-y-auto">
+                <div class="sticky top-0 px-6 py-4 border-b bg-white flex items-center justify-between z-10">
+                    <h4 class="text-xl font-bold text-gray-800">Edit Profil Desa</h4>
+                    <button onclick="closeEditModal()" class="text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <form action="{{ route('cms.profiledesa.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-semibold text-gray-800 mb-2">Logo Desa</label>
+                                    <div class="flex">
+                                        <input type="file" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200 text-sm text-gray-700" 
+                                            name="logo_image" 
+                                            accept="image/*" 
+                                            id="logo-input"
+                                            onchange="previewImage(this)">
+                                    </div>
+                                    @if(isset($profileDesa) && $profileDesa->logo_image)
+                                        <div class="mt-2">
+                                            <img src="{{ asset('images/' . $profileDesa->logo_image) }}" alt="Logo Desa" class="h-20 w-auto">
+                                        </div>
+                                    @endif
+                                    <div id="logo-preview" class="mt-2"></div>
                                 </div>
-                                @if(isset($profileDesa) && $profileDesa->logo_image)
-                                    <div class="mt-2">
-                                        <img src="{{ asset('images/' . $profileDesa->logo_image) }}" alt="Logo Desa" class="h-20 w-auto">
-                                    </div>
-                                @endif
-                                <div id="logo-preview" class="mt-2"></div>
+
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Judul</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="judul" value="{{ old('judul', $profileDesa->judul ?? '') }}" required>
+                                </div>
+
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Synopsis</label>
+                                    <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="synopsis" rows="3">{{ old('synopsis', $profileDesa->synopsis ?? '') }}</textarea>
+                                </div>
                             </div>
 
-                            <div class="mb-6">
-                                <label class="block font-bold mb-2">Judul</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="judul" value="{{ old('judul', $profileDesa->judul ?? '') }}" required>
-                            </div>
+                            <div>
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Email</label>
+                                    <input type="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="email" value="{{ old('email', $profileDesa->email ?? '') }}">
+                                </div>
 
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Telepon</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="telephone" value="{{ old('telephone', $profileDesa->telephone ?? '') }}">
+                                </div>
+
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Tahun Berdiri</label>
+                                    <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="tahun_berdiri" value="{{ old('tahun_berdiri', $profileDesa->tahun_berdiri ?? '') }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="block font-bold mb-2">Deskripsi</label>
+                            <textarea class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 transition-all duration-200" name="deskripsi" rows="5">{{ old('deskripsi', $profileDesa->deskripsi ?? '') }}</textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="mb-6">
-                                <label class="block font-bold mb-2">Synopsis</label>
-                                <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="synopsis" rows="3">{{ old('synopsis', $profileDesa->synopsis ?? '') }}</textarea>
+                                <label class="block font-bold mb-2">Visi</label>
+                                <div id="visi-container">
+                                    @if(isset($profileDesa->visi) && is_array($profileDesa->visi))
+                                        @foreach($profileDesa->visi as $visi)
+                                            <div class="flex gap-2 mb-2">
+                                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="visi[]" value="{{ $visi }}">
+                                                <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+                                <button type="button" onclick="addField('visi')" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                    <i class="fas fa-plus mr-2"></i>Tambah Visi
+                                </button>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block font-bold mb-2">Misi</label>
+                                <div id="misi-container">
+                                    @if(isset($profileDesa->misi) && is_array($profileDesa->misi))
+                                        @foreach($profileDesa->misi as $misi)
+                                            <div class="flex gap-2 mb-2">
+                                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="misi[]" value="{{ $misi }}">
+                                                <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+                                <button type="button" onclick="addField('misi')" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                    <i class="fas fa-plus mr-2"></i>Tambah Misi
+                                </button>
                             </div>
                         </div>
 
-                        <div>
-                            <div class="mb-6">
-                                <label class="block font-bold mb-2">Email</label>
-                                <input type="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="email" value="{{ old('email', $profileDesa->email ?? '') }}">
-                            </div>
-
-                            <div class="mb-6">
-                                <label class="block font-bold mb-2">Telepon</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="telephone" value="{{ old('telephone', $profileDesa->telephone ?? '') }}">
-                            </div>
-
-                            <div class="mb-6">
-                                <label class="block font-bold mb-2">Tahun Berdiri</label>
-                                <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="tahun_berdiri" value="{{ old('tahun_berdiri', $profileDesa->tahun_berdiri ?? '') }}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-8">
-                        <label class="block font-bold mb-2">Deskripsi</label>
-                        <textarea class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 transition-all duration-200" name="deskripsi" rows="5">{{ old('deskripsi', $profileDesa->deskripsi ?? '') }}</textarea>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="mb-6">
-                            <label class="block font-bold mb-2">Visi</label>
-                            <div id="visi-container">
-                                @if(isset($profileDesa->visi) && is_array($profileDesa->visi))
-                                    @foreach($profileDesa->visi as $visi)
-                                        <div class="flex gap-2 mb-2">
-                                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="visi[]" value="{{ $visi }}">
-                                            <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
+                            <label class="block font-bold mb-2">Alamat</label>
+                            <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="alamat" rows="3">{{ old('alamat', $profileDesa->alamat ?? '') }}</textarea>
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="block font-bold mb-3">Lokasi Maps</label>
+                            <input type="text" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 transition-all duration-200 mb-3" 
+                                name="lokasi" 
+                                placeholder="Masukkan link Google Maps" 
+                                value="{{ old('lokasi', $profileDesa->lokasi ?? '') }}"
+                                onchange="handleMapsUrlChange(this.value)">
+                            <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
+                        </div>
+
+                        <!-- Gallery section in edit modal -->
+                        <div class="mb-8">
+                            <label class="block font-bold mb-3">Galeri Slider</label>
+                            <div class="flex items-center gap-4 mb-4">
+                                <input type="file" 
+                                    class="hidden" 
+                                    name="gallery_images[]" 
+                                    id="gallery-input"
+                                    accept="image/*"
+                                    multiple
+                                    onchange="previewGalleryImages(this)">
+                                <label for="gallery-input" 
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer flex items-center gap-2 text-sm font-medium">
+                                    <i class="fas fa-images"></i>
+                                    <span>Tambah Slide</span>
+                                </label>
+                            </div>
+
+                            <!-- Existing Gallery Items -->
+                            <div id="existing-gallery-preview" class="grid grid-cols-1 gap-4 mb-4">
+                                @if($profileDesa && !empty($profileDesa->gallery_images))
+                                    @foreach($profileDesa->gallery_images as $index => $image)
+                                        <div class="relative group bg-gray-50 p-4 rounded-lg" data-index="{{ $index }}">
+                                            <div class="flex gap-4">
+                                                <div class="w-40 h-40 flex-shrink-0">
+                                                    <img src="{{ asset('images/' . $image) }}" 
+                                                        alt="Gallery Image" 
+                                                        class="w-full h-full object-cover rounded-lg">
+                                                </div>
+                                                <div class="flex-grow">
+                                                    <textarea 
+                                                        name="existing_gallery_texts[]" 
+                                                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
+                                                        rows="4"
+                                                        placeholder="Teks untuk slide ini">{{ $profileDesa->gallery_texts[$index] ?? '' }}</textarea>
+                                                </div>
+                                                <button type="button" 
+                                                    onclick="removeExistingImage(this, {{ $index }})"
+                                                    class="h-8 w-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     @endforeach
                                 @endif
                             </div>
-                            <button type="button" onclick="addField('visi')" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                                <i class="fas fa-plus mr-2"></i>Tambah Visi
-                            </button>
-                        </div>
-                        <div class="mb-6">
-                            <label class="block font-bold mb-2">Misi</label>
-                            <div id="misi-container">
-                                @if(isset($profileDesa->misi) && is_array($profileDesa->misi))
-                                    @foreach($profileDesa->misi as $misi)
-                                        <div class="flex gap-2 mb-2">
-                                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="misi[]" value="{{ $misi }}">
-                                            <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                @endif
+
+                            <!-- New Gallery Items Preview -->
+                            <div id="new-gallery-preview" class="grid grid-cols-1 gap-4">
+                                <!-- New items will be added here via JavaScript -->
                             </div>
-                            <button type="button" onclick="addField('misi')" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                                <i class="fas fa-plus mr-2"></i>Tambah Misi
+
+                            <input type="hidden" name="removed_indexes" id="removed-indexes" value="[]">
+                        </div>
+
+                        <div class="flex justify-end mt-8">
+                            <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
+                                <i class="fas fa-save"></i>
+                                <span>Simpan Perubahan</span>
                             </button>
                         </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block font-bold mb-2">Alamat</label>
-                        <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="alamat" rows="3">{{ old('alamat', $profileDesa->alamat ?? '') }}</textarea>
-                    </div>
-
-                    <div class="mb-8">
-                        <label class="block font-bold mb-3">Lokasi Maps</label>
-                        <input type="text" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 transition-all duration-200 mb-3" 
-                            name="lokasi" 
-                            placeholder="Masukkan link Google Maps" 
-                            value="{{ old('lokasi', $profileDesa->lokasi ?? '') }}"
-                            onchange="handleMapsUrlChange(this.value)">
-                        <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
-                    </div>
-
-                    <!-- New Multiple Images Section -->
-                    <div class="mb-8">
-                        <label class="block font-bold mb-3">Galeri Foto</label>
-                        <div class="flex items-center gap-4 mb-4">
-                            <input type="file" 
-                                class="hidden" 
-                                name="gallery_images[]" 
-                                id="gallery-input"
-                                accept="image/*"
-                                multiple
-                                onchange="previewMultipleImages(this)">
-                            <label for="gallery-input" 
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer flex items-center gap-2 text-sm font-medium">
-                                <i class="fas fa-images"></i>
-                                <span>Pilih Foto</span>
-                            </label>
-                        </div>
-                        <div id="gallery-preview" class="flex flex-wrap gap-4">
-                            @if(isset($profileDesa) && $profileDesa->gallery_images)
-                                @foreach(json_decode($profileDesa->gallery_images) as $image)
-                                    <div class="relative group">
-                                        <img src="{{ asset('images/' . $image) }}" 
-                                            alt="Gallery Image" 
-                                            class="h-32 w-32 object-cover rounded-lg">
-                                        <button type="button" 
-                                            onclick="removeExistingImage(this, '{{ $image }}')"
-                                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
-                        <input type="hidden" name="removed_images" id="removed-images" value="">
-                    </div>
-
-                    <div class="flex justify-end mt-8">
-                        <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
-                            <i class="fas fa-save"></i>
-                            <span>Simpan Perubahan</span>
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -536,25 +562,39 @@ label {
         }
     }
 
-    function previewMultipleImages(input) {
-        const preview = document.getElementById('gallery-preview');
+    function previewGalleryImages(input) {
+        const preview = document.getElementById('new-gallery-preview');
+        const existingCount = document.getElementById('existing-gallery-preview')
+            .querySelectorAll('.group').length;
         
         if (input.files) {
-            Array.from(input.files).forEach(file => {
+            Array.from(input.files).forEach((file, idx) => {
                 const reader = new FileReader();
                 
                 reader.onload = function(e) {
                     const div = document.createElement('div');
-                    div.className = 'relative group';
+                    div.className = 'relative group bg-gray-50 p-4 rounded-lg';
+                    div.dataset.index = existingCount + idx;
                     div.innerHTML = `
-                        <img src="${e.target.result}" 
-                            alt="Gallery Preview" 
-                            class="h-32 w-32 object-cover rounded-lg">
-                        <button type="button" 
-                            onclick="removeNewImage(this)"
-                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <div class="flex gap-4">
+                            <div class="w-40 h-40 flex-shrink-0">
+                                <img src="${e.target.result}" 
+                                    alt="Gallery Preview" 
+                                    class="w-full h-full object-cover rounded-lg">
+                            </div>
+                            <div class="flex-grow">
+                                <textarea 
+                                    name="new_gallery_texts[]" 
+                                    class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
+                                    rows="4"
+                                    placeholder="Teks untuk slide ini"></textarea>
+                            </div>
+                            <button type="button" 
+                                onclick="removeNewImage(this)"
+                                class="h-8 w-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     `;
                     preview.appendChild(div);
                 }
@@ -565,55 +605,44 @@ label {
     }
 
     function removeNewImage(button) {
-        button.closest('.relative').remove();
+        button.closest('.group').remove();
     }
 
-    function removeExistingImage(button, imageName) {
-        const removedInput = document.getElementById('removed-images');
-        const currentRemoved = removedInput.value ? JSON.parse(removedInput.value) : [];
-        currentRemoved.push(imageName);
-        removedInput.value = JSON.stringify(currentRemoved);
-        
-        button.closest('.relative').remove();
+    function removeExistingImage(button, index) {
+        const removedIndexesInput = document.getElementById('removed-indexes');
+        let removedIndexes = JSON.parse(removedIndexesInput.value);
+        removedIndexes.push(index);
+        removedIndexesInput.value = JSON.stringify(removedIndexes);
+        button.closest('.group').remove();
     }
 
     // Initialize Swiper
-    var thumbSwiper = new Swiper(".thumbSwiper", {
-        spaceBetween: 10,
-        slidesPerView: 4,
-        freeMode: true,
-        watchSlidesProgress: true,
-        breakpoints: {
-            // when window width is >= 320px
-            320: {
-                slidesPerView: 2,
-                spaceBetween: 10
-            },
-            // when window width is >= 480px
-            480: {
-                slidesPerView: 3,
-                spaceBetween: 10
-            },
-            // when window width is >= 640px
-            640: {
-                slidesPerView: 4,
-                spaceBetween: 10
+    document.addEventListener('DOMContentLoaded', function() {
+        var thumbSwiper = new Swiper(".thumbSwiper", {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true,
+            breakpoints: {
+                320: { slidesPerView: 2, spaceBetween: 10 },
+                480: { slidesPerView: 3, spaceBetween: 10 },
+                640: { slidesPerView: 4, spaceBetween: 10 }
             }
-        }
-    });
-    
-    var mainSwiper = new Swiper(".mainSwiper", {
-        spaceBetween: 10,
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        thumbs: {
-            swiper: thumbSwiper,
-        },
-        keyboard: {
-            enabled: true,
-        },
+        });
+        
+        var mainSwiper = new Swiper(".mainSwiper", {
+            spaceBetween: 10,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            thumbs: {
+                swiper: thumbSwiper,
+            },
+            keyboard: {
+                enabled: true,
+            },
+        });
     });
 </script>
 @endpush

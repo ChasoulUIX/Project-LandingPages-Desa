@@ -75,89 +75,62 @@ class ProfileDesaController extends Controller
             'misi' => 'nullable|array',
             'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gallery_texts' => 'nullable|array',
+            'gallery_texts.*' => 'nullable|string',
         ]);
 
-        // Get or create profile desa
         $profileDesa = ProfileDesa::first() ?? new ProfileDesa();
-
-        // Handle logo image upload
+        
+        // Handle logo upload
         if ($request->hasFile('logo_image')) {
-            // Delete old image if exists
-            if ($profileDesa->logo_image && file_exists(public_path('images/' . $profileDesa->logo_image))) {
-                unlink(public_path('images/' . $profileDesa->logo_image));
-            }
-            
-            $image = $request->file('logo_image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('images'), $imageName);
-            $profileDesa->logo_image = $imageName;
+            $logoImage = $request->file('logo_image');
+            $logoName = time() . '_logo.' . $logoImage->getClientOriginalExtension();
+            $logoImage->move(public_path('images'), $logoName);
+            $profileDesa->logo_image = $logoName;
         }
 
-        // Handle gallery images
-        if ($request->hasFile('gallery_images')) {
-            $galleryImages = [];
-            
-            // Get existing gallery images or empty array
-            $existingImages = $profileDesa->gallery_images ? json_decode($profileDesa->gallery_images, true) : [];
-            
-            // Handle removed images
-            if ($request->has('removed_images')) {
-                $removedImages = json_decode($request->removed_images, true);
-                if (is_array($removedImages)) {
-                    foreach ($removedImages as $removedImage) {
-                        // Remove from existing images array
-                        $existingImages = array_diff($existingImages, [$removedImage]);
-                        
-                        // Delete file from storage
-                        $imagePath = public_path('images/' . $removedImage);
-                        if (file_exists($imagePath)) {
-                            unlink($imagePath);
-                        }
-                    }
+        // Handle gallery images and texts
+        $galleryImages = [];
+        $galleryTexts = [];
+        
+        // Keep existing images and texts that weren't removed
+        if ($profileDesa->gallery_images) {
+            $removedIndexes = json_decode($request->removed_indexes ?? '[]', true);
+            foreach ($profileDesa->gallery_images as $index => $image) {
+                if (!in_array($index, $removedIndexes)) {
+                    $galleryImages[] = $image;
+                    // Get text from existing_gallery_texts array
+                    $galleryTexts[] = $request->existing_gallery_texts[$index] ?? '';
                 }
             }
-            
-            // Add new images
-            foreach ($request->file('gallery_images') as $image) {
-                $imageName = time() . '_' . uniqid() . '_' . $image->getClientOriginalName();
+        }
+
+        // Add new images and texts
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $index => $image) {
+                $imageName = time() . '_gallery_' . $index . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('images'), $imageName);
                 $galleryImages[] = $imageName;
-            }
-            
-            // Merge existing and new images
-            $profileDesa->gallery_images = json_encode(array_values(array_merge($existingImages, $galleryImages)));
-        } elseif ($request->has('removed_images')) {
-            // Handle case where images were only removed but no new ones added
-            $existingImages = $profileDesa->gallery_images ? json_decode($profileDesa->gallery_images, true) : [];
-            $removedImages = json_decode($request->removed_images, true);
-            
-            if (is_array($removedImages)) {
-                foreach ($removedImages as $removedImage) {
-                    // Remove from existing images array
-                    $existingImages = array_diff($existingImages, [$removedImage]);
-                    
-                    // Delete file from storage
-                    $imagePath = public_path('images/' . $removedImage);
-                    if (file_exists($imagePath)) {
-                        unlink($imagePath);
-                    }
-                }
-                
-                $profileDesa->gallery_images = json_encode(array_values($existingImages));
+                // Get text from new gallery_texts array
+                $galleryTexts[] = $request->new_gallery_texts[$index] ?? '';
             }
         }
 
-        // Update other fields
-        $profileDesa->judul = $request->judul;
-        $profileDesa->synopsis = $request->synopsis;
-        $profileDesa->email = $request->email;
-        $profileDesa->telephone = $request->telephone;
-        $profileDesa->tahun_berdiri = $request->tahun_berdiri;
-        $profileDesa->deskripsi = $request->deskripsi;
-        $profileDesa->alamat = $request->alamat;
-        $profileDesa->lokasi = $request->lokasi;
-        $profileDesa->visi = $request->visi;
-        $profileDesa->misi = $request->misi;
+        // Update all fields
+        $profileDesa->fill([
+            'judul' => $request->judul,
+            'synopsis' => $request->synopsis,
+            'email' => $request->email,
+            'telephone' => $request->telephone,
+            'tahun_berdiri' => $request->tahun_berdiri,
+            'deskripsi' => $request->deskripsi,
+            'alamat' => $request->alamat,
+            'lokasi' => $request->lokasi,
+            'visi' => $request->visi,
+            'misi' => $request->misi,
+            'gallery_images' => array_values($galleryImages), // Reindex array
+            'gallery_texts' => array_values($galleryTexts) // Reindex array
+        ]);
 
         $profileDesa->save();
 
@@ -203,3 +176,4 @@ class ProfileDesaController extends Controller
         // ... logika update profile desa ...
     }
 }
+

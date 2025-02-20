@@ -27,5 +27,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             StrukturSeeder::class
         ]);
+
+        $this->call([
+            UserSeeder::class,
+        ]);
     }
 }

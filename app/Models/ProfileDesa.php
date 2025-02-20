@@ -23,12 +23,14 @@ class ProfileDesa extends Model
         'visi',
         'misi',
         'logo_image',
-        'gallery_images'
+        'gallery_images',
+        'gallery_texts'
     ];
 
     protected $casts = [
         'visi' => 'array',
         'misi' => 'array',
-        'gallery_images' => 'array'
+        'gallery_images' => 'array',
+        'gallery_texts' => 'array'
     ];
 }
