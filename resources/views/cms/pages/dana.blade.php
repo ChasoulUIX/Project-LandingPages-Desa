@@ -255,36 +255,6 @@
                             <input type="text" id="editDanaTerpakai" name="dana_terpakai" 
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
-
-                        <!-- Add this new section for photos -->
-                        <div class="space-y-2 md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700">Foto</label>
-                            
-                            <!-- Current Photos Display -->
-                            <div id="currentPhotos" class="grid grid-cols-3 gap-4 mb-4">
-                                @if(isset($dana->photos))
-                                    @foreach($dana->photos as $photo)
-                                        <div class="relative w-full aspect-square">
-                                            <img src="/images/{{ $photo }}" 
-                                                 class="w-full h-full object-cover rounded-lg">
-                                            <input type="hidden" name="old_photos[]" value="{{ $photo }}">
-                                            <button type="button"
-                                                    onclick="removePhoto({{ $dana->id }}, '{{ $photo }}', this)"
-                                                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                            
-                            <!-- New Photos Input -->
-                            <input type="file" id="editPhotos" name="photos[]" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                   multiple accept="image/*">
-                        </div>
                     </div>
 
                     <div class="flex justify-end space-x-4 mt-8">
@@ -314,7 +284,7 @@
                 </button>
             </div>
             <div id="photosContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <!-- Photos will be inserted here -->
+                
             </div>
         </div>
     </div>
@@ -383,34 +353,6 @@ function openEditModal(id) {
     document.getElementById('editDanaMasuk').value = formatRupiahValue(danaMasuk);
     document.getElementById('editDanaTerpakai').value = formatRupiahValue(danaTerpakai);
     
-    // Clear previous previews
-    const photosContainer = document.getElementById('currentPhotos');
-    photosContainer.innerHTML = '';
-    document.getElementById('editPhotos').value = '';
-
-    // Fetch and display existing photos
-    fetch(`/cms/dana/${id}/edit`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.photos && data.photos.length > 0) {
-                data.photos.forEach(photo => {
-                    const div = document.createElement('div');
-                    div.className = 'relative w-full aspect-square';
-                    div.innerHTML = `
-                        <img src="/images/${photo}" class="w-full h-full object-cover rounded-lg">
-                        <button type="button" 
-                                onclick="removePhoto(${id}, '${photo}', this)" 
-                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    `;
-                    photosContainer.appendChild(div);
-                });
-            }
-        });
-
     // Show modal
     document.getElementById('editModal').classList.remove('hidden');
 }
@@ -451,8 +393,6 @@ document.getElementById('editStatusPencairan').readOnly = true;
 
 function closeModal() {
     document.getElementById('editModal').classList.add('hidden');
-    document.getElementById('currentPhotos').innerHTML = '';
-    document.getElementById('editPhotos').value = '';
 }
 
 // Update form submission to handle files
@@ -633,34 +573,5 @@ function calculateStatus(nominal, danaMasuk) {
     // Ensure percentage is between 0 and 100
     return Math.min(Math.max(percentage, 0), 100);
 }
-
-// Add preview functionality for image uploads
-document.getElementById('editPhotos').addEventListener('change', function(e) {
-    const files = e.target.files;
-    const container = document.getElementById('currentPhotos');
-    
-    // Create preview for each selected file
-    for (const file of files) {
-        if (!file.type.startsWith('image/')) continue;
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const div = document.createElement('div');
-            div.className = 'relative w-full aspect-square';
-            div.innerHTML = `
-                <img src="${e.target.result}" class="w-full h-full object-cover rounded-lg">
-                <button type="button" 
-                        class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                        onclick="this.parentElement.remove()">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            `;
-            container.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-    }
-});
 </script>
 @endpush

@@ -240,6 +240,12 @@
                             </div>
                         </div>
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini</label>
+                            <div class="mt-2 relative w-40 h-40 rounded-lg overflow-hidden bg-gray-100">
+                                <img id="editCurrentImage" src="" alt="Current Image" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
                             <input type="file" name="image" accept="image/*" class="w-full">
                         </div>
@@ -299,6 +305,7 @@ function openEditModal(id) {
             document.getElementById('editForm').action = `/cms/kegiatan/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
+            document.getElementById('editCurrentImage').src = `/images/${data.image}`;
             
             // Update sisa dana display
             checkEditAvailableFunds();
@@ -425,3 +432,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endsection
+    
