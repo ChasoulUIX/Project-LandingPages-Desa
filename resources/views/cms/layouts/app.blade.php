@@ -37,8 +37,13 @@
         <!-- Sidebar -->
         <div id="sidebar" class="bg-blue-900 text-white w-80 py-6 flex flex-col fixed h-screen overflow-y-auto" style="min-width: 320px;">
             <div class="px-6 mb-6 flex items-center space-x-3">
-                <img src="{{ asset('images/probolinggo.png') }}" alt="Logo Desa" class="w-10 h-10 object-contain">
-                <h1 class="text-1xl font-bold">Desa Sumber Secang</h1>
+                @php
+                    $profileDesa = \App\Models\ProfileDesa::first();
+                @endphp
+                <img src="{{ $profileDesa && $profileDesa->logo_image ? asset('images/' . $profileDesa->logo_image) : asset('images/probolinggo.png') }}" 
+                     alt="Logo Desa" 
+                     class="w-10 h-10 object-contain">
+                <h1 class="text-1xl font-bold">{{ $profileDesa ? $profileDesa->judul : 'Desa Sumber Secang' }}</h1>
             </div>
             
             <nav class="flex-1">

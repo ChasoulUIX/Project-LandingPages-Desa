@@ -58,10 +58,19 @@
             <div class="flex justify-between h-16 sm:h-20">
                 <div class="flex items-center">
                     <div class="flex items-center space-x-2">
-                        <img src="{{ asset('images/probolinggo.png') }}" alt="Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg shadow-lg object-contain">
+                        @php
+                            $profileDesa = \App\Models\ProfileDesa::first();
+                        @endphp
+                        <img src="{{ $profileDesa && $profileDesa->logo_image ? asset('images/' . $profileDesa->logo_image) : asset('images/probolinggo.png') }}" 
+                             alt="Logo" 
+                             class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg shadow-lg object-contain">
                         <div class="flex flex-col">
-                            <div class="text-white text-base sm:text-xl font-bold tracking-wider">Desa Sumber Secang</div>
-                            <div class="text-blue-200 text-xs">Sistem Informasi Desa Digital</div>
+                            <div class="text-white text-base sm:text-xl font-bold tracking-wider">
+                                {{ $profileDesa ? $profileDesa->judul : 'Desa Sumber Secang' }}
+                            </div>
+                            <div class="text-blue-200 text-xs">
+                                {{ $profileDesa ? $profileDesa->synopsis : 'Sistem Informasi Desa Digital' }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -311,12 +320,17 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
+                    @php
+                        $profileDesa = \App\Models\ProfileDesa::first();
+                    @endphp
                     <div class="flex items-center space-x-3 mb-4">
-                        <img src="{{ asset('images/probolinggo.png') }}" alt="Logo" class="h-14 w-12 rounded-lg">
-                        <div class="text-lg font-bold">Desa Sumber Secang</div>
+                        <img src="{{ $profileDesa && $profileDesa->logo_image ? asset('images/' . $profileDesa->logo_image) : asset('images/probolinggo.png') }}" 
+                             alt="Logo" 
+                             class="h-14 w-12 rounded-lg">
+                        <div class="text-lg font-bold">{{ $profileDesa ? $profileDesa->judul : 'Desa Sumber Secang' }}</div>
                     </div>
                     <p class="text-blue-200 text-sm leading-relaxed">
-                        Desa Sumber Secang adalah desa yang terletak di Kecamatan Krejengan, Kabupaten Probolinggo, Provinsi Jawa Timur. Website ini merupakan portal informasi dan layanan digital untuk masyarakat Desa Sumber Secang.
+                        {{ $profileDesa ? $profileDesa->deskripsi : 'Desa Sumber Secang adalah desa yang terletak di Kecamatan Krejengan, Kabupaten Probolinggo, Provinsi Jawa Timur. Website ini merupakan portal informasi dan layanan digital untuk masyarakat Desa Sumber Secang.' }}
                     </p>
                     <div class="flex space-x-4 mt-4">
                         <a href="#" class="text-blue-200 hover:text-yellow-400 transition duration-300">
@@ -342,19 +356,15 @@
                     <ul class="space-y-3 text-blue-200 text-sm">
                         <li class="flex items-center space-x-3">
                             <i class="fas fa-envelope"></i>
-                            <span>desasecang@gmail.com</span>
+                            <span>{{ $profileDesa ? $profileDesa->email : 'desasecang@gmail.com' }}</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fas fa-phone-alt"></i>
-                            <span>(021) 1234567</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>+62 812 3456 7890</span>
+                            <span>{{ $profileDesa ? $profileDesa->telephone : '(021) 1234567' }}</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Jl. Desa Sumber Secang, Kec. Krejengan, Kab. Probolinggo</span>
+                            <span>{{ $profileDesa ? $profileDesa->alamat : 'Jl. Desa Sumber Secang, Kec. Krejengan, Kab. Probolinggo' }}</span>
                         </li>
                     </ul>
                 </div>

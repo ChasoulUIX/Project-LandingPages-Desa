@@ -7,56 +7,71 @@
         <div class="relative min-h-screen">
             <!-- Slideshow container -->
             <div class="relative h-screen">
-                <!-- Slide 1 -->
-                <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
-                    <div class="relative h-full" style="background-image: url('{{ asset('images/background_sawah.jpg') }}'); background-size: cover; background-position: center;">
-                        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-                        <div class="relative h-full flex items-center">
-                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                                <div class="text-center space-y-8">
-                                    <div class="animate-fade-in-down">
-                                        <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
-                                            Selamat Datang di
-                                            <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-                                                Desa Sumber Secang
-                                            </span>
-                                        </h1>
-                                        <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
-                                            Bangga dengan Desa tercinta kita
-                                        </p>
+                @php
+                    $profile = App\Models\ProfileDesa::first();
+                    $defaultImages = ['background_sawah.jpg', 'gunungsawah.jpg'];
+                    $images = $profile && $profile->gallery_images ? 
+                             (is_array($profile->gallery_images) ? $profile->gallery_images : json_decode($profile->gallery_images, true)) : 
+                             $defaultImages;
+                @endphp
+
+                @if(is_array($images) && count($images) > 0)
+                    @foreach($images as $index => $image)
+                        <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                            <div class="relative h-full" style="background-image: url('{{ asset('images/' . $image) }}'); background-size: cover; background-position: center;">
+                                <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+                                <div class="relative h-full flex items-center">
+                                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                                        <div class="text-center space-y-8">
+                                            <div class="animate-fade-in-down">
+                                                <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                                    Selamat Datang di
+                                                    <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                                                        Desa Sumber Secang
+                                                    </span>
+                                                </h1>
+                                                <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+                                                    Bangga dengan Desa tercinta kita
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    <!-- Slide indicators -->
+                    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                        @foreach($images as $index => $image)
+                            <span class="dot w-16 h-1 bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300" onclick="currentSlide({{$index + 1}})"></span>
+                        @endforeach
+                    </div>
+                @else
+                    <!-- Default slide if no images -->
+                    <div class="slide absolute inset-0 opacity-1">
+                        <div class="relative h-full" style="background-image: url('{{ asset('images/background_sawah.jpg') }}'); background-size: cover; background-position: center;">
+                            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+                            <div class="relative h-full flex items-center">
+                                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                                    <div class="text-center space-y-8">
+                                        <div class="animate-fade-in-down">
+                                            <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                                Selamat Datang di
+                                                <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                                                    Desa Sumber Secang
+                                                </span>
+                                            </h1>
+                                            <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+                                                Bangga dengan Desa tercinta kita
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
-                    <div class="relative h-full" style="background-image: url('{{ asset('images/gunungsawah.jpg') }}'); background-size: cover; background-position: center;">
-                        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-                        <div class="relative h-full flex items-center">
-                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                                <div class="text-center space-y-8">
-                                    <div class="animate-fade-in-down">
-                                        <h2 class="text-5xl sm:text-7xl font-extrabold text-white tracking-tight">
-                                            Kabupaten Probolinggo
-                                        </h2>
-                                        <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto font-light">
-                                            Desa Cerdas, Desa Kuat, Desa Maju!
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide indicators -->
-                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    <span class="dot w-16 h-1 bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
-                    <span class="dot w-16 h-1 bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300"></span>
-                </div>
+                @endif
             </div>
 
             <!-- Action buttons -->
