@@ -16,15 +16,13 @@
         <!-- Products Grid -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="products-container">
-            @foreach(App\Models\Produk::latest()->get() as $item)
-                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
-                    <div class="relative h-64">
-                        <img src="{{ asset('images/'.$item->image) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-blue-900 mb-2">{{ $item->nama }}</h3>
-                        <p class="text-gray-600 mb-4">{{ $item->deskripsi }}</p>
-                        <div class="flex justify-between items-center">
+                @foreach(App\Models\Produk::latest()->get() as $item)
+                <div class="product-item bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300 flex flex-col h-full">
+                    <img src="{{ asset('images/'.$item->image) }}" alt="{{ $item->nama }}" class="w-full h-48 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-semibold text-blue-900 mb-3 truncate">{{ $item->nama }}</h3>
+                        <p class="text-gray-600 mb-4 flex-grow line-clamp-3">{{ $item->deskripsi }}</p>
+                        <div class="flex justify-between items-center mt-auto">
                             <span class="text-yellow-500 font-bold">Rp {{ number_format($item->harga, 0, ',', '.') }}</span>
                             <a href="https://wa.me/{{ $item->no_wa }}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 flex items-center">
                                 <i class="fab fa-whatsapp mr-2"></i>

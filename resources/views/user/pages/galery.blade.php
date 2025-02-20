@@ -29,15 +29,20 @@
                 <!-- Gallery Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-container">
                     @foreach(App\Models\Aktifitas::latest()->get() as $item)
-                    <div class="gallery-item group relative overflow-hidden rounded-xl" data-category="Kegiatan">
+                    <div class="gallery-item bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300 flex flex-col h-full" data-category="Kegiatan">
                         <img src="{{ asset('images/'.$item->image) }}" alt="{{ $item->judul }}" 
-                             class="w-full h-64 object-cover transform group-hover:scale-110 transition duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-100 transition duration-300">
-                            <div class="absolute bottom-0 p-6">
-                                <h3 class="text-white text-xl font-semibold mb-2">{{ $item->judul }}</h3>
-                                <p class="text-gray-200 text-sm">{{ $item->deskripsi }}</p>
-                                <p class="text-gray-300 text-xs mt-2">{{ $item->tgl_mulai->format('d M Y') }}</p>
+                             class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center text-gray-500 text-sm mb-2">
+                                <i class="far fa-calendar-alt mr-2"></i>
+                                <span>{{ $item->tgl_mulai->format('d F Y') }}</span>
                             </div>
+                            <h3 class="text-xl font-semibold text-blue-900 mb-3 truncate">{{ $item->judul }}</h3>
+                            <p class="text-gray-600 mb-4 flex-grow line-clamp-3">{{ $item->deskripsi }}</p>
+                            <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 mt-auto">
+                                <span>Lihat detail</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                     @endforeach

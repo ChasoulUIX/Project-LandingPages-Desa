@@ -25,8 +25,8 @@
                         <div class="space-y-6">
                             @foreach(\App\Models\Berita::orderBy('tanggal', 'desc')->take(3)->get() as $berita)
                                 <div class="{{ !$loop->last ? 'border-b' : '' }} pb-4">
-                                    <h3 class="font-medium text-lg text-gray-900 mb-2">{{ $berita->judul }}</h3>
-                                    <p class="text-gray-600 mb-2">{{ Str::limit($berita->konten, 120) }}</p>
+                                    <h3 class="font-medium text-lg text-gray-900 mb-2 truncate">{{ $berita->judul }}</h3>
+                                    <p class="text-gray-600 mb-2 line-clamp-2">{{ $berita->konten }}</p>
                                 </div>
                             @endforeach
                         </div>
