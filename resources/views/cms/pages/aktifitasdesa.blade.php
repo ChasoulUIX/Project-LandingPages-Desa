@@ -107,7 +107,7 @@
 
     <!-- Edit Modal -->
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+        <div class="bg-white rounded-lg w-full max-w-4xl mx-4">
             <div class="flex justify-between items-center p-6 border-b">
                 <h3 class="text-lg font-semibold">Edit Aktivitas</h3>
                 <button onclick="closeEditModal()" class="text-gray-600 hover:text-gray-800">
@@ -117,23 +117,38 @@
             <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 @method('PUT')
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                        <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left Column -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
+                            <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                            <textarea name="deskripsi" id="editDeskripsi" rows="8" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                            <input type="date" name="tgl_mulai" id="editTanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <textarea name="deskripsi" id="editDeskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+
+                    <!-- Right Column -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini</label>
+                            <div class="mb-4">
+                                <img id="currentImage" src="" alt="Current Image" class="w-full h-64 object-contain bg-gray-100 rounded-lg">
+                            </div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
+                            <input type="file" name="image" accept="image/*" class="w-full">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
-                        <input type="file" name="image" accept="image/*" class="w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                        <input type="date" name="tgl_mulai" id="editTanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+                </div>
+
+                <!-- Submit Button - Full Width -->
+                <div class="mt-6">
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
                         Update Aktivitas
                     </button>
@@ -177,7 +192,10 @@ function openEditModal(id) {
         .then(data => {
             document.getElementById('editJudul').value = data.judul;
             document.getElementById('editDeskripsi').value = data.deskripsi;
-            document.getElementById('editTanggal').value = data.tgl_mulai;
+            const date = new Date(data.tgl_mulai);
+            const formattedDate = date.toISOString().split('T')[0];
+            document.getElementById('editTanggal').value = formattedDate;
+            document.getElementById('currentImage').src = `/images/${data.image}`;
             document.getElementById('editForm').action = `/cms/aktifitas/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');

@@ -73,7 +73,7 @@
 
     <!-- Add Modal -->
     <div id="addModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+        <div class="bg-white rounded-lg w-full max-w-4xl mx-4">
             <div class="flex justify-between items-center p-6 border-b">
                 <h3 class="text-lg font-semibold">Tambah Produk Baru</h3>
                 <button onclick="closeAddModal()" class="text-gray-600 hover:text-gray-800">
@@ -82,38 +82,46 @@
             </div>
             <form action="{{ route('cms.produk.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nama">
-                        Nama Produk
-                    </label>
-                    <input type="text" name="nama" id="nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="nama">
+                                Nama Produk
+                            </label>
+                            <input type="text" name="nama" id="nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="no_wa">
+                                No. WA
+                            </label>
+                            <input type="text" name="no_wa" id="no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">
+                                Harga
+                            </label>
+                            <input type="number" name="harga" id="harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">
+                                Deskripsi
+                            </label>
+                            <textarea name="deskripsi" id="deskripsi" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
+                                Gambar Produk
+                            </label>
+                            <input type="file" name="image" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'imagePreview')" required>
+                            <div id="imagePreview" class="mt-4 hidden">
+                                <img src="" alt="Preview" class="max-w-full h-64 object-contain rounded-lg border">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="no_wa">
-                        No. WA
-                    </label>
-                    <input type="text" name="no_wa" id="no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">
-                        Deskripsi
-                    </label>
-                    <textarea name="deskripsi" id="deskripsi" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">
-                        Harga
-                    </label>
-                    <input type="number" name="harga" id="harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
-                        Gambar Produk
-                    </label>
-                    <input type="file" name="image" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                </div>
-                <div class="flex justify-end">
+                <div class="flex justify-end mt-6">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Simpan
                     </button>
@@ -124,7 +132,7 @@
 
     <!-- Edit Modal -->
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+        <div class="bg-white rounded-lg w-full max-w-4xl mx-4">
             <div class="flex justify-between items-center p-6 border-b">
                 <h3 class="text-lg font-semibold">Edit Produk</h3>
                 <button onclick="closeEditModal()" class="text-gray-600 hover:text-gray-800">
@@ -134,38 +142,47 @@
             <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 @method('PUT')
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_nama">
-                        Nama Produk
-                    </label>
-                    <input type="text" name="nama" id="edit_nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_nama">
+                                Nama Produk
+                            </label>
+                            <input type="text" name="nama" id="edit_nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_no_wa">
+                                No. WA
+                            </label>
+                            <input type="text" name="no_wa" id="edit_no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_harga">
+                                Harga
+                            </label>
+                            <input type="number" name="harga" id="edit_harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_deskripsi">
+                                Deskripsi
+                            </label>
+                            <textarea name="deskripsi" id="edit_deskripsi" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_image">
+                                Gambar Produk
+                            </label>
+                            <input type="file" name="image" id="edit_image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'editImagePreview')">
+                            <div id="editImagePreview" class="mt-4">
+                                <p class="text-sm text-gray-600 mb-2">Gambar Saat Ini:</p>
+                                <img src="" alt="Preview" class="max-w-full h-64 object-contain rounded-lg border">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_no_wa">
-                        No. WA
-                    </label>
-                    <input type="text" name="no_wa" id="edit_no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_deskripsi">
-                        Deskripsi
-                    </label>
-                    <textarea name="deskripsi" id="edit_deskripsi" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_harga">
-                        Harga
-                    </label>
-                    <input type="number" name="harga" id="edit_harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_image">
-                        Gambar Produk
-                    </label>
-                    <input type="file" name="image" id="edit_image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <div class="flex justify-end">
+                <div class="flex justify-end mt-6">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Update
                     </button>
@@ -219,28 +236,16 @@ function openEditModal(id) {
         .then(result => {
             if (result.status === 'success') {
                 const data = result.data;
-                // Populate form dengan data yang ada
                 document.getElementById('edit_nama').value = data.nama || '';
                 document.getElementById('edit_no_wa').value = data.no_wa || '';
                 document.getElementById('edit_deskripsi').value = data.deskripsi || '';
                 document.getElementById('edit_harga').value = data.harga || '';
                 
-                // Tampilkan preview gambar jika ada
+                // Update image preview
                 if (data.image) {
-                    const imagePreview = document.createElement('div');
-                    imagePreview.className = 'mt-2 mb-2';
-                    imagePreview.innerHTML = `
-                        <p class="text-sm text-gray-600">Gambar Saat Ini:</p>
-                        <img src="/images/${data.image}" alt="Preview" class="w-32 h-32 object-cover rounded">
-                    `;
-                    
-                    const imageContainer = document.getElementById('edit_image').parentElement;
-                    // Hapus preview lama jika ada
-                    const oldPreview = imageContainer.querySelector('.mt-2');
-                    if (oldPreview) {
-                        oldPreview.remove();
-                    }
-                    imageContainer.insertBefore(imagePreview, document.getElementById('edit_image'));
+                    const previewImg = document.querySelector('#editImagePreview img');
+                    previewImg.src = `/images/${data.image}`;
+                    document.getElementById('editImagePreview').classList.remove('hidden');
                 }
             } else {
                 throw new Error(result.message || 'Terjadi kesalahan');
@@ -295,5 +300,22 @@ document.getElementById('photosModal').addEventListener('click', function(e) {
         closePhotosModal();
     }
 });
+
+// Add this new function for image preview
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const previewImg = preview.querySelector('img');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.classList.remove('hidden');
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 </script>
 @endsection
