@@ -730,8 +730,8 @@
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     <!-- Feature Card 1 -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
-                        <div class="p-6 sm:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
+                        <div class="p-6 sm:p-8 flex-grow">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
                                 <i class="fas fa-file-alt text-white text-xl sm:text-2xl"></i>
                             </div>
@@ -752,7 +752,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="px-6 sm:px-8 pb-6 sm:pb-8">
+                        <div class="p-6 sm:p-8 mt-auto border-t">
                             <a href="{{ url('/layanan') }}" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
                                 <span>Pelajari Selengkapnya</span>
                                 <i class="fas fa-arrow-right"></i>
@@ -761,8 +761,8 @@
                     </div>
 
                     <!-- Feature Card 2 -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
-                        <div class="p-6 sm:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
+                        <div class="p-6 sm:p-8 flex-grow">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
                                 <i class="fas fa-bullhorn text-white text-xl sm:text-2xl"></i>
                             </div>
@@ -783,7 +783,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="px-6 sm:px-8 pb-6 sm:pb-8">
+                        <div class="p-6 sm:p-8 mt-auto border-t">
                             <a href="{{ url('/informasidesa') }}" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
                                 <span>Pelajari Selengkapnya</span>
                                 <i class="fas fa-arrow-right"></i>
@@ -792,8 +792,8 @@
                     </div>
 
                     <!-- Feature Card 3 -->
-                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
-                        <div class="p-6 sm:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col">
+                        <div class="p-6 sm:p-8 flex-grow">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition duration-300">
                                 <i class="fas fa-comments text-white text-xl sm:text-2xl"></i>
                             </div>
@@ -814,7 +814,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="px-6 sm:px-8 pb-6 sm:pb-8">
+                        <div class="p-6 sm:p-8 mt-auto border-t">
                             <a href="{{ url('/pengaduan') }}" class="text-blue-900 hover:text-yellow-500 font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition duration-300">
                                 <span>Pelajari Selengkapnya</span>
                                 <i class="fas fa-arrow-right"></i>
