@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cms;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sambutan;
+use App\Models\HeroSlider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +25,8 @@ class SambutanController extends Controller
             ]);
         }
 
-        return view('cms.pages.sambutan', compact('sambutan'));
+        $sliders = HeroSlider::orderBy('order')->get();
+        return view('cms.pages.sambutan', compact('sambutan', 'sliders'));
     }
 
     public function edit($id)

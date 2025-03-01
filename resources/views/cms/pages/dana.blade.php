@@ -188,7 +188,7 @@
     </div>
 
     <!-- Modal Edit -->
-    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50 items-center justify-center">
         <div class="relative p-8 border w-full max-w-4xl shadow-xl rounded-lg bg-white">
             <!-- Header -->
             <div class="absolute top-0 right-0 pt-4 pr-4">

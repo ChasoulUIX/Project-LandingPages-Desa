@@ -30,15 +30,14 @@
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt mr-2"></i> 
                                 @php
                                     $lokasi = $profileDesa->lokasi ?? 'Default Lokasi';
-                                    // If it's a URL, extract the location name with city and province
+                                    // If it's a URL, extract the location name
                                     if (filter_var($lokasi, FILTER_VALIDATE_URL)) {
-                                        $parts = explode('/', $lokasi);
-                                        $locationPart = array_values(array_filter($parts, function($part) {
-                                            return strpos($part, '+') !== false || strpos($part, ',') !== false;
-                                        }));
-                                        if (!empty($locationPart)) {
-                                            $lokasi = str_replace('+', ' ', urldecode($locationPart[0]));
-                                            $lokasi = preg_replace('/\s*\+\s*/', ', ', $lokasi); // Replace + with comma and space
+                                        // Extract location name from Google Maps URL
+                                        if (preg_match('/place\/([^\/]+)/', $lokasi, $matches)) {
+                                            $lokasi = str_replace('+', ' ', urldecode($matches[1]));
+                                            // Remove any text after comma and question mark
+                                            $lokasi = preg_replace('/,.+$/', '', $lokasi);
+                                            $lokasi = preg_replace('/\?.+$/', '', $lokasi);
                                         }
                                     }
                                 @endphp
@@ -91,52 +90,6 @@
             <div class="mt-8">
                 <h3 class="text-lg font-semibold mb-3">Lokasi</h3>
                 <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
-            </div>
-
-            <div class="mt-8">
-                <h3 class="text-lg font-semibold mb-3">Galeri Slider</h3>
-                <div class="relative">
-                    <!-- Main Slider -->
-                    <div class="swiper mainSwiper mb-4">
-                        <div class="swiper-wrapper">
-                            @if($profileDesa && !empty($profileDesa->gallery_images))
-                                @foreach($profileDesa->gallery_images as $index => $image)
-                                    <div class="swiper-slide bg-gray-100">
-                                        <div class="relative w-full h-[500px]">
-                                            <img src="{{ asset('images/' . $image) }}" 
-                                                alt="Gallery Image {{ $index + 1 }}" 
-                                                class="absolute inset-0 w-full h-full object-contain">
-                                            @if(isset($profileDesa->gallery_texts[$index]))
-                                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                                                    <p class="text-lg">{{ $profileDesa->gallery_texts[$index] }}</p>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
-                        <div class="swiper-button-next !text-white !bg-black/50 hover:!bg-black/70 transition-colors"></div>
-                        <div class="swiper-button-prev !text-white !bg-black/50 hover:!bg-black/70 transition-colors"></div>
-                    </div>
-
-                    <!-- Thumbnail Slider -->
-                    <div class="swiper thumbSwiper">
-                        <div class="swiper-wrapper">
-                            @if($profileDesa && !empty($profileDesa->gallery_images))
-                                @foreach($profileDesa->gallery_images as $index => $image)
-                                    <div class="swiper-slide bg-gray-100">
-                                        <div class="relative w-full h-24">
-                                            <img src="{{ asset('images/' . $image) }}" 
-                                                alt="Gallery Thumbnail {{ $index + 1 }}" 
-                                                class="absolute inset-0 w-full h-full object-cover rounded-lg cursor-pointer">
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -263,61 +216,6 @@
                                 value="{{ old('lokasi', $profileDesa->lokasi ?? '') }}"
                                 onchange="handleMapsUrlChange(this.value)">
                             <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
-                        </div>
-
-                        <!-- Gallery section in edit modal -->
-                        <div class="mb-8">
-                            <label class="block font-bold mb-3">Galeri Slider</label>
-                            <div class="flex items-center gap-4 mb-4">
-                                <input type="file" 
-                                    class="hidden" 
-                                    name="gallery_images[]" 
-                                    id="gallery-input"
-                                    accept="image/*"
-                                    multiple
-                                    onchange="previewGalleryImages(this)">
-                                <label for="gallery-input" 
-                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer flex items-center gap-2 text-sm font-medium">
-                                    <i class="fas fa-images"></i>
-                                    <span>Tambah Slide</span>
-                                </label>
-                            </div>
-
-                            <!-- Existing Gallery Items -->
-                            <div id="existing-gallery-preview" class="grid grid-cols-1 gap-4 mb-4">
-                                @if($profileDesa && !empty($profileDesa->gallery_images))
-                                    @foreach($profileDesa->gallery_images as $index => $image)
-                                        <div class="relative group bg-gray-50 p-4 rounded-lg" data-index="{{ $index }}">
-                                            <div class="flex gap-4">
-                                                <div class="w-40 h-40 flex-shrink-0">
-                                                    <img src="{{ asset('images/' . $image) }}" 
-                                                        alt="Gallery Image" 
-                                                        class="w-full h-full object-cover rounded-lg">
-                                                </div>
-                                                <div class="flex-grow">
-                                                    <textarea 
-                                                        name="existing_gallery_texts[]" 
-                                                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
-                                                        rows="4"
-                                                        placeholder="Teks untuk slide ini">{{ $profileDesa->gallery_texts[$index] ?? '' }}</textarea>
-                                                </div>
-                                                <button type="button" 
-                                                    onclick="removeExistingImage(this, {{ $index }})"
-                                                    class="h-8 w-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
-
-                            <!-- New Gallery Items Preview -->
-                            <div id="new-gallery-preview" class="grid grid-cols-1 gap-4">
-                                <!-- New items will be added here via JavaScript -->
-                            </div>
-
-                            <input type="hidden" name="removed_indexes" id="removed-indexes" value="[]">
                         </div>
 
                         <div class="flex justify-end mt-8">
@@ -459,36 +357,36 @@ label {
         if (!url) return;
         
         let embedUrl = '';
+        let locationQuery = '';
         
-        // Cek jika URL adalah dari Google My Maps
-        if (url.includes('google.com/maps/d/')) {
-            // Jika URL sudah dalam format embed, gunakan langsung
-            if (url.includes('/embed')) {
-                embedUrl = url;
-            } else {
-                // Jika URL dalam format edit atau view, konversi ke format embed
-                embedUrl = url.replace('/edit', '/embed').replace('/viewer', '/embed');
-                
-                // Pastikan mid parameter ada
-                if (!embedUrl.includes('mid=')) {
-                    const midMatch = url.match(/[?&]mid=([^&]+)/);
-                    if (midMatch) {
-                        embedUrl = `https://www.google.com/maps/d/embed?mid=${midMatch[1]}`;
-                    }
-                }
+        // Handle different Google Maps URL formats
+        if (url.includes('google.com/maps/place/') || url.includes('google.co.id/maps/place/')) {
+            // Extract location name from place URL
+            const placeMatch = url.match(/place\/([^\/]+)/);
+            if (placeMatch) {
+                locationQuery = placeMatch[1];
+                // Remove coordinates and additional parameters
+                locationQuery = locationQuery.split('/@')[0];
+                // Convert to embed URL format
+                embedUrl = `https://www.google.com/maps?q=${locationQuery}&output=embed`;
             }
+        } else if (url.includes('google.com/maps/d/')) {
+            // Handle My Maps URLs
+            embedUrl = url.replace('/edit', '/embed').replace('/viewer', '/embed');
+        } else if (url.includes('google.com/maps?q=')) {
+            // Already in correct format
+            embedUrl = url.includes('output=embed') ? url : `${url}&output=embed`;
         } else {
-            // Untuk URL Google Maps biasa, ekstrak koordinat
+            // Extract coordinates as fallback
             const pattern = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
             const matches = url.match(pattern);
-            
             if (matches) {
                 const [, lat, lng] = matches;
-                embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.0!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sid!4v1`;
+                embedUrl = `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
             }
         }
         
-        // Update iframe jika ada valid URL
+        // Update iframe if valid URL
         if (embedUrl) {
             const mapContainer = document.getElementById('map');
             mapContainer.innerHTML = `
@@ -561,151 +459,7 @@ label {
             reader.readAsDataURL(input.files[0]);
         }
     }
-
-    function previewGalleryImages(input) {
-        const preview = document.getElementById('new-gallery-preview');
-        const existingCount = document.getElementById('existing-gallery-preview')
-            .querySelectorAll('.group').length;
-        
-        if (input.files) {
-            // Get previously selected files and their texts
-            const prevFiles = Array.from(preview.querySelectorAll('.group')).map(group => ({
-                file: group.querySelector('img').src,
-                text: group.querySelector('textarea').value
-            }));
-            
-            // Clear the preview
-            preview.innerHTML = '';
-            
-            // Create new FileList
-            let dataTransfer = new DataTransfer();
-            
-            // Add new files
-            Array.from(input.files).forEach(file => {
-                dataTransfer.items.add(file);
-            });
-            
-            // Update input files
-            const fileInput = document.querySelector('input[name="gallery_images[]"]');
-            fileInput.files = dataTransfer.files;
-            
-            // Restore previous files and texts, then add new files
-            prevFiles.forEach((item, idx) => {
-                const div = createGalleryItem(item.file, item.text, existingCount + idx);
-                preview.appendChild(div);
-            });
-            
-            // Add new files
-            Array.from(input.files).forEach((file, idx) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const div = createGalleryItem(e.target.result, '', existingCount + prevFiles.length + idx);
-                    preview.appendChild(div);
-                }
-                reader.readAsDataURL(file);
-            });
-        }
-    }
-
-    function createGalleryItem(imgSrc, text, index) {
-        const div = document.createElement('div');
-        div.className = 'relative group bg-gray-50 p-4 rounded-lg';
-        div.dataset.index = index;
-        div.innerHTML = `
-            <div class="flex gap-4">
-                <div class="w-40 h-40 flex-shrink-0">
-                    <img src="${imgSrc}" 
-                        alt="Gallery Preview" 
-                        class="w-full h-full object-cover rounded-lg">
-                </div>
-                <div class="flex-grow">
-                    <textarea 
-                        name="new_gallery_texts[]" 
-                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
-                        rows="4"
-                        placeholder="Teks untuk slide ini">${text}</textarea>
-                </div>
-                <button type="button" 
-                    onclick="removeNewImage(this)"
-                    class="h-8 w-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-        return div;
-    }
-
-    function removeNewImage(button) {
-        const container = button.closest('.group');
-        const preview = document.getElementById('new-gallery-preview');
-        const fileInput = document.querySelector('input[name="gallery_images[]"]');
-        
-        // Get all current items with their texts
-        const items = Array.from(preview.querySelectorAll('.group')).map(group => ({
-            file: group.querySelector('img').src,
-            text: group.querySelector('textarea').value,
-            element: group
-        }));
-        
-        // Remove the selected item
-        const indexToRemove = items.findIndex(item => item.element === container);
-        items.splice(indexToRemove, 1);
-        
-        // Clear preview
-        preview.innerHTML = '';
-        
-        // Create new FileList without removed file
-        const dt = new DataTransfer();
-        Array.from(fileInput.files).forEach((file, idx) => {
-            if (idx !== indexToRemove) {
-                dt.items.add(file);
-            }
-        });
-        fileInput.files = dt.files;
-        
-        // Restore remaining items
-        items.forEach((item, idx) => {
-            const div = createGalleryItem(item.file, item.text, idx);
-            preview.appendChild(div);
-        });
-    }
-
-    function removeExistingImage(button, index) {
-        const removedIndexesInput = document.getElementById('removed-indexes');
-        let removedIndexes = JSON.parse(removedIndexesInput.value);
-        removedIndexes.push(index);
-        removedIndexesInput.value = JSON.stringify(removedIndexes);
-        button.closest('.group').remove();
-    }
-
-    // Initialize Swiper
-    document.addEventListener('DOMContentLoaded', function() {
-        var thumbSwiper = new Swiper(".thumbSwiper", {
-            spaceBetween: 10,
-            slidesPerView: 4,
-            freeMode: true,
-            watchSlidesProgress: true,
-            breakpoints: {
-                320: { slidesPerView: 2, spaceBetween: 10 },
-                480: { slidesPerView: 3, spaceBetween: 10 },
-                640: { slidesPerView: 4, spaceBetween: 10 }
-            }
-        });
-        
-        var mainSwiper = new Swiper(".mainSwiper", {
-            spaceBetween: 10,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            thumbs: {
-                swiper: thumbSwiper,
-            },
-            keyboard: {
-                enabled: true,
-            },
-        });
-    });
 </script>
 @endpush
 @endsection
+

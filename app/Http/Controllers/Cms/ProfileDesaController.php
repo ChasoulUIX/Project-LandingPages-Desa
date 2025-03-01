@@ -73,10 +73,7 @@ class ProfileDesaController extends Controller
             'lokasi' => 'nullable|string',
             'visi' => 'nullable|array',
             'misi' => 'nullable|array',
-            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gallery_texts' => 'nullable|array',
-            'gallery_texts.*' => 'nullable|string',
+            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $profileDesa = ProfileDesa::first() ?? new ProfileDesa();
@@ -87,33 +84,6 @@ class ProfileDesaController extends Controller
             $logoName = time() . '_logo.' . $logoImage->getClientOriginalExtension();
             $logoImage->move(public_path('images'), $logoName);
             $profileDesa->logo_image = $logoName;
-        }
-
-        // Handle gallery images and texts
-        $galleryImages = [];
-        $galleryTexts = [];
-        
-        // Keep existing images and texts that weren't removed
-        if ($profileDesa->gallery_images) {
-            $removedIndexes = json_decode($request->removed_indexes ?? '[]', true);
-            foreach ($profileDesa->gallery_images as $index => $image) {
-                if (!in_array($index, $removedIndexes)) {
-                    $galleryImages[] = $image;
-                    // Get text from existing_gallery_texts array
-                    $galleryTexts[] = $request->existing_gallery_texts[$index] ?? '';
-                }
-            }
-        }
-
-        // Add new images and texts
-        if ($request->hasFile('gallery_images')) {
-            foreach ($request->file('gallery_images') as $index => $image) {
-                $imageName = time() . '_gallery_' . $index . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('images'), $imageName);
-                $galleryImages[] = $imageName;
-                // Get text from new gallery_texts array
-                $galleryTexts[] = $request->new_gallery_texts[$index] ?? '';
-            }
         }
 
         // Update all fields
@@ -127,9 +97,7 @@ class ProfileDesaController extends Controller
             'alamat' => $request->alamat,
             'lokasi' => $request->lokasi,
             'visi' => $request->visi,
-            'misi' => $request->misi,
-            'gallery_images' => array_values($galleryImages), // Reindex array
-            'gallery_texts' => array_values($galleryTexts) // Reindex array
+            'misi' => $request->misi
         ]);
 
         $profileDesa->save();

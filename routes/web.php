@@ -29,6 +29,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Cms\DanaController;
 use App\Http\Controllers\Cms\CmsDomisiliController;
 use App\Http\Controllers\Cms\StrukturProfileController;
+use App\Http\Controllers\Cms\CmsHeroSliderController;
 
 // Auth
 // ... existing code ...
@@ -377,3 +378,10 @@ Route::middleware(['auth'])->prefix('cms/admin')->group(function () {
 });
 
 Route::resource('dana', DanaDesaController::class);
+
+Route::prefix('cms')->middleware(['auth'])->group(function () {
+    Route::post('/sliders', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'store'])->name('sliders.store');
+    Route::get('/sliders/{slider}/edit', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'edit'])->name('sliders.edit');
+    Route::put('/sliders/{slider}', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'update'])->name('sliders.update');
+    Route::delete('/sliders/{slider}', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'destroy'])->name('sliders.destroy');
+});

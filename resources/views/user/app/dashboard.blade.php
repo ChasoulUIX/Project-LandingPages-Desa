@@ -8,38 +8,27 @@
             <!-- Slideshow container -->
             <div class="relative h-screen">
                 @php
-                    $profile = App\Models\ProfileDesa::first();
-                    $defaultImages = ['background_sawah.jpg', 'gunungsawah.jpg'];
-                    $images = $profile && $profile->gallery_images ? 
-                             (is_array($profile->gallery_images) ? $profile->gallery_images : json_decode($profile->gallery_images, true)) : 
-                             $defaultImages;
-                    $texts = $profile && $profile->gallery_texts ? 
-                             (is_array($profile->gallery_texts) ? $profile->gallery_texts : json_decode($profile->gallery_texts, true)) : 
-                             [];
+                    $sliders = App\Models\HeroSlider::active()->ordered()->get();
                 @endphp
 
-                @if(is_array($images) && count($images) > 0)
-                    @foreach($images as $index => $image)
+                @if($sliders->count() > 0)
+                    @foreach($sliders as $slider)
                         <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
-                            <div class="relative h-full" style="background-image: url('{{ asset('images/' . $image) }}'); background-size: cover; background-position: center;">
+                            <div class="relative h-full" style="background-image: url('{{ asset('images/' . $slider->background_image) }}'); background-size: cover; background-position: center;">
                                 <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
                                 <div class="relative h-full flex items-center">
                                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                                         <div class="text-center space-y-8">
                                             <div class="animate-fade-in-down">
-                                                @if(isset($texts[$index]) && !empty($texts[$index]))
-                                                    <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
-                                                        {{ $texts[$index] }}
-                                                    </h1>
-                                                @else
-                                                    <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
-                                                        Selamat Datang di
-                                                        <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-                                                            Desa Sumber Secang
-                                                        </span>
-                                                    </h1>
+                                                <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                                    {{ $slider->heading }}
+                                                    <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                                                        {{ $slider->subheading }}
+                                                    </span>
+                                                </h1>
+                                                @if($slider->tagline)
                                                     <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
-                                                        Bangga dengan Desa tercinta kita
+                                                        {{ $slider->tagline }}
                                                     </p>
                                                 @endif
                                             </div>
@@ -52,12 +41,12 @@
 
                     <!-- Slide indicators -->
                     <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                        @foreach($images as $index => $image)
-                            <span class="dot w-16 h-1 bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300" onclick="currentSlide({{$index + 1}})"></span>
+                        @foreach($sliders as $index => $slider)
+                            <span class="dot w-16 h-1 bg-white/30 backdrop-blur-sm cursor-pointer hover:bg-white/70 transition-all duration-300" onclick="currentSlide({{$loop->iteration}})"></span>
                         @endforeach
                     </div>
                 @else
-                    <!-- Default slide if no images -->
+                    <!-- Default slide if no sliders -->
                     <div class="slide absolute inset-0 opacity-1">
                         <div class="relative h-full" style="background-image: url('{{ asset('images/background_sawah.jpg') }}'); background-size: cover; background-position: center;">
                             <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
@@ -891,40 +880,52 @@
                             <i class="fas fa-map-marker-alt text-blue-900 text-xl"></i>
                         </div>
                         <h3 class="text-lg font-bold text-blue-900 text-center mb-2">Alamat</h3>
-                        <p class="text-gray-600 text-center">{{ $profile->alamat ?? 'Alamat belum diisi' }}</p>
+                        <p class="text-gray-600 text-center">{{ $profile->alamat ?? 'Sumbersecang, Gading, Probolinggo' }}</p>
                     </div>
                 </div>
 
                 <!-- Google Maps -->
                 <div class="w-full rounded-xl overflow-hidden shadow-lg">
+                    <div class="bg-white p-4 border-b">
+                        <h3 class="text-lg font-semibold">Lokasi Desa</h3>
+                        <p class="text-gray-600 mt-2">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            {{ $profile->alamat ?? 'Sumbersecang, Gading, Probolinggo' }}
+                        </p>
+                    </div>
                     <div id="map" style="width:100%; height:450px;">
-                        @if($profile && $profile->lokasi)
-                            <iframe 
-                                src="https://www.google.com/maps?q=Wangkal,+Gading,+Probolinggo+Regency,+East+Java&output=embed"
-                                width="100%" 
-                                height="450" 
-                                style="border:0;" 
-                                allowfullscreen="" 
-                                loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"
-                                class="w-full">
-                            </iframe>
-                        @else
-                            <iframe 
-                                src="https://www.google.com/maps?q=Wangkal,+Gading,+Probolinggo+Regency,+East+Java&output=embed"
-                                width="100%" 
-                                height="450" 
-                                style="border:0;" 
-                                allowfullscreen="" 
-                                loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"
-                                class="w-full">
-                            </iframe>
-                        @endif
+                        @php
+                            $defaultMap = "https://www.google.com/maps?q=Sumbersecang,+Gading,+Probolinggo+Regency,+East+Java&output=embed";
+                            $mapUrl = $profile->lokasi ?? $defaultMap;
+                            
+                            // Jika URL mengandung '/place/', konversi ke format embed
+                            if (strpos($mapUrl, '/place/') !== false) {
+                                $parts = explode('/place/', $mapUrl);
+                                if (count($parts) > 1) {
+                                    $location = explode('/', $parts[1])[0];
+                                    $mapUrl = "https://www.google.com/maps?q=" . $location . "&output=embed";
+                                }
+                            }
+                            
+                            // Jika URL tidak mengandung 'output=embed', tambahkan parameter tersebut
+                            if (strpos($mapUrl, 'output=embed') === false) {
+                                $mapUrl .= (strpos($mapUrl, '?') !== false ? '&' : '?') . 'output=embed';
+                            }
+                        @endphp
+                        <iframe 
+                            src="{{ $mapUrl }}"
+                            width="100%" 
+                            height="450" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="w-full">
+                        </iframe>
                     </div>
                     <div class="bg-white p-4">
                         <p class="text-gray-600 text-sm">
-                            <i class="fas fa-map-marked-alt text-red-500 mr-2"></i>
+                            <i class="fas fa-info-circle text-blue-500 mr-2"></i>
                             {{ $profile->deskripsi ?? 'Luas wilayah Desa Sumber Secang adalah 486,2 hektar' }}
                         </p>
                     </div>
