@@ -86,10 +86,10 @@
                             </button>
                             <div x-show="open" class="pl-4 mt-2 space-y-2">
                                 <a href="/cms/dana" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors">
-                                    <i class="fas fa-file-invoice-dollar mr-3"></i>Dana Desa
+                                    <i class="fas fa-file-invoice-dollar mr-3"></i>Pendapatan Desa
                                 </a>
                                 <a href="/cms/kegiatan" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors">
-                                    <i class="fas fa-tasks mr-3"></i>Pendanaan Desa
+                                    <i class="fas fa-tasks mr-3"></i>Belanja Desa
                                 </a>
                             </div>
                         </div>
@@ -186,10 +186,10 @@
                             </button>
                             <div x-show="open" class="pl-4 mt-2 space-y-2">
                                 <a href="/cms/dana" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors">
-                                    <i class="fas fa-file-invoice-dollar mr-3"></i>Dana Desa
+                                    <i class="fas fa-file-invoice-dollar mr-3"></i>Pendapatan Desa
                                 </a>
                                 <a href="/cms/kegiatan" class="nav-link block px-4 py-2.5 text-base rounded-lg hover:bg-blue-800 transition-colors">
-                                    <i class="fas fa-tasks mr-3"></i>Pendanaan Desa
+                                    <i class="fas fa-tasks mr-3"></i>Belanja Desa
                                 </a>
                             </div>
                         </div>

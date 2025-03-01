@@ -29,4 +29,9 @@ class Kegiatan extends Model
         'tgl_mulai' => 'date',
         'tgl_selesai' => 'date'
     ];
+
+    public function scopeByYear($query, $year)
+    {
+        return $query->whereYear('tgl_mulai', $year);
+    }
 }

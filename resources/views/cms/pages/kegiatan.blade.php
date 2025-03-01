@@ -9,6 +9,42 @@
         </button>
     </div>
 
+    <!-- Add Search and Filter Section -->
+    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+                <input type="text" 
+                       id="searchInput" 
+                       placeholder="Cari kegiatan..." 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Filter Kategori</label>
+                <select id="kategoriFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Kategori</option>
+                    <option value="Infrastruktur">Infrastruktur</option>
+                    <option value="Sosial">Sosial</option>
+                    <option value="Ekonomi">Ekonomi</option>
+                    <option value="Lingkungan">Lingkungan</option>
+                    <option value="Pemerintahan">Pemerintahan</option>
+                    <option value="Kemasyarakatan">Kemasyarakatan</option>
+                    <option value="Keadaan Darurat">Keadaan Darurat</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Filter Progress</label>
+                <select id="progressFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Progress</option>
+                    <option value="0">Belum Dimulai (0%)</option>
+                    <option value="1-50">Dalam Proses (1-50%)</option>
+                    <option value="51-99">Hampir Selesai (51-99%)</option>
+                    <option value="100">Selesai (100%)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <!-- Replace Kegiatan Grid with Table -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <div class="overflow-x-auto">
@@ -429,6 +465,61 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
+
+    // Search and Filter functionality
+    const searchInput = document.getElementById('searchInput');
+    const kategoriFilter = document.getElementById('kategoriFilter');
+    const progressFilter = document.getElementById('progressFilter');
+    const tableRows = document.querySelectorAll('tbody tr[data-id]');
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const kategori = kategoriFilter.value;
+        const progress = progressFilter.value;
+
+        tableRows.forEach(row => {
+            const judul = row.cells[0].textContent.toLowerCase();
+            const rowKategori = row.cells[2].textContent;
+            const rowProgress = parseInt(row.cells[4].textContent);
+            
+            let showRow = true;
+
+            // Search filter
+            if (searchTerm && !judul.includes(searchTerm)) {
+                showRow = false;
+            }
+
+            // Kategori filter
+            if (kategori && rowKategori !== kategori) {
+                showRow = false;
+            }
+
+            // Progress filter
+            if (progress) {
+                switch(progress) {
+                    case '0':
+                        if (rowProgress !== 0) showRow = false;
+                        break;
+                    case '1-50':
+                        if (rowProgress <= 0 || rowProgress > 50) showRow = false;
+                        break;
+                    case '51-99':
+                        if (rowProgress <= 50 || rowProgress >= 100) showRow = false;
+                        break;
+                    case '100':
+                        if (rowProgress !== 100) showRow = false;
+                        break;
+                }
+            }
+
+            row.style.display = showRow ? '' : 'none';
+        });
+    }
+
+    // Add event listeners for search and filters
+    searchInput.addEventListener('input', filterTable);
+    kategoriFilter.addEventListener('change', filterTable);
+    progressFilter.addEventListener('change', filterTable);
 });
 </script>
 @endsection

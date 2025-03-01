@@ -42,11 +42,11 @@
     <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 text-sm">Total Penduduk</p>
-                <h3 class="text-xl font-bold">{{ App\Models\Kependudukan::count() }}</h3>
+                <p class="text-gray-500 text-sm">Total Program</p>
+                <h3 class="text-xl font-bold">{{ App\Models\Kegiatan::count() }}</h3>
             </div>
             <div class="bg-green-100 p-2 rounded-full">
-                <i class="fas fa-users text-green-500 text-sm"></i>
+                <i class="fas fa-tasks text-green-500 text-sm"></i>
             </div>
         </div>
     </div>
@@ -54,11 +54,11 @@
     <div class="bg-white rounded-lg shadow-md p-4">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 text-sm">Total Surat Kelahiran</p>
-                <h3 class="text-xl font-bold">{{ App\Models\SuratKelahiran::count() }}</h3>
+                <p class="text-gray-500 text-sm">Total Penduduk</p>
+                <h3 class="text-xl font-bold">{{ App\Models\Kependudukan::count() }}</h3>
             </div>
-            <div class="bg-purple-100 p-2 rounded-full">
-                <i class="fas fa-baby text-purple-500 text-sm"></i>
+            <div class="bg-green-100 p-2 rounded-full">
+                <i class="fas fa-users text-green-500 text-sm"></i>
             </div>
         </div>
     </div>

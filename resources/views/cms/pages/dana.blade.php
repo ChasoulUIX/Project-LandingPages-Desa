@@ -53,7 +53,7 @@
                     <table class="w-full text-sm">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tahun</th>
+                                <!-- <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tahun</th> -->
                                 <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Sumber Anggaran</th>
                                 <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Nominal</th>
                                 <th class="px-2 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tgl Pencairan</th>
@@ -68,7 +68,7 @@
                             @if($danaDesa->count() > 0)
                                 @foreach($danaDesa as $dana)
                                 <tr class="text-gray-700 hover:bg-gray-50" data-id="{{ $dana->id }}">
-                                    <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tahun_anggaran }}</td>
+                                    <!-- <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tahun_anggaran }}</td> -->
                                     <td class="px-2 py-2 whitespace-nowrap">{{ $dana->sumber_anggaran }}</td>
                                     <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->nominal, 0, ',', '.') }}</td>
                                     <td class="px-2 py-2 whitespace-nowrap">{{ $dana->tgl_pencairan->format('d/m/Y') }}</td>
@@ -138,7 +138,13 @@
                 
                 <!-- Kegiatan List -->
                 <div class="space-y-4">
-                    @foreach(App\Models\Kegiatan::orderBy('created_at', 'desc')->limit(5)->get() as $item)
+                    @php
+                        $selectedYear = request('tahun', date('Y'));
+                        $kegiatan = App\Models\Kegiatan::whereYear('tgl_mulai', $selectedYear)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+                    @endphp
+                    @foreach($kegiatan as $item)
                         <div class="border-l-4 border-blue-500 pl-4 py-2">
                             <div class="flex justify-between items-start">
                                 <div>
