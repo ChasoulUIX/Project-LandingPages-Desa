@@ -898,16 +898,29 @@
                 <!-- Google Maps -->
                 <div class="w-full rounded-xl overflow-hidden shadow-lg">
                     <div id="map" style="width:100%; height:450px;">
-                        <iframe 
-                            src="https://www.google.com/maps?q=Sumbersecang,+Kec.+Gading,+Kabupaten+Probolinggo,+Jawa+Timur&output=embed"
-                            width="100%" 
-                            height="450" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            class="w-full">
-                        </iframe>
+                        @if($profile && $profile->lokasi)
+                            <iframe 
+                                src="https://www.google.com/maps?q=Wangkal,+Gading,+Probolinggo+Regency,+East+Java&output=embed"
+                                width="100%" 
+                                height="450" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                class="w-full">
+                            </iframe>
+                        @else
+                            <iframe 
+                                src="https://www.google.com/maps?q=Wangkal,+Gading,+Probolinggo+Regency,+East+Java&output=embed"
+                                width="100%" 
+                                height="450" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                class="w-full">
+                            </iframe>
+                        @endif
                     </div>
                     <div class="bg-white p-4">
                         <p class="text-gray-600 text-sm">

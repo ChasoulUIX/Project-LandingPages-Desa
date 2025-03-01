@@ -568,44 +568,106 @@ label {
             .querySelectorAll('.group').length;
         
         if (input.files) {
+            // Get previously selected files and their texts
+            const prevFiles = Array.from(preview.querySelectorAll('.group')).map(group => ({
+                file: group.querySelector('img').src,
+                text: group.querySelector('textarea').value
+            }));
+            
+            // Clear the preview
+            preview.innerHTML = '';
+            
+            // Create new FileList
+            let dataTransfer = new DataTransfer();
+            
+            // Add new files
+            Array.from(input.files).forEach(file => {
+                dataTransfer.items.add(file);
+            });
+            
+            // Update input files
+            const fileInput = document.querySelector('input[name="gallery_images[]"]');
+            fileInput.files = dataTransfer.files;
+            
+            // Restore previous files and texts, then add new files
+            prevFiles.forEach((item, idx) => {
+                const div = createGalleryItem(item.file, item.text, existingCount + idx);
+                preview.appendChild(div);
+            });
+            
+            // Add new files
             Array.from(input.files).forEach((file, idx) => {
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
-                    const div = document.createElement('div');
-                    div.className = 'relative group bg-gray-50 p-4 rounded-lg';
-                    div.dataset.index = existingCount + idx;
-                    div.innerHTML = `
-                        <div class="flex gap-4">
-                            <div class="w-40 h-40 flex-shrink-0">
-                                <img src="${e.target.result}" 
-                                    alt="Gallery Preview" 
-                                    class="w-full h-full object-cover rounded-lg">
-                            </div>
-                            <div class="flex-grow">
-                                <textarea 
-                                    name="new_gallery_texts[]" 
-                                    class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
-                                    rows="4"
-                                    placeholder="Teks untuk slide ini"></textarea>
-                            </div>
-                            <button type="button" 
-                                onclick="removeNewImage(this)"
-                                class="h-8 w-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    `;
+                    const div = createGalleryItem(e.target.result, '', existingCount + prevFiles.length + idx);
                     preview.appendChild(div);
                 }
-                
                 reader.readAsDataURL(file);
             });
         }
     }
 
+    function createGalleryItem(imgSrc, text, index) {
+        const div = document.createElement('div');
+        div.className = 'relative group bg-gray-50 p-4 rounded-lg';
+        div.dataset.index = index;
+        div.innerHTML = `
+            <div class="flex gap-4">
+                <div class="w-40 h-40 flex-shrink-0">
+                    <img src="${imgSrc}" 
+                        alt="Gallery Preview" 
+                        class="w-full h-full object-cover rounded-lg">
+                </div>
+                <div class="flex-grow">
+                    <textarea 
+                        name="new_gallery_texts[]" 
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
+                        rows="4"
+                        placeholder="Teks untuk slide ini">${text}</textarea>
+                </div>
+                <button type="button" 
+                    onclick="removeNewImage(this)"
+                    class="h-8 w-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        return div;
+    }
+
     function removeNewImage(button) {
-        button.closest('.group').remove();
+        const container = button.closest('.group');
+        const preview = document.getElementById('new-gallery-preview');
+        const fileInput = document.querySelector('input[name="gallery_images[]"]');
+        
+        // Get all current items with their texts
+        const items = Array.from(preview.querySelectorAll('.group')).map(group => ({
+            file: group.querySelector('img').src,
+            text: group.querySelector('textarea').value,
+            element: group
+        }));
+        
+        // Remove the selected item
+        const indexToRemove = items.findIndex(item => item.element === container);
+        items.splice(indexToRemove, 1);
+        
+        // Clear preview
+        preview.innerHTML = '';
+        
+        // Create new FileList without removed file
+        const dt = new DataTransfer();
+        Array.from(fileInput.files).forEach((file, idx) => {
+            if (idx !== indexToRemove) {
+                dt.items.add(file);
+            }
+        });
+        fileInput.files = dt.files;
+        
+        // Restore remaining items
+        items.forEach((item, idx) => {
+            const div = createGalleryItem(item.file, item.text, idx);
+            preview.appendChild(div);
+        });
     }
 
     function removeExistingImage(button, index) {
