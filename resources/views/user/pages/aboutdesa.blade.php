@@ -141,27 +141,44 @@
             </div>
 
             <!-- Google Maps -->
-             <!-- Google Maps -->
-             <div class="w-full rounded-xl overflow-hidden shadow-lg">
-                    <div id="map" style="width:100%; height:450px;">
-                        <iframe 
-                            src="https://www.google.com/maps?q=Sumbersecang,+Kec.+Gading,+Kabupaten+Probolinggo,+Jawa+Timur&output=embed"
-                            width="100%" 
-                            height="450" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            class="w-full">
-                        </iframe>
-                    </div>
-                    <div class="bg-white p-4">
-                        <p class="text-gray-600 text-sm">
-                            <i class="fas fa-map-marked-alt text-red-500 mr-2"></i>
-                            {{ $profile->deskripsi ?? 'Luas wilayah Desa Sumber Secang adalah 486,2 hektar' }}
-                        </p>
-                    </div>
+            <div class="w-full rounded-xl overflow-hidden shadow-lg">
+                <div id="map" style="width:100%; height:450px;">
+                    @php
+                        $defaultMap = "https://www.google.com/maps?q=Sumbersecang,+Gading,+Probolinggo+Regency,+East+Java&output=embed";
+                        $mapUrl = $profile->lokasi ?? $defaultMap;
+                        
+                        // Jika URL mengandung '/place/', konversi ke format embed
+                        if (strpos($mapUrl, '/place/') !== false) {
+                            $parts = explode('/place/', $mapUrl);
+                            if (count($parts) > 1) {
+                                $location = explode('/', $parts[1])[0];
+                                $mapUrl = "https://www.google.com/maps?q=" . $location . "&output=embed";
+                            }
+                        }
+                        
+                        // Jika URL tidak mengandung 'output=embed', tambahkan parameter tersebut
+                        if (strpos($mapUrl, 'output=embed') === false) {
+                            $mapUrl .= (strpos($mapUrl, '?') !== false ? '&' : '?') . 'output=embed';
+                        }
+                    @endphp
+                    <iframe 
+                        src="{{ $mapUrl }}"
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="w-full">
+                    </iframe>
                 </div>
+                <div class="bg-white p-4">
+                    <p class="text-gray-600 text-sm">
+                        <i class="fas fa-map-marked-alt text-red-500 mr-2"></i>
+                        {{ $profile->deskripsi ?? 'Luas wilayah Desa Sumber Secang adalah 486,2 hektar' }}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
