@@ -32,19 +32,18 @@
             <div class="flex flex-col items-center justify-center py-12">
                 <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20Facing%20Up.png" 
                      alt="No Data" 
-                     class="w-64 h-64 mb-6"
+                     class="w-32 h-32 mb-4"
                 >
-                <h3 class="text-xl font-medium text-gray-900 mb-2">
-                    Data Kependudukan Kosong
+                <h3 class="text-lg font-medium text-gray-900 mb-2">
+                    No Communities yet
                 </h3>
-                <p class="text-gray-500 text-center mb-6">
-                    Belum ada data kependudukan yang tersedia. Mulai tambahkan data sekarang!
+                <p class="text-sm text-gray-500 text-center mb-4">
+                    Join or create a Community and it will show up here
                 </p>
                 @if(!Auth::guard('struktur')->check())
                     <button onclick="openAddModal()" 
-                            class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-150 ease-in-out">
-                        <i class="fas fa-plus mr-2"></i>
-                        Tambah Data Kependudukan
+                            class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Create Community
                     </button>
                 @endif
             </div>
@@ -172,7 +171,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('cms.kependudukan.store') }}" method="POST" class="p-6">
+            <form action="{{ route('cms.kependudukan.store') }}" method="POST" class="p-6" autocomplete="off">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">
@@ -180,34 +179,40 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">NIK</label>
                             <input type="text" name="nik" required pattern="[0-9]{16}" 
                                    title="NIK harus 16 digit angka"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">No KK</label>
                             <input type="text" name="no_kk" required pattern="[0-9]{16}" 
                                    title="No KK harus 16 digit angka"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
                             <input type="text" name="nama_lengkap" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
                             <input type="text" name="nomor_hp" required pattern="[0-9]{10,15}" 
                                    title="Nomor HP harus 10-15 digit angka"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir</label>
                             <input type="text" name="tempat_lahir" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
                             <input type="date" name="tanggal_lahir" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
@@ -305,7 +310,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="editForm" method="POST" class="p-6">
+            <form id="editForm" method="POST" class="p-6" autocomplete="off">
                 @csrf
                 @method('PUT')
                 <div class="grid grid-cols-2 gap-6">
@@ -315,39 +320,45 @@
                             <input type="text" name="nik" id="editNik" required 
                                    pattern="[0-9]{16}" title="NIK harus 16 digit angka"
                                    value="{{ old('nik') }}"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">No KK</label>
                             <input type="text" name="no_kk" id="editNoKK" required 
                                    pattern="[0-9]{16}" title="No KK harus 16 digit angka"
                                    value="{{ old('no_kk') }}"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
                             <input type="text" name="nama_lengkap" id="editNamaLengkap" required 
                                    value="{{ old('nama_lengkap') }}"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
                             <input type="text" name="nomor_hp" id="editNomorHP" required 
                                    pattern="[0-9]{10,15}" title="Nomor HP harus 10-15 digit angka"
                                    value="{{ old('nomor_hp') }}"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir</label>
                             <input type="text" name="tempat_lahir" id="editTempatLahir" required 
                                    value="{{ old('tempat_lahir') }}"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
                             <input type="date" name="tanggal_lahir" id="editTanggalLahir" required 
                                    value="{{ old('tanggal_lahir', isset($penduduk) ? date('Y-m-d', strtotime($penduduk->tanggal_lahir)) : '') }}"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>

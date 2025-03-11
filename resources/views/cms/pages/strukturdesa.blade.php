@@ -67,29 +67,44 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <form action="{{ route('struktur.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('struktur.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">NIK</label>
-                            <input type="text" name="nik" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="text" name="nik" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
-                            <input type="password" name="password" value="123456" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="password" name="password" value="123456" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="new-password">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor WhatsApp</label>
-                            <input type="text" name="no_wa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="text" name="no_wa" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama</label>
-                            <input type="text" name="nama" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="text" name="nama" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
-                            <select name="jabatan" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <select name="jabatan" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                                 <option value="">Pilih Jabatan</option>
                                 <option value="Kepala Desa">Kepala Desa</option>
                                 <option value="Sekretaris Desa">Sekretaris Desa</option>
@@ -107,29 +122,44 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Hak Akses</label>
-                            <select name="akses" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <select name="akses" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                                 <option value="full">Full Akses</option>
                                 <option value="view">View Only</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Mulai</label>
-                            <input type="date" name="periode_mulai" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="date" name="periode_mulai" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Akhir</label>
-                            <input type="date" name="periode_akhir" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="date" name="periode_akhir" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                            <select name="status" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <select name="status" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                                 <option value="aktif">Aktif</option>
                                 <option value="non-aktif">Non-Aktif</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Foto</label>
-                            <input type="file" name="image" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            <input type="file" name="image" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                required
+                                autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -151,30 +181,42 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
+            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
                 @csrf
                 @method('PUT')
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">NIK</label>
-                            <input type="text" name="nik" id="edit_nik" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="text" name="nik" id="edit_nik" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Password (Kosongkan jika tidak ingin mengubah)</label>
-                            <input type="password" name="password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300">
+                            <input type="password" name="password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor WhatsApp</label>
-                            <input type="text" name="no_wa" id="edit_no_wa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="text" name="no_wa" id="edit_no_wa" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama</label>
-                            <input type="text" name="nama" id="edit_nama" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="text" name="nama" id="edit_nama" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
-                            <select name="jabatan" id="edit_jabatan" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <select name="jabatan" id="edit_jabatan" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                                 <option value="">Pilih Jabatan</option>
                                 <option value="Kepala Desa">Kepala Desa</option>
                                 <option value="Sekretaris Desa">Sekretaris Desa</option>
@@ -192,22 +234,34 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Hak Akses</label>
-                            <select name="akses" id="edit_akses" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <select name="akses" id="edit_akses" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                                 <option value="full">Full Akses</option>
                                 <option value="view">View Only</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Mulai</label>
-                            <input type="date" name="periode_mulai" id="edit_periode_mulai" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="date" name="periode_mulai" id="edit_periode_mulai" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Akhir</label>
-                            <input type="date" name="periode_akhir" id="edit_periode_akhir" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <input type="date" name="periode_akhir" id="edit_periode_akhir" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                            <select name="status" id="edit_status" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                            <select name="status" id="edit_status" 
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
+                                required
+                                autocomplete="off">
                                 <option value="aktif">Aktif</option>
                                 <option value="non-aktif">Non-Aktif</option>
                             </select>
@@ -216,7 +270,7 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Saat Ini</label>
                             <img id="current_image" src="" alt="Current Image" class="w-48 h-48 object-contain bg-gray-100 rounded-lg mb-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Baru (Opsional)</label>
-                            <input type="file" name="image" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onchange="previewImage(this)">
+                            <input type="file" name="image" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onchange="previewImage(this)" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -275,4 +329,18 @@ function previewImage(input) {
     }
 }
 </script>
+
+<style>
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+</style>
 @endsection

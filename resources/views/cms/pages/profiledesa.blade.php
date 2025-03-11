@@ -107,7 +107,7 @@
                     </button>
                 </div>
                 <div class="p-6">
-                    <form action="{{ route('cms.profiledesa.update') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('cms.profiledesa.update') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                         @csrf
                         @method('PUT')
                         
@@ -120,7 +120,8 @@
                                             name="logo_image" 
                                             accept="image/*" 
                                             id="logo-input"
-                                            onchange="previewImage(this)">
+                                            onchange="previewImage(this)"
+                                            autocomplete="off">
                                     </div>
                                     @if(isset($profileDesa) && $profileDesa->logo_image)
                                         <div class="mt-2">
@@ -132,36 +133,36 @@
 
                                 <div class="mb-6">
                                     <label class="block font-bold mb-2">Judul</label>
-                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="judul" value="{{ old('judul', $profileDesa->judul ?? '') }}" required>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="judul" value="{{ old('judul', $profileDesa->judul ?? '') }}" required autocomplete="off">
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block font-bold mb-2">Synopsis</label>
-                                    <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="synopsis" rows="3">{{ old('synopsis', $profileDesa->synopsis ?? '') }}</textarea>
+                                    <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="synopsis" rows="3" autocomplete="off">{{ old('synopsis', $profileDesa->synopsis ?? '') }}</textarea>
                                 </div>
                             </div>
 
                             <div>
                                 <div class="mb-6">
                                     <label class="block font-bold mb-2">Email</label>
-                                    <input type="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="email" value="{{ old('email', $profileDesa->email ?? '') }}">
+                                    <input type="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="email" value="{{ old('email', $profileDesa->email ?? '') }}" autocomplete="off">
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block font-bold mb-2">Telepon</label>
-                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="telephone" value="{{ old('telephone', $profileDesa->telephone ?? '') }}">
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="telephone" value="{{ old('telephone', $profileDesa->telephone ?? '') }}" autocomplete="off">
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block font-bold mb-2">Tahun Berdiri</label>
-                                    <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="tahun_berdiri" value="{{ old('tahun_berdiri', $profileDesa->tahun_berdiri ?? '') }}">
+                                    <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="tahun_berdiri" value="{{ old('tahun_berdiri', $profileDesa->tahun_berdiri ?? '') }}" autocomplete="off">
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-8">
                             <label class="block font-bold mb-2">Deskripsi</label>
-                            <textarea class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 transition-all duration-200" name="deskripsi" rows="5">{{ old('deskripsi', $profileDesa->deskripsi ?? '') }}</textarea>
+                            <textarea class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 transition-all duration-200" name="deskripsi" rows="5" autocomplete="off">{{ old('deskripsi', $profileDesa->deskripsi ?? '') }}</textarea>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -171,7 +172,7 @@
                                     @if(isset($profileDesa->visi) && is_array($profileDesa->visi))
                                         @foreach($profileDesa->visi as $visi)
                                             <div class="flex gap-2 mb-2">
-                                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="visi[]" value="{{ $visi }}">
+                                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="visi[]" value="{{ $visi }}" autocomplete="off">
                                                 <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
                                                     <i class="fas fa-minus"></i>
                                                 </button>
@@ -189,7 +190,7 @@
                                     @if(isset($profileDesa->misi) && is_array($profileDesa->misi))
                                         @foreach($profileDesa->misi as $misi)
                                             <div class="flex gap-2 mb-2">
-                                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="misi[]" value="{{ $misi }}">
+                                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="misi[]" value="{{ $misi }}" autocomplete="off">
                                                 <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
                                                     <i class="fas fa-minus"></i>
                                                 </button>
@@ -205,7 +206,7 @@
 
                         <div class="mb-6">
                             <label class="block font-bold mb-2">Alamat</label>
-                            <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="alamat" rows="3">{{ old('alamat', $profileDesa->alamat ?? '') }}</textarea>
+                            <textarea class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="alamat" rows="3" autocomplete="off">{{ old('alamat', $profileDesa->alamat ?? '') }}</textarea>
                         </div>
 
                         <div class="mb-8">
@@ -214,7 +215,8 @@
                                 name="lokasi" 
                                 placeholder="Masukkan link Google Maps" 
                                 value="{{ old('lokasi', $profileDesa->lokasi ?? '') }}"
-                                onchange="handleMapsUrlChange(this.value)">
+                                onchange="handleMapsUrlChange(this.value)"
+                                autocomplete="off">
                             <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
                         </div>
 
@@ -313,7 +315,11 @@ label {
         const newField = document.createElement('div');
         newField.className = 'flex gap-2 mb-2';
         newField.innerHTML = `
-            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="${type}[]" placeholder="Masukkan ${type}...">
+            <input type="text" 
+                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" 
+                name="${type}[]" 
+                placeholder="Masukkan ${type}..."
+                autocomplete="off">
             <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
                 <i class="fas fa-minus"></i>
             </button>

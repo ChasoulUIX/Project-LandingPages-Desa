@@ -151,19 +151,22 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Heading</label>
                             <input type="text" name="heading" id="slider_heading" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                                placeholder="Masukkan heading slider">
+                                placeholder="Masukkan heading slider"
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Subheading</label>
                             <input type="text" name="subheading" id="slider_subheading" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                                placeholder="Masukkan subheading slider">
+                                placeholder="Masukkan subheading slider"
+                                autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tagline</label>
                             <textarea name="tagline" id="slider_tagline" rows="4" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                                placeholder="Masukkan tagline slider"></textarea>
+                                placeholder="Masukkan tagline slider"
+                                autocomplete="off"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>

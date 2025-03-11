@@ -53,10 +53,14 @@
                             </div>
                             <input id="email" name="email" type="text" required 
                                 class="pl-10 appearance-none block w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 
-                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base @error('email') border-red-500 @enderror"
+                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base @error('email') @enderror"
                                 value="{{ old('email') }}" placeholder="Masukkan email atau NIK Anda">
                             @error('email')
-                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @if($message == 'These credentials do not match our records.')
+                                    <p class="mt-1 text-sm text-red-500">Email atau NIK tidak terdaftar</p>
+                                @else
+                                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @endif
                             @enderror
                         </div>
                     </div>
@@ -69,10 +73,14 @@
                             </div>
                             <input id="password" name="password" type="password" required 
                                 class="pl-10 appearance-none block w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 
-                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base @error('password') border-red-500 @enderror"
+                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base @error('password') @enderror"
                                 placeholder="Masukkan password Anda">
                             @error('password')
-                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @if($message == 'These credentials do not match our records.')
+                                    <p class="mt-1 text-sm text-red-500">Password yang Anda masukkan salah</p>
+                                @else
+                                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @endif
                             @enderror
                         </div>
                     </div>
