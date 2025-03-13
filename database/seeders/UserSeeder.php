@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'email' => 'admin@gmail.com',
-                'password' => Hash::make('123'),
+                'password' => Hash::make('admin1234'),
                 'photo_profile' => null, // default null untuk photo profile
                 'email_verified_at' => now(),
                 'remember_token' => null,

@@ -31,6 +31,57 @@
         }
     </style>
     @stack('styles')
+    <script>
+        // Tambahkan fungsi untuk mengecek status response AJAX
+        function checkAuthStatus(response) {
+            if (response.status === 401 || response.status === 419) {
+                window.location.href = '/login';
+            }
+            return response;
+        }
+
+        // Override fetch untuk menangani unauthorized responses
+        const originalFetch = window.fetch;
+        window.fetch = function() {
+            return originalFetch.apply(this, arguments)
+                .then(checkAuthStatus)
+                .catch(error => {
+                    if (error.status === 401 || error.status === 419) {
+                        window.location.href = '/login';
+                    }
+                    throw error;
+                });
+        }
+
+        // Tambahkan event listener untuk axios responses
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.axios) {
+                window.axios.interceptors.response.use(
+                    response => response,
+                    error => {
+                        if (error.response && (error.response.status === 401 || error.response.status === 419)) {
+                            window.location.href = '/login';
+                        }
+                        return Promise.reject(error);
+                    }
+                );
+            }
+        });
+
+        // Cek session setiap 5 menit
+        setInterval(function() {
+            fetch('/api/check-session', {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .catch(error => {
+                if (error.status === 401 || error.status === 419) {
+                    window.location.href = '/login';
+                }
+            });
+        }, 300000); // 5 menit = 300000 ms
+    </script>
 </head>
 <body class="bg-gray-100">
     <div class="min-h-screen flex">

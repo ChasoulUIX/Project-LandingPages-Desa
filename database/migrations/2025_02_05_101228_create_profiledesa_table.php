@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('telephone')->nullable();
             $table->integer('tahun_berdiri')->nullable();
             $table->text('deskripsi')->nullable();
+            $table->string('desa')->nullable();
+            $table->string('kecamatan')->nullable();
+            $table->string('kabupaten')->nullable();
             $table->text('alamat')->nullable();
             $table->text('lokasi')->nullable();
             $table->json('visi')->nullable();

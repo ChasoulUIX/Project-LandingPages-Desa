@@ -32,7 +32,10 @@ class ProfileDesaController extends Controller
             'visi.*' => 'string',
             'misi' => 'nullable|array',
             'misi.*' => 'string',
-            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'desa' => 'nullable|string|max:255',
+            'kecamatan' => 'nullable|string|max:255',
+            'kabupaten' => 'nullable|string|max:255',
         ]);
 
         // Handle logo image upload if present
@@ -73,7 +76,10 @@ class ProfileDesaController extends Controller
             'lokasi' => 'nullable|string',
             'visi' => 'nullable|array',
             'misi' => 'nullable|array',
-            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'desa' => 'nullable|string|max:255',
+            'kecamatan' => 'nullable|string|max:255',
+            'kabupaten' => 'nullable|string|max:255',
         ]);
 
         $profileDesa = ProfileDesa::first() ?? new ProfileDesa();
@@ -97,7 +103,10 @@ class ProfileDesaController extends Controller
             'alamat' => $request->alamat,
             'lokasi' => $request->lokasi,
             'visi' => $request->visi,
-            'misi' => $request->misi
+            'misi' => $request->misi,
+            'desa' => $request->desa,
+            'kecamatan' => $request->kecamatan,
+            'kabupaten' => $request->kabupaten,
         ]);
 
         $profileDesa->save();
@@ -113,13 +122,8 @@ class ProfileDesaController extends Controller
         return view('cms.pages.sambutan', compact('sambutan'));
     }
 
-    // Method untuk user biasa yang bisa edit
     public function updateSambutan(Request $request)
     {
-        if (Auth::guard('struktur')->check()) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah data');
-        }
-
         $validated = $request->validate([
             'judul' => 'required',
             'isi' => 'required',
@@ -131,10 +135,6 @@ class ProfileDesaController extends Controller
 
     public function updateProfile(Request $request)
     {
-        if (Auth::guard('struktur')->check()) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah data');
-        }
-
         $validated = $request->validate([
             'nama_desa' => 'required',
             'deskripsi' => 'required',

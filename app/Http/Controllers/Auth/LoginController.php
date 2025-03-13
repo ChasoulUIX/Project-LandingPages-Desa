@@ -49,29 +49,29 @@ class LoginController extends Controller
         $struktur = \App\Models\Struktur::where('nik', $request->email)->first();
 
         if ($struktur) {
-            // Cek apakah jabatan adalah Operator Desa
-            if ($struktur->jabatan !== 'Operator Desa') {
-                throw ValidationException::withMessages([
-                    'email' => ['Hanya Operator Desa yang diizinkan untuk login menggunakan NIK.'],
-                ]);
-            }
+            // Cek apakah jabatan adalah Operator Desa dan akses adalah full
+            if ($struktur->jabatan === 'Operator Desa' && $struktur->akses === 'full') {
+                if (password_verify($request->password, $struktur->password)) {
+                    // Check if all required fields are filled
+                    $requiredFields = ['nama', 'jabatan', 'no_wa', 'akses', 'periode_mulai', 'periode_akhir', 'status', 'image'];
+                    $isComplete = !collect($requiredFields)->contains(function ($field) use ($struktur) {
+                        return empty($struktur->$field);
+                    });
 
-            if (password_verify($request->password, $struktur->password)) {
-                // Check if all required fields are filled
-                $requiredFields = ['nama', 'jabatan', 'no_wa', 'akses', 'periode_mulai', 'periode_akhir', 'status', 'image'];
-                $isComplete = !collect($requiredFields)->contains(function ($field) use ($struktur) {
-                    return empty($struktur->$field);
-                });
+                    // Login the Struktur user using struktur guard
+                    Auth::guard('struktur')->login($struktur);
+                    $request->session()->regenerate();
 
-                // Login the Struktur user using struktur guard
-                Auth::guard('struktur')->login($struktur);
-                $request->session()->regenerate();
-
-                if ($isComplete) {
-                    return redirect()->intended('/cms/app/dashboard');
-                } else {
-                    return redirect()->route('profile.edit')->with('warning', 'Silakan lengkapi data profil Anda terlebih dahulu.');
+                    if ($isComplete) {
+                        return redirect()->intended('/cms/app/dashboard');
+                    } else {
+                        return redirect()->route('profile.edit')->with('warning', 'Silakan lengkapi data profil Anda terlebih dahulu.');
+                    }
                 }
+            } else {
+                throw ValidationException::withMessages([
+                    'email' => ['Akses tidak diizinkan. Hanya Operator Desa dengan akses penuh yang dapat login.'],
+                ]);
             }
         }
 

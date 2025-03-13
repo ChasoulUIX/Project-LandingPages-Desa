@@ -24,6 +24,11 @@
                         <div>
                             <p class="text-gray-600"><i class="fas fa-envelope mr-2"></i> {{ $profileDesa->email ?? '-' }}</p>
                             <p class="text-gray-600"><i class="fas fa-phone mr-2"></i> {{ $profileDesa->telephone ?? '-' }}</p>
+                            <p class="text-gray-600"><i class="fas fa-map mr-2"></i> 
+                                {{ $profileDesa->desa ?? '-' }}, 
+                                {{ $profileDesa->kecamatan ?? '-' }}, 
+                                {{ $profileDesa->kabupaten ?? '-' }}
+                            </p>
                         </div>
                         <div>
                             <p class="text-gray-600"><i class="fas fa-calendar mr-2"></i> Berdiri: {{ $profileDesa->tahun_berdiri ?? '-' }}</p>
@@ -48,7 +53,9 @@
                 </div>
             </div>
 
-            <div class="mt-8">
+            <hr class="my-8 border-gray-200">
+
+            <div>
                 <div class="grid grid-cols-2 gap-8">
                     <div>
                         <h3 class="text-lg font-semibold mb-3">Visi</h3>
@@ -77,17 +84,23 @@
                 </div>
             </div>
 
-            <div class="mt-8">
+            <hr class="my-8 border-gray-200">
+
+            <div>
                 <h3 class="text-lg font-semibold mb-3">Deskripsi</h3>
                 <p class="text-gray-600">{{ $profileDesa->deskripsi ?? '-' }}</p>
             </div>
 
-            <div class="mt-8">
+            <hr class="my-8 border-gray-200">
+
+            <div>
                 <h3 class="text-lg font-semibold mb-3">Alamat</h3>
                 <p class="text-gray-600">{{ $profileDesa->alamat ?? '-' }}</p>
             </div>
 
-            <div class="mt-8">
+            <hr class="my-8 border-gray-200">
+
+            <div>
                 <h3 class="text-lg font-semibold mb-3">Lokasi</h3>
                 <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
             </div>
@@ -156,6 +169,33 @@
                                 <div class="mb-6">
                                     <label class="block font-bold mb-2">Tahun Berdiri</label>
                                     <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" name="tahun_berdiri" value="{{ old('tahun_berdiri', $profileDesa->tahun_berdiri ?? '') }}" autocomplete="off">
+                                </div>
+
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Desa</label>
+                                    <input type="text" 
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" 
+                                        name="desa" 
+                                        value="{{ old('desa', $profileDesa->desa ?? '') }}" 
+                                        autocomplete="off">
+                                </div>
+
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Kecamatan</label>
+                                    <input type="text" 
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" 
+                                        name="kecamatan" 
+                                        value="{{ old('kecamatan', $profileDesa->kecamatan ?? '') }}" 
+                                        autocomplete="off">
+                                </div>
+
+                                <div class="mb-6">
+                                    <label class="block font-bold mb-2">Kabupaten</label>
+                                    <input type="text" 
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" 
+                                        name="kabupaten" 
+                                        value="{{ old('kabupaten', $profileDesa->kabupaten ?? '') }}" 
+                                        autocomplete="off">
                                 </div>
                             </div>
                         </div>

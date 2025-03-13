@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Storage;
 
 class SambutanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (auth()->guard('web')->check() || 
+                (auth()->guard('struktur')->check() && 
+                 auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && 
+                 auth()->guard('struktur')->user()->akses === 'full')) {
+                return $next($request);
+            }
+            return redirect()->back()->with('error', 'Unauthorized access');
+        })->except(['index', 'show']);
+    }
+
     public function index()
     {
         // Ambil data sambutan yang ada, atau buat data default jika belum ada

@@ -23,6 +23,9 @@ class ProfileDesa extends Model
         'visi',
         'misi',
         'logo_image',
+        'desa',
+        'kecamatan',
+        'kabupaten'
     ];
 
     protected $casts = [

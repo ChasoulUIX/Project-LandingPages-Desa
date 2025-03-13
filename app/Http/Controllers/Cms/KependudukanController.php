@@ -22,10 +22,6 @@ class KependudukanController extends Controller
 
     public function store(Request $request)
     {
-        // Hanya user biasa yang bisa menambah data
-        if (Auth::guard('struktur')->check()) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk menambah data');
-        }
 
         try {
             $validated = $request->validate([
@@ -94,10 +90,7 @@ class KependudukanController extends Controller
 
     public function update(Request $request, $nik)
     {
-        // Hanya user biasa yang bisa mengubah data
-        if (Auth::guard('struktur')->check()) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengubah data');
-        }
+       
 
         try {
             $penduduk = Kependudukan::where('nik', $nik)->first();

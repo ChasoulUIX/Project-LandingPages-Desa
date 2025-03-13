@@ -122,10 +122,6 @@ class CmsBeritaController extends Controller
 
     public function destroy($id)
     {
-        if (Auth::guard('struktur')->check()) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk menghapus berita');
-        }
-
         $berita = Berita::findOrFail($id);
         
         // Hapus gambar jika ada

@@ -30,6 +30,7 @@ use App\Http\Controllers\Cms\DanaController;
 use App\Http\Controllers\Cms\CmsDomisiliController;
 use App\Http\Controllers\Cms\StrukturProfileController;
 use App\Http\Controllers\Cms\CmsHeroSliderController;
+use Illuminate\Support\Facades\Auth;
 
 // Auth
 // ... existing code ...
@@ -384,4 +385,11 @@ Route::prefix('cms')->middleware(['auth'])->group(function () {
     Route::get('/sliders/{slider}/edit', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'edit'])->name('sliders.edit');
     Route::put('/sliders/{slider}', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'update'])->name('sliders.update');
     Route::delete('/sliders/{slider}', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'destroy'])->name('sliders.destroy');
+});
+
+Route::get('/api/check-session', function () {
+    if (!Auth::check() && !Auth::guard('struktur')->check()) {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+    return response()->json(['message' => 'Authenticated']);
 });
