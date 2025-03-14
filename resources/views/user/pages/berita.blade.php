@@ -19,7 +19,9 @@
                             <span>{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}</span>
                         </div>
                         <h3 class="text-xl font-semibold text-blue-900 mb-3 truncate">{{ $item->judul }}</h3>
-                        <p class="text-gray-600 mb-4 flex-grow line-clamp-3">{{ $item->konten }}</p>
+                        <div class="text-gray-600 mb-4 flex-grow line-clamp-3 prose">
+                            {!! Str::limit($item->konten, 200) !!}
+                        </div>
                         <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 mt-auto">
                             <span>Baca selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>

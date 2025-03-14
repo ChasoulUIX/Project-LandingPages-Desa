@@ -10,54 +10,60 @@
         <form method="POST" action="{{ route('dana.store') }}" class="space-y-6" enctype="multipart/form-data">
             @csrf
             
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Anggaran</label>
-                <input type="number" name="tahun_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="space-y-6"> <!-- Left Column -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Anggaran</label>
+                        <input type="number" name="tahun_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Sumber Anggaran</label>
+                        <select name="sumber_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Pilih Sumber Anggaran</option>
+                            <option value="DANA DESA (DD)">DANA DESA (DD)</option>
+                            <option value="ALOKASI DANA DESA (ADD)">ALOKASI DANA DESA (ADD)</option>
+                            <option value="Pendapatan Asli Daerah (PAD)">Pendapatan Asli Daerah (PAD)</option>
+                            <option value="BK PROVINSI">BK PROVINSI</option>
+                            <option value="BK KABUPATEN/KOTA">BK KABUPATEN/KOTA</option>
+                            <option value="Pendapatan Asli Desa (PADes)">Pendapatan Asli Desa (PADes)</option>
+                            <option value="HIBAH">HIBAH</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nominal</label>
+                        <input type="text" id="nominal_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                        <input type="hidden" name="nominal" id="nominal_actual">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pencairan</label>
+                        <input type="date" name="tgl_pencairan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                </div>
+
+                <div class="space-y-6"> <!-- Right Column -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status Pencairan (%)</label>
+                        <input type="number" name="status_pencairan" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required readonly>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dana Masuk</label>
+                        <input type="text" id="dana_masuk_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                        <input type="hidden" name="dana_masuk" id="dana_masuk_actual">
+                    </div>
+
+                    <div class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dana Terpakai</label>
+                        <input type="text" id="dana_terpakai_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" value="Rp 0" readonly>
+                        <input type="hidden" name="dana_terpakai" id="dana_terpakai_actual" value="0">
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Sumber Anggaran</label>
-                <select name="sumber_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-                    <option value="">Pilih Sumber Anggaran</option>
-                    <option value="DANA DESA (DD)">DANA DESA (DD)</option>
-                    <option value="ALOKASI DANA DESA (ADD)">ALOKASI DANA DESA (ADD)</option>
-                    <option value="Pendapatan Asli Daerah (PAD)">Pendapatan Asli Daerah (PAD)</option>
-                    <option value="BK PROVINSI">BK PROVINSI</option>
-                    <option value="BK KABUPATEN/KOTA">BK KABUPATEN/KOTA</option>
-                    <option value="Pendapatan Asli Desa (PADes)">Pendapatan Asli Desa (PADes)</option>
-                    <option value="HIBAH">HIBAH</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Nominal</label>
-                <input type="text" id="nominal_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-                <input type="hidden" name="nominal" id="nominal_actual">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pencairan</label>
-                <input type="date" name="tgl_pencairan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status Pencairan (%)</label>
-                <input type="number" name="status_pencairan" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required readonly>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Dana Masuk</label>
-                <input type="text" id="dana_masuk_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-                <input type="hidden" name="dana_masuk" id="dana_masuk_actual">
-            </div>
-
-            <div class="hidden">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Dana Terpakai</label>
-                <input type="text" id="dana_terpakai_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" value="Rp 0" readonly>
-                <input type="hidden" name="dana_terpakai" id="dana_terpakai_actual" value="0">
-            </div>
-
-            <div>
+            <div class="mt-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Foto Dokumentasi</label>
                 <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                     <div class="space-y-1 text-center">
@@ -77,7 +83,7 @@
                 <div id="image-preview" class="grid grid-cols-2 gap-4 mt-4"></div>
             </div>
 
-            <div class="flex justify-end space-x-3">
+            <div class="flex justify-end space-x-3 mt-6">
                 <a href="{{ route('dana.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
                     Batal
                 </a>

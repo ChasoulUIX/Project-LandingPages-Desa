@@ -35,15 +35,15 @@
                      class="w-32 h-32 mb-4"
                 >
                 <h3 class="text-lg font-medium text-gray-900 mb-2">
-                    No Communities yet
+                   Tidak ada data kependudukan
                 </h3>
                 <p class="text-sm text-gray-500 text-center mb-4">
-                    Join or create a Community and it will show up here
+                    Mulai tambahkan data sekarang
                 </p>
                 @if(!Auth::guard('struktur')->check())
                     <button onclick="openAddModal()" 
                             class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Create Community
+                        Tambah Data
                     </button>
                 @endif
             </div>

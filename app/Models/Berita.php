@@ -14,4 +14,9 @@ class Berita extends Model
         'image',
         'tanggal'
     ];
+
+    // Jika menggunakan Laravel Purifier, tambahkan:
+    protected $purify = [
+        'konten'
+    ];
 }

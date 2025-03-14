@@ -198,7 +198,7 @@
     </div>
 
     <!-- Modal Edit -->
-    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50 items-center justify-center">
+    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50 items-center justify-center" style="display: none;">
         <div class="relative p-8 border w-full max-w-4xl shadow-xl rounded-lg bg-white">
             <!-- Header -->
             <div class="absolute top-0 right-0 pt-4 pr-4">
@@ -248,12 +248,14 @@
                             <div class="flex items-center space-x-4">
                                 <input type="number" id="editStatusPencairan" name="status_pencairan" 
                                        min="0" max="100" step="1"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       class="w-24 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       value="{{ old('status_pencairan', $dana->status_pencairan ?? 0) }}"
                                        readonly>
-                                <div class="w-32">
-                                    <div class="overflow-hidden h-2 text-xs flex rounded bg-blue-200">
-                                        <div id="editStatusBar" style="width: 0%" 
-                                             class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500">
+                                <div class="flex-1">
+                                    <div class="overflow-hidden h-2.5 text-xs flex rounded bg-blue-200">
+                                        <div id="editStatusBar" 
+                                             style="width: {{ old('status_pencairan', $dana->status_pencairan ?? 0) }}%" 
+                                             class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-300">
                                         </div>
                                     </div>
                                 </div>
@@ -345,32 +347,33 @@ function openEditModal(id) {
 
     // Set form values
     document.getElementById('editId').value = id;
-    document.getElementById('editTahun').value = row.cells[0].textContent.trim();
-    document.getElementById('editSumber').value = row.cells[1].textContent.trim();
-    document.getElementById('editTglPencairan').value = row.cells[3].textContent.trim();
+    document.getElementById('editSumber').value = row.cells[0].textContent.trim();
+    document.getElementById('editNominal').value = row.cells[1].textContent.trim();
+    document.getElementById('editTglPencairan').value = row.cells[2].textContent.trim();
     
-    // Handle status pencairan - Get the percentage value directly from the progress bar width
-    const statusBar = row.cells[4].querySelector('.bg-blue-500');
-    const statusValue = statusBar.style.width.replace('%', '');
+    // Perbaikan pengambilan status pencairan
+    const statusText = row.cells[3].querySelector('.text-sm').textContent.replace('%', '').trim();
+    const statusValue = parseInt(statusText);
     
-    // Update both the input and visual progress bar
-    const editStatusInput = document.getElementById('editStatusPencairan');
-    const editStatusBar = document.getElementById('editStatusBar');
+    // Set nilai status pencairan dan progress bar
+    document.getElementById('editStatusPencairan').value = statusValue;
+    document.getElementById('editStatusBar').style.width = `${statusValue}%`;
     
-    editStatusInput.value = statusValue;
-    editStatusBar.style.width = `${statusValue}%`;
-
-    // Format nominal fields
-    const nominal = row.cells[2].textContent.replace(/[^\d]/g, '');
-    const danaMasuk = row.cells[5].textContent.replace(/[^\d]/g, '');
-    const danaTerpakai = row.cells[6].textContent.replace(/[^\d]/g, '');
-
-    document.getElementById('editNominal').value = formatRupiahValue(nominal);
-    document.getElementById('editDanaMasuk').value = formatRupiahValue(danaMasuk);
-    document.getElementById('editDanaTerpakai').value = formatRupiahValue(danaTerpakai);
+    document.getElementById('editDanaMasuk').value = row.cells[4].textContent.trim();
+    document.getElementById('editDanaTerpakai').value = row.cells[5].textContent.trim();
+    
+    // Get tahun from the current filter
+    const tahunFilter = document.getElementById('tahunFilter');
+    document.getElementById('editTahun').value = tahunFilter.value;
     
     // Show modal
-    document.getElementById('editModal').classList.remove('hidden');
+    const modal = document.getElementById('editModal');
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+
+    // Debug log untuk memastikan nilai diambil dengan benar
+    console.log('Status Value:', statusValue);
+    console.log('Status Text:', statusText);
 }
 
 // Helper function to format value to Rupiah

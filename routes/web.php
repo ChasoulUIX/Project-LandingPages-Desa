@@ -147,8 +147,8 @@ Route::middleware(['auth'])->prefix('cms')->name('cms.')->group(function () {
     Route::resource('kegiatan', CmsKegiatanController::class);
 });
 
-Route::prefix('cms')->group(function () {
-    Route::resource('berita', CmsBeritaController::class);
+Route::prefix('cms')->name('cms.')->group(function () {
+    Route::post('/berita', [CmsBeritaController::class, 'store'])->name('berita.store');
 });
 
 Route::middleware(['auth'])->prefix('cms')->group(function () {
@@ -392,4 +392,8 @@ Route::get('/api/check-session', function () {
         return response()->json(['message' => 'Unauthorized'], 401);
     }
     return response()->json(['message' => 'Authenticated']);
+});
+
+Route::prefix('cms')->group(function () {
+    Route::get('/berita/edit/{id}', [CmsBeritaController::class, 'edit'])->name('cms.berita.edit');
 });

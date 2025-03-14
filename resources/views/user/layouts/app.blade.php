@@ -69,7 +69,7 @@
                                 {{ $profileDesa ? $profileDesa->judul : 'Desa Sumber Secang' }}
                             </div>
                             <div class="text-blue-200 text-xs">
-                                {{ $profileDesa ? $profileDesa->synopsis : 'Sistem Informasi Desa Digital' }}
+                                {{ $profileDesa ? "Desa " . $profileDesa->desa . ", Kabupaten " . $profileDesa->kabupaten : 'Sistem Informasi Desa Digital' }}
                             </div>
                         </div>
                     </div>

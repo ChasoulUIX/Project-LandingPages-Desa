@@ -28,7 +28,9 @@
                             <tr class="text-gray-700" data-id="{{ $item->id }}">
                                 <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->tanggal }}</td>
                                 <td class="px-3 py-2 md:px-6 md:py-4">{{ $item->judul }}</td>
-                                <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->konten, 100) }}</td>
+                                <td class="px-3 py-2 md:px-6 md:py-4">
+                                    {!! Str::limit($item->konten, 100) !!}
+                                </td>
                                 <td class="px-3 py-2 md:px-6 md:py-4">
                                     <button onclick="showPhotosModal(['{{ $item->image }}'])" 
                                             class="text-blue-500 hover:text-blue-700 flex items-center">
@@ -80,88 +82,83 @@
     </div>
 
     <!-- Add Modal -->
-    <div id="addModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg w-full max-w-md mx-4">
-            <div class="flex justify-between items-center p-6 border-b">
-                <h3 class="text-lg font-semibold">Tambah Berita Baru</h3>
+    <div id="addModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white w-full h-full overflow-y-auto">
+            <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
+                <h3 class="text-xl font-semibold">Tambah Berita Baru</h3>
                 <button onclick="closeAddModal()" class="text-gray-600 hover:text-gray-800">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="addForm" action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form id="addForm" method="POST" action="{{ route('cms.berita.store') }}" enctype="multipart/form-data" class="p-6 max-w-5xl mx-auto">
                 @csrf
-                <div class="space-y-4">
+                <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
                         <input type="text" name="judul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Konten</label>
-                        <textarea name="konten" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea name="konten" id="addKonten" class="w-full"></textarea>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                        <input type="file" name="image" required accept="image/*" class="w-full">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
+                            <input type="file" name="image" required accept="image/*" class="w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                            <input type="date" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                        <input type="date" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="sticky bottom-0 bg-white py-4 border-t">
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg">
+                            Simpan Berita
+                        </button>
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
-                        Simpan Berita
-                    </button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Edit Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg w-full max-w-4xl mx-4">
-            <div class="flex justify-between items-center p-6 border-b">
-                <h3 class="text-lg font-semibold">Edit Berita</h3>
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white w-full h-full overflow-y-auto">
+            <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
+                <h3 class="text-xl font-semibold">Edit Berita</h3>
                 <button onclick="closeEditModal()" class="text-gray-600 hover:text-gray-800">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
+            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6 max-w-5xl mx-auto">
                 @csrf
                 @method('PUT')
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Left Column -->
-                    <div class="space-y-4">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
+                        <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Konten</label>
+                        <textarea name="konten" id="editKonten" required></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
-                            <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Konten</label>
-                            <textarea name="konten" id="editKonten" rows="8" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini</label>
+                            <img id="currentImage" src="" alt="Current Image" class="w-full h-64 object-contain bg-gray-100 rounded-lg mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
+                            <input type="file" name="image" accept="image/*" class="w-full">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
                             <input type="date" name="tanggal" id="editTanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
-                    
-                    <!-- Right Column -->
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini</label>
-                            <div class="mb-4">
-                                <img id="currentImage" src="" alt="Current Image" class="w-full h-64 object-contain bg-gray-100 rounded-lg">
-                            </div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
-                            <input type="file" name="image" accept="image/*" class="w-full">
-                        </div>
+                    <div class="sticky bottom-0 bg-white py-4 border-t">
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg">
+                            Update Berita
+                        </button>
                     </div>
-                </div>
-                
-                <!-- Submit Button - Full Width -->
-                <div class="mt-6">
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
-                        Update Berita
-                    </button>
                 </div>
             </form>
         </div>
@@ -185,24 +182,128 @@
     </div>
 </div>
 
+@if ($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
 <script>
+// Add this at the beginning of your script
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.log('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+    return false;
+};
+
+// Inisialisasi TinyMCE dengan konfigurasi sederhana
+function initEditor() {
+    tinymce.init({
+        selector: '#addKonten',
+        height: 400,
+        menubar: false,
+        plugins: [
+            'lists', 'link', 'image', 'code'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image | code',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+    });
+}
+
+// Fungsi untuk membuka modal
 function openAddModal() {
     document.getElementById('addModal').classList.remove('hidden');
     document.getElementById('addModal').classList.add('flex');
+    initEditor();
 }
 
+// Fungsi untuk menutup modal
 function closeAddModal() {
+    if (tinymce.get('addKonten')) {
+        tinymce.get('addKonten').remove();
+    }
     document.getElementById('addModal').classList.add('hidden');
     document.getElementById('addModal').classList.remove('flex');
 }
 
+// Handle form submission
+document.getElementById('addForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    
+    // Get TinyMCE content
+    if (tinymce.get('addKonten')) {
+        formData.set('konten', tinymce.get('addKonten').getContent());
+    }
+    
+    // Submit form
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Berita berhasil disimpan!');
+            window.location.reload();
+        } else {
+            throw new Error(data.message || 'Terjadi kesalahan saat menyimpan berita');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan: ' + error.message);
+    });
+});
+
+// Inisialisasi TinyMCE untuk form edit
+function initEditEditor() {
+    tinymce.init({
+        selector: '#editKonten',
+        height: 400,
+        menubar: false,
+        plugins: [
+            'lists', 'link', 'image', 'code'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image | code',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+    });
+}
+
 function openEditModal(id) {
-    fetch(`/cms/berita/${id}/edit`)
-        .then(response => response.json())
+    // Inisialisasi editor terlebih dahulu
+    initEditEditor();
+    
+    fetch(`/cms/berita/edit/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Received data:', data); // Debug log
             document.getElementById('editJudul').value = data.judul;
-            document.getElementById('editKonten').value = data.konten;
+            // Tunggu editor selesai diinisialisasi
+            setTimeout(() => {
+                if (tinymce.get('editKonten')) {
+                    tinymce.get('editKonten').setContent(data.konten);
+                } else {
+                    console.error('TinyMCE editor not initialized');
+                }
+            }, 500);
             document.getElementById('editTanggal').value = data.tanggal;
+            // Ubah path image sesuai dengan lokasi di public/images
             document.getElementById('currentImage').src = `/images/${data.image}`;
             document.getElementById('editForm').action = `/cms/berita/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
@@ -210,27 +311,28 @@ function openEditModal(id) {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat mengambil data berita');
+            alert('Terjadi kesalahan saat mengambil data berita: ' + error.message);
         });
 }
 
 function closeEditModal() {
+    // Hapus instance TinyMCE saat modal ditutup
+    if (tinymce.get('editKonten')) {
+        tinymce.get('editKonten').remove();
+    }
     document.getElementById('editModal').classList.add('hidden');
     document.getElementById('editModal').classList.remove('flex');
 }
 
-// Add these new functions for photo modal
 function showPhotosModal(photos) {
     const modal = document.getElementById('photosModal');
     const container = document.getElementById('photosContainer');
     
-    // Clear previous photos
     container.innerHTML = '';
     
-    // Add photos to the modal
     photos.forEach(photo => {
         const photoDiv = document.createElement('div');
-        photoDiv.className = 'relative pt-[100%]'; // Create 1:1 aspect ratio container
+        photoDiv.className = 'relative pt-[100%]';
         photoDiv.innerHTML = `
             <div class="absolute inset-0 p-1">
                 <img src="/images/${photo}" 
@@ -242,7 +344,6 @@ function showPhotosModal(photos) {
         container.appendChild(photoDiv);
     });
     
-    // Show modal
     modal.classList.remove('hidden');
 }
 
@@ -250,70 +351,45 @@ function closePhotosModal() {
     document.getElementById('photosModal').classList.add('hidden');
 }
 
-// Close modal when clicking outside
 document.getElementById('photosModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closePhotosModal();
     }
 });
 
-document.getElementById('addForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    
-    fetch(this.action, {
-        method: 'POST',
-        body: formData,
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        } else {
-            alert(data.message || 'Terjadi kesalahan saat menyimpan berita');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan berita: ' + error.message);
+function initializeTinyMCE(selector) {
+    return tinymce.init({
+        selector: selector,
+        height: 400,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+        formats: {
+            bold: { inline: 'strong' },
+            italic: { inline: 'em' },
+            underline: { inline: 'u' },
+            strikethrough: { inline: 'strike' }
+        },
+        cleanup: false,
+        verify_html: false,
+        valid_elements: '*[*]', // Izinkan semua elemen HTML
+        extended_valid_elements: '*[*]', // Izinkan semua atribut
+        promotion: false,
+        branding: false
     });
-});
+}
 
-// Add event listener for edit form submission
-document.getElementById('editForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    
-    fetch(this.action, {
-        method: 'POST', // Laravel akan menangani method PUT melalui _method field
-        body: formData,
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        } else {
-            alert(data.message || 'Terjadi kesalahan saat mengupdate berita');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengupdate berita: ' + error.message);
-    });
+// Tambahkan event listener untuk debugging
+window.addEventListener('load', function() {
+    console.log('Form action:', document.getElementById('addForm').action);
+    console.log('CSRF token:', document.querySelector('meta[name="csrf-token"]')?.content);
 });
 </script>
 @endsection
