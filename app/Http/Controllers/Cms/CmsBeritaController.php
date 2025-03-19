@@ -20,30 +20,28 @@ class CmsBeritaController extends Controller
     public function store(Request $request)
     {
         try {
-            \Log::info('Received request data:', $request->all());
-            
+
+
             $validated = $request->validate([
                 'judul' => 'required|string|max:255',
                 'konten' => 'required|string',
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'tanggal' => 'required|date',
             ]);
-            
-            \Log::info('Validation passed');
+
+
 
             if (!$request->hasFile('image')) {
-                \Log::error('No image file found in request');
+
                 throw new \Exception('File gambar tidak ditemukan');
             }
 
             $imageName = time().'.'.$request->image->extension();
-            \Log::info('Image name generated:', ['name' => $imageName]);
-            
+
+
             try {
                 $request->image->move(public_path('images'), $imageName);
-                \Log::info('Image moved successfully');
             } catch (\Exception $e) {
-                \Log::error('Error moving image:', ['error' => $e->getMessage()]);
                 throw new \Exception('Gagal mengupload gambar: ' . $e->getMessage());
             }
 
@@ -54,8 +52,7 @@ class CmsBeritaController extends Controller
                 'image' => $imageName,
                 'tanggal' => $validated['tanggal'],
             ]);
-            
-            \Log::info('Berita created successfully:', ['id' => $berita->id]);
+
 
             return response()->json([
                 'success' => true,
@@ -63,11 +60,7 @@ class CmsBeritaController extends Controller
                 'data' => $berita
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error in store method:', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
@@ -97,7 +90,7 @@ class CmsBeritaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            \Log::info('Received berita update request', $request->all());
+            
 
             $berita = Berita::findOrFail($id);
 
@@ -131,7 +124,6 @@ class CmsBeritaController extends Controller
 
             $berita->update($updateData);
 
-            \Log::info('Berita updated successfully', ['berita_id' => $berita->id]);
 
             return response()->json([
                 'success' => true,
@@ -139,8 +131,7 @@ class CmsBeritaController extends Controller
                 'data' => $berita
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error updating berita: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
@@ -151,7 +142,7 @@ class CmsBeritaController extends Controller
     public function destroy($id)
     {
         $berita = Berita::findOrFail($id);
-        
+
         // Hapus gambar jika ada
         if ($berita->image) {
             $imagePath = public_path('images/' . $berita->image);
@@ -159,7 +150,7 @@ class CmsBeritaController extends Controller
                 unlink($imagePath);
             }
         }
-        
+
         $berita->delete();
 
         return redirect()->route('cms.berita.index')

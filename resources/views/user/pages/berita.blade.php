@@ -22,7 +22,7 @@
                         <div class="text-gray-600 mb-4 flex-grow line-clamp-3 prose">
                             {!! Str::limit($item->konten, 200) !!}
                         </div>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 mt-auto">
+                        <a href="#" onclick="openModal('{{ $item->image }}', '{{ $item->judul }}', '{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}', `{!! $item->konten !!}`)" class="text-blue-600 hover:text-blue-800 flex items-center space-x-2 mt-auto">
                             <span>Baca selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -47,4 +47,47 @@
             </div>
         </div>
     </main>
+
+    <!-- Full Screen Modal -->
+    <div id="newsModal" class="fixed inset-0 bg-white hidden z-50 overflow-y-auto">
+        <div class="min-h-screen">
+            <!-- Header with close button -->
+            <div class="fixed top-0 left-0 right-0 bg-white z-10 shadow-md">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                    <h1 class="text-xl font-bold text-blue-900">Detail Berita</h1>
+                    <button onclick="closeModal()" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+                <img id="modalImage" src="" alt="" class="w-full h-[500px] object-cover rounded-lg mb-6">
+                <div class="flex items-center text-gray-500 text-sm mb-4">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span id="modalDate"></span>
+                </div>
+                <h2 id="modalTitle" class="text-4xl font-bold text-blue-900 mb-6"></h2>
+                <div id="modalContent" class="prose max-w-none text-gray-700 text-lg"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(image, judul, tanggal, konten) {
+            document.getElementById('modalImage').src = `/images/${image}`;
+            document.getElementById('modalImage').alt = judul;
+            document.getElementById('modalTitle').textContent = judul;
+            document.getElementById('modalDate').textContent = tanggal;
+            document.getElementById('modalContent').innerHTML = konten;
+            document.getElementById('newsModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('newsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
 @endsection

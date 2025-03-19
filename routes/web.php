@@ -143,15 +143,20 @@ Route::get('/cms/app/dashboard', function () {
 });
 
 //pages
-Route::middleware(['auth'])->prefix('cms')->name('cms.')->group(function () {
-    Route::resource('kegiatan', CmsKegiatanController::class);
+Route::prefix('cms')->middleware(['auth:web,struktur'])->name('cms.')->group(function () {
+    // Kegiatan Routes
+    Route::get('/kegiatan', [CmsKegiatanController::class, 'index'])->name('kegiatan.index');
+    Route::post('/kegiatan', [CmsKegiatanController::class, 'store'])->name('kegiatan.store');
+    Route::get('/kegiatan/{id}/edit', [CmsKegiatanController::class, 'edit'])->name('kegiatan.edit');
+    Route::put('/kegiatan/{id}', [CmsKegiatanController::class, 'update'])->name('kegiatan.update');
+    Route::delete('/kegiatan/{id}', [CmsKegiatanController::class, 'destroy'])->name('kegiatan.destroy');
 });
 
 Route::prefix('cms')->name('cms.')->group(function () {
     Route::post('/berita', [CmsBeritaController::class, 'store'])->name('berita.store');
 });
 
-Route::middleware(['auth'])->prefix('cms')->group(function () {
+Route::prefix('cms')->middleware(['auth:web,struktur'])->group(function () {
     // Produk Routes
     Route::get('/produk', [CmsProdukController::class, 'index'])->name('cms.produk.index');
     Route::post('/produk', [CmsProdukController::class, 'store'])->name('cms.produk.store');
@@ -188,7 +193,7 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     // Route untuk surat KTP
     Route::get('/suratketerangan/ktp', [CmsSuratKtpController::class, 'ktp'])
         ->name('suratketerangan.ktp');
-    
+
     Route::put('/suratketerangan/ktp/{id}/update-status', [CmsSuratKtpController::class, 'updateStatus'])
         ->name('cms.ktp.update-status');
 });
@@ -197,7 +202,7 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
     // Route untuk surat kelahiran
     Route::get('/suratketerangan/kelahiran', [CmsSuratKelahiranController::class, 'kelahiran'])
         ->name('suratketerangan.kelahiran');
-    
+
     Route::put('/suratketerangan/kelahiran/{id}/update-status', [CmsSuratKelahiranController::class, 'updateStatus'])
         ->name('cms.kelahiran.update-status');
 });
@@ -228,7 +233,7 @@ Route::get('/cms/app/kependudukan', function () {
     return view('cms.pages.kependudukan');
 });
 
-Route::prefix('cms')->name('cms.')->middleware(['auth'])->group(function () {
+Route::middleware(['auth:web,struktur'])->prefix('cms')->name('cms.')->group(function () {
     Route::resource('kependudukan', KependudukanController::class);
     Route::get('/kependudukan/{nik}/edit', [KependudukanController::class, 'edit'])
         ->name('kependudukan.edit');
@@ -240,7 +245,7 @@ Route::get('/cms/dana', function () {
     return view('cms.pages.dana');
 });
 
-Route::prefix('cms')->middleware(['auth'])->group(function () {
+Route::middleware(['auth:web,struktur'])->prefix('cms')->group(function () {
     Route::controller(DanaDesaController::class)->group(function () {
         Route::get('/dana', 'index')->name('dana.index');
         Route::get('/dana/create', 'create')->name('dana.create');
@@ -251,7 +256,7 @@ Route::prefix('cms')->middleware(['auth'])->group(function () {
     });
 });
 
-Route::middleware(['auth'])->prefix('cms')->group(function () {
+Route::middleware(['auth:web,struktur'])->prefix('cms')->group(function () {
     Route::get('/sambutan', [SambutanController::class, 'index'])->name('cms.sambutan.index');
     Route::get('/sambutan/{id}/edit', [SambutanController::class, 'edit'])->name('sambutan.edit');
     Route::put('/sambutan/{id}', [SambutanController::class, 'update'])->name('sambutan.update');
@@ -263,13 +268,13 @@ Route::middleware(['auth'])->prefix('cms')->group(function () {
         ->name('cms.tidakmampu.update-status');
 });
 
-Route::middleware(['auth'])->prefix('cms')->group(function () {
+Route::middleware(['auth:web,struktur'])->prefix('cms')->group(function () {
     Route::get('/profile-desa', [ProfileDesaController::class, 'index'])->name('cms.profile-desa.index');
     Route::post('/profile-desa', [ProfileDesaController::class, 'store'])->name('cms.profile-desa.store');
     Route::put('/cms/profiledesa/update', [ProfileDesaController::class, 'update'])->name('cms.profiledesa.update');
 });
 
-Route::middleware(['auth'])->prefix('cms')->group(function () {
+Route::middleware(['auth:web,struktur'])->prefix('cms')->group(function () {
     Route::get('/aktifitas', [CmsAktifitasController::class, 'index'])->name('cms.aktifitasdesa.index');
     Route::post('/aktifitas', [CmsAktifitasController::class, 'store'])->name('cms.aktifitasdesa.store');
     Route::get('/aktifitas/{id}/edit', [CmsAktifitasController::class, 'edit'])->name('cms.aktifitasdesa.edit');
@@ -281,9 +286,10 @@ Route::get('/cms/editprofile', function () {
     return view('cms.pages.editprofile');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:web'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/{id}', [ProfileController::class, 'updateById'])->name('profile.update.byid');
 });
 
 // Routes untuk user biasa
@@ -300,6 +306,8 @@ Route::middleware(['auth:struktur'])->group(function () {
         ->name('struktur.profile.edit');
     Route::put('/struktur/profile/update', [StrukturProfileController::class, 'update'])
         ->name('struktur.profile.update');
+    Route::put('/struktur/profile/{id}', [StrukturProfileController::class, 'updateById'])
+        ->name('struktur.profile.update.byid');
 });
 
 // Routes untuk kedua tipe user
@@ -317,31 +325,31 @@ Route::middleware(['auth:web,struktur'])->group(function () {
 Route::middleware(['auth:web,struktur'])->prefix('cms')->name('cms.')->group(function () {
     // Dashboard
     Route::get('/app/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Profile Desa
     Route::get('/sambutan', [ProfileDesaController::class, 'sambutan'])->name('sambutan');
     Route::get('/profile-desa', [ProfileDesaController::class, 'index'])->name('profile-desa');
-    
+
     // Kependudukan
-    Route::get('/app/kependudukan', [KependudukanController::class, 'index'])->name('kependudukan.index');
-    Route::middleware('auth:web')->group(function () {
-        Route::post('/app/kependudukan', [KependudukanController::class, 'store'])->name('kependudukan.store');
-        Route::put('/app/kependudukan/{id}', [KependudukanController::class, 'update'])->name('kependudukan.update');
-        Route::delete('/app/kependudukan/{id}', [KependudukanController::class, 'destroy'])->name('kependudukan.destroy');
-    });
-    
+        // Route::get('/app/kependudukan', [KependudukanController::class, 'index'])->name('kependudukan.index');
+        // Route::middleware('auth:web')->group(function () {
+        //     Route::post('/app/kependudukan', [KependudukanController::class, 'store'])->name('kependudukan.store');
+        //     Route::put('/app/kependudukan/{id}', [KependudukanController::class, 'update'])->name('kependudukan.update');
+        //     Route::delete('/app/kependudukan/{id}', [KependudukanController::class, 'destroy'])->name('kependudukan.destroy');
+        // });
+
     // Struktur Desa
     Route::get('/strukturdesa', [StrukturController::class, 'index'])->name('strukturdesa.index');
-    
+
     // Keuangan Desa
     Route::get('/dana', [DanaDesaController::class, 'index'])->name('dana.index');
-    Route::get('/kegiatan', [CmsKegiatanController::class, 'index'])->name('kegiatan.index');
-    
+    // Route::get('/kegiatan', [CmsKegiatanController::class, 'index'])->name('kegiatan.index');
+
     // Galeri
     Route::get('/berita', [CmsBeritaController::class, 'index'])->name('berita.index');
     Route::get('/aktifitas', [CmsAktifitasController::class, 'index'])->name('aktifitas.index');
     Route::get('/produk', [CmsProdukController::class, 'index'])->name('produk.index');
-    
+
     // Layanan
     Route::prefix('suratketerangan')->name('suratketerangan.')->group(function () {
         Route::get('/domisili', [CmsDomisiliController::class, 'domisili'])->name('domisili');
@@ -350,7 +358,7 @@ Route::middleware(['auth:web,struktur'])->prefix('cms')->name('cms.')->group(fun
         Route::get('/ktp', [CmsSuratKtpController::class, 'ktp'])->name('ktp');
         Route::get('/kelahiran', [CmsSuratKelahiranController::class, 'kelahiran'])->name('kelahiran');
     });
-    
+
     Route::get('/pengaduan', [CmsPengaduanController::class, 'index'])->name('pengaduan.index');
 });
 
@@ -360,9 +368,16 @@ Route::middleware(['auth:web'])->prefix('cms')->name('cms.')->group(function () 
 });
 
 // Di dalam group middleware auth:web,struktur
-Route::post('/berita', [CmsBeritaController::class, 'store'])->name('berita.store');
-Route::put('/berita/{id}', [CmsBeritaController::class, 'update'])->name('berita.update');
-Route::delete('/berita/{id}', [CmsBeritaController::class, 'destroy'])->name('berita.destroy');
+Route::middleware(['auth:web,struktur'])->group(function() {
+    Route::post('/berita', [CmsBeritaController::class, 'store'])->name('berita.store');
+    Route::delete('/berita/{id}', [CmsBeritaController::class, 'destroy'])->name('berita.destroy');
+
+    // Route untuk edit dan update berita dengan prefix cms
+    Route::prefix('cms')->group(function () {
+        Route::get('/berita/edit/{id}', [CmsBeritaController::class, 'edit'])->name('cms.berita.edit');
+        Route::put('/berita/{id}', [CmsBeritaController::class, 'update'])->name('cms.berita.update');
+    });
+});
 
 // Tambahkan route untuk update status domisili
 Route::middleware(['auth'])->prefix('cms')->group(function () {
@@ -380,7 +395,7 @@ Route::middleware(['auth'])->prefix('cms/admin')->group(function () {
 
 Route::resource('dana', DanaDesaController::class);
 
-Route::prefix('cms')->middleware(['auth'])->group(function () {
+Route::middleware(['auth:web,struktur'])->prefix('cms')->group(function () {
     Route::post('/sliders', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'store'])->name('sliders.store');
     Route::get('/sliders/{slider}/edit', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'edit'])->name('sliders.edit');
     Route::put('/sliders/{slider}', [App\Http\Controllers\Cms\CmsHeroSliderController::class, 'update'])->name('sliders.update');
@@ -392,8 +407,4 @@ Route::get('/api/check-session', function () {
         return response()->json(['message' => 'Unauthorized'], 401);
     }
     return response()->json(['message' => 'Authenticated']);
-});
-
-Route::prefix('cms')->group(function () {
-    Route::get('/berita/edit/{id}', [CmsBeritaController::class, 'edit'])->name('cms.berita.edit');
 });

@@ -4,9 +4,11 @@
 <div class="container mx-auto px-6 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-semibold text-gray-900">Pendanaan Desa</h1>
+        @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
         <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
             <i class="fas fa-plus mr-2"></i> Tambah Kegiatan
         </button>
+        @endif
     </div>
 
     <!-- Add Search and Filter Section -->
@@ -14,9 +16,9 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
-                <input type="text" 
-                       id="searchInput" 
-                       placeholder="Cari kegiatan..." 
+                <input type="text"
+                       id="searchInput"
+                       placeholder="Cari kegiatan..."
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
@@ -58,7 +60,9 @@
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
+                        @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
                         <th class="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -74,48 +78,50 @@
                                 {{ $item->tgl_mulai->format('d/m/Y') }} - {{ $item->tgl_selesai->format('d/m/Y') }}
                             </td>
                             <td class="px-3 py-2 md:px-6 md:py-4">
-                                <button onclick="showPhotosModal(['{{ $item->image }}'])" 
+                                <button onclick="showPhotosModal(['{{ $item->image }}'])"
                                         class="text-blue-500 hover:text-blue-700 flex items-center">
                                     📷 <span class="ml-1 text-sm">(1)</span>
                                 </button>
                             </td>
+                            @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
                             <td class="px-3 py-2 md:px-6 md:py-3">
                                 <div class="flex items-center justify-start space-x-3">
-                                    <button onclick="openEditModal({{ $item->id }})" 
+                                    <button onclick="openEditModal({{ $item->id }})"
                                             class="text-blue-500 hover:text-blue-700 p-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                   d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </button>
                                     <form action="{{ route('cms.kegiatan.destroy', $item->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" 
+                                        <button type="submit"
                                                 onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"
                                                 class="text-red-500 hover:text-red-700 p-1">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                             </svg>
                                         </button>
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                            <td colspan="{{ auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full') ? '8' : '7' }}" class="px-6 py-4 text-center text-gray-500">
                                 Belum ada kegiatan
                             </td>
                         </tr>
                         @endforelse
                     @else
                         <tr>
-                            <td colspan="8">
+                            <td colspan="{{ auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full') ? '8' : '7' }}">
                                 <div class="flex flex-col items-center justify-center py-12">
-                                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Clipboard.png" 
-                                         alt="No Data" 
+                                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Clipboard.png"
+                                         alt="No Data"
                                          class="w-64 h-64 mb-6"
                                     >
                                     <h3 class="text-xl font-medium text-gray-600 mb-2">Belum Ada Kegiatan</h3>
@@ -352,7 +358,7 @@ function openEditModal(id) {
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
             document.getElementById('editCurrentImage').src = `/images/${data.image}`;
-            
+
             // Update sisa dana display
             checkEditAvailableFunds();
         });
@@ -366,17 +372,17 @@ function closeEditModal() {
 function showPhotosModal(photos) {
     const modal = document.getElementById('photosModal');
     const container = document.getElementById('photosContainer');
-    
+
     // Clear previous photos
     container.innerHTML = '';
-    
+
     // Add photos to the modal
     photos.forEach(photo => {
         const photoDiv = document.createElement('div');
         photoDiv.className = 'relative pt-[100%]';
         photoDiv.innerHTML = `
             <div class="absolute inset-0 p-1">
-                <img src="/images/${photo}" 
+                <img src="/images/${photo}"
                      class="w-full h-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity object-contain bg-gray-100"
                      onclick="window.open('/images/${photo}', '_blank')"
                      alt="Kegiatan Photo">
@@ -384,7 +390,7 @@ function showPhotosModal(photos) {
         `;
         container.appendChild(photoDiv);
     });
-    
+
     // Show modal
     modal.classList.remove('hidden');
 }
@@ -410,14 +416,14 @@ document.addEventListener('DOMContentLoaded', function() {
     anggaranDisplay.addEventListener('input', function(e) {
         // Remove non-numeric characters
         let value = this.value.replace(/\D/g, '');
-        
+
         // Format the number with thousand separator
         const formattedValue = new Intl.NumberFormat('id-ID').format(value);
         this.value = formattedValue;
-        
+
         // Store the raw number in hidden input (convert to decimal format)
         anggaranActual.value = (parseFloat(value) || 0).toFixed(2);
-        
+
         // Check available funds
         checkAvailableFunds();
     });
@@ -431,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const terpakai = parseInt(selectedOption.dataset.terpakai) || 0;
             const anggaran = parseFloat(anggaranActual.value) || 0;
             const sisaAnggaran = nominal - terpakai;
-            
+
             sisaDana.textContent = `Sisa dana: Rp ${new Intl.NumberFormat('id-ID').format(sisaAnggaran)}`;
 
             if (anggaran > sisaAnggaran) {
@@ -465,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const terpakai = parseInt(selectedOption.dataset.terpakai) || 0;
             const anggaran = parseFloat(editAnggaranActual.value) || 0;
             const sisaAnggaran = nominal - terpakai;
-            
+
             editSisaDana.textContent = `Sisa dana: Rp ${new Intl.NumberFormat('id-ID').format(sisaAnggaran)}`;
 
             if (anggaran > sisaAnggaran) {
@@ -491,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const judul = row.cells[0].textContent.toLowerCase();
             const rowKategori = row.cells[2].textContent;
             const rowProgress = parseInt(row.cells[4].textContent);
-            
+
             let showRow = true;
 
             // Search filter
@@ -533,4 +539,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endsection
-    

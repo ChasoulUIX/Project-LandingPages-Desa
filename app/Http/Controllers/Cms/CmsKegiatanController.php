@@ -115,11 +115,11 @@ class CmsKegiatanController extends Controller
     public function destroy($id)
     {
         $kegiatan = Kegiatan::findOrFail($id);
-        
+
         // Update dana_terpakai in danadesa
         $danaDesa = \App\Models\DanaDesa::findOrFail($kegiatan->sumber_dana);
         $danaDesa->decrement('dana_terpakai', $kegiatan->anggaran);
-        
+
         // Delete image
         if (file_exists(public_path('images/'.$kegiatan->image))) {
             unlink(public_path('images/'.$kegiatan->image));

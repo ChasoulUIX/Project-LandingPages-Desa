@@ -20,14 +20,14 @@
                                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                                         <div class="text-center space-y-8">
                                             <div class="animate-fade-in-down">
-                                                <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                                <h1 class="text-4xl sm:text-6xl font-extrabold text-white leading-tight tracking-tight">
                                                     {{ $slider->heading }}
-                                                    <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                                                    <span class="block mt-2 text-3xl sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
                                                         {{ $slider->subheading }}
                                                     </span>
                                                 </h1>
                                                 @if($slider->tagline)
-                                                    <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+                                                    <p class="mt-6 text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
                                                         {{ $slider->tagline }}
                                                     </p>
                                                 @endif
@@ -54,13 +54,13 @@
                                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                                     <div class="text-center space-y-8">
                                         <div class="animate-fade-in-down">
-                                            <h1 class="text-5xl sm:text-7xl font-extrabold text-white leading-tight tracking-tight">
+                                            <h1 class="text-4xl sm:text-6xl font-extrabold text-white leading-tight tracking-tight">
                                                 Selamat Datang di
-                                                <span class="block mt-2 text-4xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                                                <span class="block mt-2 text-3xl sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
                                                     Desa Sumber Secang
                                                 </span>
                                             </h1>
-                                            <p class="mt-6 text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+                                            <p class="mt-6 text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
                                                 Bangga dengan Desa tercinta kita
                                             </p>
                                         </div>
@@ -293,7 +293,7 @@
         <div class="bg-white py-20 sm:py-32">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Galeri Desa</h2>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-blue-900 mb-6">Informasi Desa</h2>
                     <div class="h-1.5 w-24 bg-yellow-500 mx-auto mb-6"></div>
                     <p class="text-gray-600 text-base sm:text-lg">Jelajahi berbagai kegiatan, berita, dan produk unggulan Desa Sumber Secang</p>
                 </div>
@@ -307,7 +307,6 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div class="absolute bottom-4 left-4 text-white">
                                 <h3 class="text-xl font-bold">{{ $kegiatan->judul }}</h3>
-                                <p class="text-sm opacity-90">{{ $kegiatan->deskripsi }}</p>
                             </div>
                         </div>
                         <div class="p-6">
@@ -316,14 +315,14 @@
                                     <i class="fas fa-calendar-alt text-yellow-500"></i>
                                     <p class="text-gray-600">{{ $kegiatan->created_at->format('F j, Y') }}</p>
                                 </div>
-                                <div class="flex items-center space-x-4">
+                                <!-- <div class="flex items-center space-x-4">
                                     <i class="fas fa-users text-yellow-500"></i>
                                     <p class="text-gray-600">{{ $kegiatan->kategori }}</p>
                                 </div>
                                 <div class="flex items-center space-x-4">
                                     <i class="fas fa-mosque text-yellow-500"></i>
                                     <p class="text-gray-600">{{ $kegiatan->lokasi }}</p>
-                                </div>
+                                </div> -->
                             </div>
                             <a href="{{ url('/galery') }}" class="mt-6 inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold group-hover:translate-x-2 transition duration-300">
                                 <span>Lihat Semua Kegiatan</span>
@@ -340,8 +339,7 @@
                             <img src="{{ asset('images/' . $aktivitas->image) }}" alt="{{ $aktivitas->judul }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">{{ $aktivitas->judul }}</h3>
-                                <p class="text-sm opacity-90">{{ $aktivitas->deskripsi }}</p>
+                                <h3 class="text-xl font-bold truncate">{{ Str::limit($aktivitas->judul, 40) }}</h3>
                             </div>
                         </div>
                         <div class="p-6">
@@ -366,8 +364,7 @@
                                 <img src="{{ asset('images/' . $berita->image) }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                 <div class="absolute bottom-4 left-4 text-white">
-                                    <h3 class="text-xl font-bold">{{ $berita->judul }}</h3>
-                                    <p class="text-sm opacity-90">{{ $berita->konten }}</p>
+                                    <h3 class="text-xl font-bold truncate">{{ $berita->judul }}</h3>
                                 </div>
                             </div>
                             <div class="p-6">

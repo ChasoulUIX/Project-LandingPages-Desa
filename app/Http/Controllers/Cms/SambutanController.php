@@ -10,24 +10,30 @@ use Illuminate\Support\Facades\Storage;
 
 class SambutanController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            if (auth()->guard('web')->check() || 
-                (auth()->guard('struktur')->check() && 
-                 auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && 
-                 auth()->guard('struktur')->user()->akses === 'full')) {
-                return $next($request);
-            }
-            return redirect()->back()->with('error', 'Unauthorized access');
-        })->except(['index', 'show']);
-    }
+
+    /**
+     *
+     * ini penyebab tidak muncul nya modal edit di module sambutan kepala desa
+     */
+
+    // public function __construct()
+    // {
+    //     $this->middleware(function ($request, $next) {
+    //         if (auth()->guard('web')->check() ||
+    //             (auth()->guard('struktur')->check() &&
+    //              (auth()->guard('struktur')->user()->jabatan === 'Operator Desa' &&
+    //              auth()->guard('struktur')->user()->akses === 'full'))) {
+    //             return $next($request);
+    //         }
+    //         return redirect()->back()->with('error', 'Unauthorized access');
+    //     })->except(['index', 'show']);
+    // }
 
     public function index()
     {
         // Ambil data sambutan yang ada, atau buat data default jika belum ada
         $sambutan = Sambutan::first();
-        
+
         if (!$sambutan) {
             $sambutan = Sambutan::create([
                 'nama' => 'Nama Kepala Desa',
@@ -51,7 +57,7 @@ class SambutanController extends Controller
     public function update(Request $request, $id)
     {
         $sambutan = Sambutan::findOrFail($id);
-        
+
         $request->validate([
             'nama' => 'required',
             'jabatan' => 'required',
@@ -72,7 +78,7 @@ class SambutanController extends Controller
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images'), $imageName);
-            
+
             $data['image'] = $imageName;
         }
 

@@ -4,7 +4,7 @@
 <div class="container mx-auto px-2 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-semibold text-gray-900">Data Kependudukan</h1>
-        @if(!Auth::guard('struktur')->check())
+        @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
             <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
                 <i class="fas fa-plus mr-2"></i> Tambah Data
             </button>
@@ -14,9 +14,9 @@
     <!-- Search Bar -->
     <div class="mb-6">
         <div class="relative">
-            <input type="text" 
-                   id="searchInput" 
-                   placeholder="Cari berdasarkan NIK atau Nama..." 
+            <input type="text"
+                   id="searchInput"
+                   placeholder="Cari berdasarkan NIK atau Nama..."
                    oninput="filterData(this.value)"
                    class="w-full md:w-96 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
@@ -30,8 +30,8 @@
     <div class="bg-white rounded-lg shadow-md">
         @if(App\Models\Kependudukan::count() == 0)
             <div class="flex flex-col items-center justify-center py-12">
-                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20Facing%20Up.png" 
-                     alt="No Data" 
+                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20Facing%20Up.png"
+                     alt="No Data"
                      class="w-32 h-32 mb-4"
                 >
                 <h3 class="text-lg font-medium text-gray-900 mb-2">
@@ -40,8 +40,8 @@
                 <p class="text-sm text-gray-500 text-center mb-4">
                     Mulai tambahkan data sekarang
                 </p>
-                @if(!Auth::guard('struktur')->check())
-                    <button onclick="openAddModal()" 
+                @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full') )
+                    <button onclick="openAddModal()"
                             class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         Tambah Data
                     </button>
@@ -76,7 +76,7 @@
                         @php
                             $sort = request()->get('sort');
                             $order = request()->get('order', 'asc');
-                            
+
                             $kependudukan = App\Models\Kependudukan::when($sort, function($query) use ($sort, $order) {
                                 return $query->orderBy($sort, $order);
                             })->paginate(10);
@@ -94,7 +94,7 @@
                             </td>
                             <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->agama }}</td>
                             <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_perkawinan }}</td>
-                            @if(!Auth::guard('struktur')->check())
+                            @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
                                 <td class="sticky right-0 bg-white px-6 py-4 text-right text-base font-medium whitespace-nowrap">
                                     <button onclick="openEditModal('{{ $item->nik }}')" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">
                                         <i class="fas fa-edit"></i>
@@ -130,7 +130,7 @@
             <div class="flex items-center gap-2">
                 @if(App\Models\Kependudukan::count() > 0)
                     @for($i = 1; $i <= $kependudukan->lastPage(); $i++)
-                        <a href="{{ $kependudukan->url($i) }}" 
+                        <a href="{{ $kependudukan->url($i) }}"
                        class="px-4 py-2 text-sm font-medium {{ $kependudukan->currentPage() == $i ? 'text-white bg-blue-600' : 'text-gray-700 bg-white' }} border border-gray-300 rounded-md hover:bg-gray-50">
                         {{ $i }}
                     </a>
@@ -177,40 +177,40 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">NIK</label>
-                            <input type="text" name="nik" required pattern="[0-9]{16}" 
+                            <input type="text" name="nik" required pattern="[0-9]{16}"
                                    title="NIK harus 16 digit angka"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">No KK</label>
-                            <input type="text" name="no_kk" required pattern="[0-9]{16}" 
+                            <input type="text" name="no_kk" required pattern="[0-9]{16}"
                                    title="No KK harus 16 digit angka"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                            <input type="text" name="nama_lengkap" required 
+                            <input type="text" name="nama_lengkap" required
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
-                            <input type="text" name="nomor_hp" required pattern="[0-9]{10,15}" 
+                            <input type="text" name="nomor_hp" required pattern="[0-9]{10,15}"
                                    title="Nomor HP harus 10-15 digit angka"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir</label>
-                            <input type="text" name="tempat_lahir" required 
+                            <input type="text" name="tempat_lahir" required
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
-                            <input type="date" name="tanggal_lahir" required 
+                            <input type="date" name="tanggal_lahir" required
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
@@ -222,7 +222,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Golongan Darah</label>
@@ -317,7 +317,7 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">NIK</label>
-                            <input type="text" name="nik" id="editNik" required 
+                            <input type="text" name="nik" id="editNik" required
                                    pattern="[0-9]{16}" title="NIK harus 16 digit angka"
                                    value="{{ old('nik') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -325,7 +325,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">No KK</label>
-                            <input type="text" name="no_kk" id="editNoKK" required 
+                            <input type="text" name="no_kk" id="editNoKK" required
                                    pattern="[0-9]{16}" title="No KK harus 16 digit angka"
                                    value="{{ old('no_kk') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -333,14 +333,14 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                            <input type="text" name="nama_lengkap" id="editNamaLengkap" required 
+                            <input type="text" name="nama_lengkap" id="editNamaLengkap" required
                                    value="{{ old('nama_lengkap') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
-                            <input type="text" name="nomor_hp" id="editNomorHP" required 
+                            <input type="text" name="nomor_hp" id="editNomorHP" required
                                    pattern="[0-9]{10,15}" title="Nomor HP harus 10-15 digit angka"
                                    value="{{ old('nomor_hp') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -348,32 +348,32 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir</label>
-                            <input type="text" name="tempat_lahir" id="editTempatLahir" required 
+                            <input type="text" name="tempat_lahir" id="editTempatLahir" required
                                    value="{{ old('tempat_lahir') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
-                            <input type="date" name="tanggal_lahir" id="editTanggalLahir" required 
+                            <input type="date" name="tanggal_lahir" id="editTanggalLahir" required
                                    value="{{ old('tanggal_lahir', isset($penduduk) ? date('Y-m-d', strtotime($penduduk->tanggal_lahir)) : '') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
-                            <select name="jenis_kelamin" id="editJenisKelamin" required 
+                            <select name="jenis_kelamin" id="editJenisKelamin" required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="Laki-Laki" {{ old('jenis_kelamin') == 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
                                 <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Golongan Darah</label>
-                            <select name="golongan_darah" id="editGolonganDarah" required 
+                            <select name="golongan_darah" id="editGolonganDarah" required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="A" {{ old('golongan_darah') == 'A' ? 'selected' : '' }}>A</option>
                                 <option value="B" {{ old('golongan_darah') == 'B' ? 'selected' : '' }}>B</option>
@@ -384,7 +384,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Agama</label>
-                            <select name="agama" id="editAgama" required 
+                            <select name="agama" id="editAgama" required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
                                 <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
@@ -397,7 +397,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Perkawinan</label>
-                            <select name="status_perkawinan" id="editStatusPerkawinan" required 
+                            <select name="status_perkawinan" id="editStatusPerkawinan" required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="Belum Kawin" {{ old('status_perkawinan') == 'Belum Kawin' ? 'selected' : '' }}>Belum Kawin</option>
                                 <option value="Kawin" {{ old('status_perkawinan') == 'Kawin' ? 'selected' : '' }}>Kawin</option>
@@ -407,7 +407,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label>
-                            <select name="pekerjaan" id="editPekerjaan" required 
+                            <select name="pekerjaan" id="editPekerjaan" required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="Petani" {{ old('pekerjaan') == 'Petani' ? 'selected' : '' }}>Petani</option>
                                 <option value="PNS" {{ old('pekerjaan') == 'PNS' ? 'selected' : '' }}>PNS</option>
@@ -419,7 +419,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
-                            <select name="pendidikan_terakhir" id="editPendidikanTerakhir" required 
+                            <select name="pendidikan_terakhir" id="editPendidikanTerakhir" required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="SD" {{ old('pendidikan_terakhir') == 'SD' ? 'selected' : '' }}>SD</option>
                                 <option value="SMP" {{ old('pendidikan_terakhir') == 'SMP' ? 'selected' : '' }}>SMP</option>
@@ -431,7 +431,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Keluarga</label>
-                            <select name="status_keluarga" id="editStatusKeluarga" required 
+                            <select name="status_keluarga" id="editStatusKeluarga" required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="Kepala Keluarga" {{ old('status_keluarga') == 'Kepala Keluarga' ? 'selected' : '' }}>Kepala Keluarga</option>
                                 <option value="Suami" {{ old('status_keluarga') == 'Suami' ? 'selected' : '' }}>Suami</option>
@@ -484,7 +484,7 @@ function openEditModal(nik) {
         .then(response => response.json())
         .then(data => {
             Swal.close();
-            
+
             if (data.penduduk) {
                 // Isi form dengan data yang diterima
                 document.getElementById('editNik').value = data.penduduk.nik;
@@ -503,7 +503,7 @@ function openEditModal(nik) {
 
                 // Set action URL form
                 document.getElementById('editForm').action = `/cms/app/kependudukan/${nik}`;
-                
+
                 // Tampilkan modal
                 document.getElementById('editModal').classList.remove('hidden');
                 document.getElementById('editModal').classList.add('flex');
@@ -533,22 +533,22 @@ function closeEditModal() {
 
 function filterData(searchValue) {
     const rows = document.querySelectorAll('tbody tr');
-    
+
     rows.forEach(row => {
         // Skip empty state row
         if (row.children.length === 1) return;
-        
+
         const nik = row.children[1].textContent.toLowerCase(); // Column index 1 for NIK
         const nama_lengkap = row.children[3].textContent.toLowerCase(); // Column index 3 for nama_lengkap
         const searchTerm = searchValue.toLowerCase();
-        
+
         if (nik.includes(searchTerm) || nama_lengkap.includes(searchTerm)) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
         }
     });
-    
+
     // Update the "Showing X to Y of Z results" text
     updateResultsCount();
 }
@@ -556,10 +556,10 @@ function filterData(searchValue) {
 function updateResultsCount() {
     const visibleRows = document.querySelectorAll('tbody tr:not([style*="display: none"])');
     const totalRows = document.querySelectorAll('tbody tr').length;
-    
+
     const firstItem = visibleRows.length > 0 ? 1 : 0;
     const lastItem = visibleRows.length;
-    
+
     document.querySelector('.text-sm.text-gray-700').innerHTML = `
         Showing
         <span class="font-medium">${firstItem}</span>
@@ -619,15 +619,15 @@ function sortTable(column) {
     const urlParams = new URLSearchParams(window.location.search);
     const currentSort = urlParams.get('sort');
     const currentOrder = urlParams.get('order') || 'asc';
-    
+
     let newOrder = 'asc';
     if (currentSort === column && currentOrder === 'asc') {
         newOrder = 'desc';
     }
-    
+
     urlParams.set('sort', column);
     urlParams.set('order', newOrder);
-    
+
     // Maintain the current page and any other existing parameters
     window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
 }
@@ -638,16 +638,16 @@ function filterTable(column, value) {
     window.filterTimeout = setTimeout(() => {
         const currentUrl = new URL(window.location.href);
         const params = new URLSearchParams(currentUrl.search);
-        
+
         if (value) {
             params.set(`filter[${column}]`, value);
         } else {
             params.delete(`filter[${column}]`);
         }
-        
+
         // Reset to page 1 when filtering
         params.set('page', '1');
-        
+
         window.location.href = `${currentUrl.pathname}?${params.toString()}`;
     }, 500);
 }
@@ -655,7 +655,7 @@ function filterTable(column, value) {
 // Keep filter values after page reload
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
-    
+
     for (const [key, value] of urlParams.entries()) {
         if (key.startsWith('filter[')) {
             const column = key.replace('filter[', '').replace(']', '');
@@ -681,7 +681,7 @@ function deleteData(nik) {
     }).then((result) => {
         if (result.isConfirmed) {
             const token = document.querySelector('meta[name="csrf-token"]').content;
-            
+
             fetch(`/cms/app/kependudukan/${nik}`, {
                 method: 'DELETE',
                 headers: {

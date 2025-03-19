@@ -83,7 +83,7 @@ class ProfileDesaController extends Controller
         ]);
 
         $profileDesa = ProfileDesa::first() ?? new ProfileDesa();
-        
+
         // Handle logo upload
         if ($request->hasFile('logo_image')) {
             $logoImage = $request->file('logo_image');
@@ -118,7 +118,7 @@ class ProfileDesaController extends Controller
     {
         // Ambil data sambutan jika ada
         $sambutan = Sambutan::first();
-        
+
         return view('cms.pages.sambutan', compact('sambutan'));
     }
 

@@ -75,7 +75,7 @@
                                     <td class="px-2 py-2 whitespace-nowrap">
                                         <div class="relative pt-1">
                                             <div class="overflow-hidden h-1.5 text-sm flex rounded bg-blue-200">
-                                                <div style="width: {{ $dana->status_pencairan }}%" 
+                                                <div style="width: {{ $dana->status_pencairan }}%"
                                                      class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500">
                                                 </div>
                                             </div>
@@ -86,7 +86,7 @@
                                     <td class="px-2 py-2 whitespace-nowrap">Rp {{ number_format($dana->dana_terpakai, 0, ',', '.') }}</td>
                                     <td class="px-2 py-2 whitespace-nowrap">
                                         @if($dana->photos && count($dana->photos) > 0)
-                                            <button onclick="showPhotosModal({{ json_encode($dana->photos) }})" 
+                                            <button onclick="showPhotosModal({{ json_encode($dana->photos) }})"
                                                     class="text-blue-500 hover:text-blue-700 flex items-center">
                                                 📷 <span class="ml-1">({{ count($dana->photos) }})</span>
                                             </button>
@@ -96,17 +96,17 @@
                                     </td>
                                     <td class="px-2 py-2 whitespace-nowrap">
                                         <div class="flex items-center space-x-2">
-                                            <button onclick="openEditModal({{ $dana->id }})" 
+                                            <button onclick="openEditModal({{ $dana->id }})"
                                                     class="text-blue-500 hover:text-blue-700">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                           d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                                 </svg>
                                             </button>
-                                            <button onclick="deleteData({{ $dana->id }})" 
+                                            <button onclick="deleteData({{ $dana->id }})"
                                                     class="text-red-500 hover:text-red-700">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
                                             </button>
@@ -118,8 +118,8 @@
                                 <tr>
                                     <td colspan="9">
                                         <div class="flex flex-col items-center justify-center py-12">
-                                            <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Money%20Bag.png" 
-                                                 alt="No Data" 
+                                            <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Money%20Bag.png"
+                                                 alt="No Data"
                                                  class="w-64 h-64 mb-6"
                                             >
                                             <h3 class="text-xl font-medium text-gray-600 mb-2">Data Kosong</h3>
@@ -145,7 +145,7 @@
         <div id="kegiatanSection" class="lg:col-span-1">
             <div class="bg-white rounded-lg shadow-md p-4">
                 <h2 class="text-lg font-semibold text-gray-800 mb-4">Riwayat Pendanaan</h2>
-                
+
                 <!-- Kegiatan List -->
                 <div class="space-y-4">
                     @php
@@ -170,7 +170,7 @@
                             </div>
                             <div class="mt-2">
                                 <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-blue-500 h-2 rounded-full" 
+                                    <div class="bg-blue-500 h-2 rounded-full"
                                          style="width: {{ $item->progress }}%">
                                     </div>
                                 </div>
@@ -184,11 +184,11 @@
 
                 <!-- View All Button -->
                 <div class="mt-4 text-center">
-                    <a href="/cms/kegiatan" 
+                    <a href="/cms/kegiatan"
                        class="inline-flex items-center text-blue-600 hover:text-blue-700">
                         Lihat Semua Kegiatan
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9 5l7 7-7 7"/>
                         </svg>
                     </a>
@@ -202,59 +202,59 @@
         <div class="relative p-8 border w-full max-w-4xl shadow-xl rounded-lg bg-white">
             <!-- Header -->
             <div class="absolute top-0 right-0 pt-4 pr-4">
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-gray-500 focus:outline-none">
                     <span class="sr-only">Close</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
-            
+
             <div class="mt-3">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Dana Desa</h2>
                 <form id="editForm" method="POST">
                     @csrf
                     @method('PUT')
                     <input type="hidden" id="editId" name="id">
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Tahun Anggaran</label>
-                            <input type="text" id="editTahun" name="tahun_anggaran" 
+                            <input type="text" id="editTahun" name="tahun_anggaran"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Sumber Anggaran</label>
-                            <input type="text" id="editSumber" name="sumber_anggaran" 
+                            <input type="text" id="editSumber" name="sumber_anggaran"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Nominal</label>
-                            <input type="text" id="editNominal" name="nominal" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                            <input type="text" id="editNominal" name="nominal"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                    oninput="formatRupiah(this)" placeholder="Rp 0">
                         </div>
 
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Tgl Pencairan</label>
-                            <input type="text" id="editTglPencairan" name="tgl_pencairan" 
+                            <input type="text" id="editTglPencairan" name="tgl_pencairan"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Status Pencairan (%)</label>
                             <div class="flex items-center space-x-4">
-                                <input type="number" id="editStatusPencairan" name="status_pencairan" 
+                                <input type="number" id="editStatusPencairan" name="status_pencairan"
                                        min="0" max="100" step="1"
                                        class="w-24 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                        value="{{ old('status_pencairan', $dana->status_pencairan ?? 0) }}"
                                        readonly>
                                 <div class="flex-1">
                                     <div class="overflow-hidden h-2.5 text-xs flex rounded bg-blue-200">
-                                        <div id="editStatusBar" 
-                                             style="width: {{ old('status_pencairan', $dana->status_pencairan ?? 0) }}%" 
+                                        <div id="editStatusBar"
+                                             style="width: {{ old('status_pencairan', $dana->status_pencairan ?? 0) }}%"
                                              class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-300">
                                         </div>
                                     </div>
@@ -264,23 +264,23 @@
 
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Dana Masuk</label>
-                            <input type="text" id="editDanaMasuk" name="dana_masuk" 
+                            <input type="text" id="editDanaMasuk" name="dana_masuk"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div class="space-y-2 md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700">Dana Terpakai</label>
-                            <input type="text" id="editDanaTerpakai" name="dana_terpakai" 
+                            <input type="text" id="editDanaTerpakai" name="dana_terpakai"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
                     </div>
 
                     <div class="flex justify-end space-x-4 mt-8">
-                        <button type="button" onclick="closeModal()" 
+                        <button type="button" onclick="closeModal()"
                                 class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 font-medium">
                             Batal
                         </button>
-                        <button type="submit" 
+                        <button type="submit"
                                 class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
                             Simpan Perubahan
                         </button>
@@ -302,7 +302,7 @@
                 </button>
             </div>
             <div id="photosContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                
+
             </div>
         </div>
     </div>
@@ -319,7 +319,7 @@ function formatRupiah(input) {
         input.value = '';
         return;
     }
-    
+
     // Convert to number and format
     const number = parseInt(value, 10);
     const formatted = new Intl.NumberFormat('id-ID', {
@@ -328,16 +328,31 @@ function formatRupiah(input) {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
     }).format(number);
-    
+
     // Update input value (remove 'IDR' prefix and trim)
     input.value = formatted.replace('IDR', 'Rp').trim();
 }
+
+// Tambahkan event listener untuk tombol Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+        closePhotosModal();
+    }
+});
+
+// Tambahkan event listener untuk klik di luar modal
+document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
 
 function openEditModal(id) {
     // Set form action
     const form = document.getElementById('editForm');
     form.action = `/cms/dana/${id}`;
-    
+
     // Cari baris data berdasarkan ID
     const row = document.querySelector(`tr[data-id="${id}"]`);
     if (!row) {
@@ -350,22 +365,22 @@ function openEditModal(id) {
     document.getElementById('editSumber').value = row.cells[0].textContent.trim();
     document.getElementById('editNominal').value = row.cells[1].textContent.trim();
     document.getElementById('editTglPencairan').value = row.cells[2].textContent.trim();
-    
+
     // Perbaikan pengambilan status pencairan
-    const statusText = row.cells[3].querySelector('.text-sm').textContent.replace('%', '').trim();
-    const statusValue = parseInt(statusText);
-    
+    const statusText = row.cells[3].querySelector('.text-sm').textContent.trim();
+    const statusValue = parseInt(statusText.replace('%', ''));
+
     // Set nilai status pencairan dan progress bar
     document.getElementById('editStatusPencairan').value = statusValue;
     document.getElementById('editStatusBar').style.width = `${statusValue}%`;
-    
+
     document.getElementById('editDanaMasuk').value = row.cells[4].textContent.trim();
     document.getElementById('editDanaTerpakai').value = row.cells[5].textContent.trim();
-    
+
     // Get tahun from the current filter
     const tahunFilter = document.getElementById('tahunFilter');
     document.getElementById('editTahun').value = tahunFilter.value;
-    
+
     // Show modal
     const modal = document.getElementById('editModal');
     modal.classList.remove('hidden');
@@ -378,53 +393,41 @@ function openEditModal(id) {
 
 // Helper function to format value to Rupiah
 function formatRupiahValue(value) {
+    // Hapus semua karakter kecuali angka
+    let numericValue = value.replace(/[^\d]/g, '');
+    if (numericValue === '') {
+        return '';
+    }
+
+    // Convert to number and format
+    const number = parseInt(numericValue, 10);
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
-    }).format(value).replace('IDR', 'Rp').trim();
+    }).format(number).replace('IDR', 'Rp').trim();
 }
 
-// Add input event listeners for all currency fields
-document.getElementById('editNominal').addEventListener('input', function() {
-    formatRupiah(this);
-    const danaMasuk = document.getElementById('editDanaMasuk').value;
-    const status = calculateStatus(this.value, danaMasuk);
-    
-    // Update status input and progress bar
-    document.getElementById('editStatusPencairan').value = status;
-    document.getElementById('editStatusBar').style.width = `${status}%`;
-});
 
-document.getElementById('editDanaMasuk').addEventListener('input', function() {
-    formatRupiah(this);
-    const nominal = document.getElementById('editNominal').value;
-    const status = calculateStatus(nominal, this.value);
-    
-    // Update status input and progress bar
-    document.getElementById('editStatusPencairan').value = status;
-    document.getElementById('editStatusBar').style.width = `${status}%`;
-});
-
-// Disable manual input for status pencairan
-document.getElementById('editStatusPencairan').readOnly = true;
 
 function closeModal() {
-    document.getElementById('editModal').classList.add('hidden');
+    const modal = document.getElementById('editModal');
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
 }
 
 // Update form submission to handle files
 document.getElementById('editForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(this);
-    
+
     // Convert Rupiah format back to number before sending
     formData.set('nominal', document.getElementById('editNominal').value.replace(/[^\d]/g, ''));
     formData.set('dana_masuk', document.getElementById('editDanaMasuk').value.replace(/[^\d]/g, ''));
     formData.set('dana_terpakai', document.getElementById('editDanaTerpakai').value.replace(/[^\d]/g, ''));
-    
+
     const url = this.action;
 
     fetch(url, {
@@ -432,6 +435,7 @@ document.getElementById('editForm').addEventListener('submit', function(e) {
         body: formData,
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         }
     })
     .then(response => response.json())
@@ -447,13 +451,6 @@ document.getElementById('editForm').addEventListener('submit', function(e) {
         console.error('Error:', error);
         alert('Terjadi kesalahan saat menyimpan data');
     });
-});
-
-// Close modal when clicking outside
-document.getElementById('editModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeModal();
-    }
 });
 
 function deleteData(id) {
@@ -515,17 +512,17 @@ function removePhoto(danaId, filename, button) {
 function showPhotosModal(photos) {
     const modal = document.getElementById('photosModal');
     const container = document.getElementById('photosContainer');
-    
+
     // Clear previous photos
     container.innerHTML = '';
-    
+
     // Add photos to the modal
     photos.forEach(photo => {
         const photoDiv = document.createElement('div');
         photoDiv.className = 'relative pt-[100%]'; // Create 1:1 aspect ratio container
         photoDiv.innerHTML = `
             <div class="absolute inset-0 p-1">
-                <img src="/images/${photo}" 
+                <img src="/images/${photo}"
                      class="w-full h-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity object-contain bg-gray-100"
                      onclick="window.open('/images/${photo}', '_blank')"
                      alt="Dana Photo">
@@ -533,7 +530,7 @@ function showPhotosModal(photos) {
         `;
         container.appendChild(photoDiv);
     });
-    
+
     // Show modal
     modal.classList.remove('hidden');
 }
@@ -553,7 +550,7 @@ function toggleKegiatan() {
     const tableSection = document.getElementById('tableSection');
     const kegiatanSection = document.getElementById('kegiatanSection');
     const toggleIcon = document.getElementById('toggleIcon');
-    
+
     if (kegiatanSection.classList.contains('hidden')) {
         // Show Kegiatan
         kegiatanSection.classList.remove('hidden');
@@ -582,15 +579,39 @@ function calculateStatus(nominal, danaMasuk) {
     // Remove currency formatting and convert to numbers
     const nominalValue = parseInt(nominal.replace(/[^\d]/g, '')) || 0;
     const danaMasukValue = parseInt(danaMasuk.replace(/[^\d]/g, '')) || 0;
-    
+
     // Calculate percentage
     let percentage = 0;
     if (nominalValue > 0) {
         percentage = Math.round((danaMasukValue / nominalValue) * 100);
     }
-    
+
     // Ensure percentage is between 0 and 100
     return Math.min(Math.max(percentage, 0), 100);
 }
+
+// Add input event listeners for all currency fields
+document.getElementById('editNominal').addEventListener('input', function() {
+    formatRupiah(this);
+    const danaMasuk = document.getElementById('editDanaMasuk').value;
+    const status = calculateStatus(this.value, danaMasuk);
+
+    // Update status input and progress bar
+    document.getElementById('editStatusPencairan').value = status;
+    document.getElementById('editStatusBar').style.width = `${status}%`;
+});
+
+document.getElementById('editDanaMasuk').addEventListener('input', function() {
+    formatRupiah(this);
+    const nominal = document.getElementById('editNominal').value;
+    const status = calculateStatus(nominal, this.value);
+
+    // Update status input and progress bar
+    document.getElementById('editStatusPencairan').value = status;
+    document.getElementById('editStatusBar').style.width = `${status}%`;
+});
+
+// Disable manual input for status pencairan
+document.getElementById('editStatusPencairan').readOnly = true;
 </script>
 @endpush

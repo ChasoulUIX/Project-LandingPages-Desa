@@ -68,7 +68,7 @@
                                 <input type="text" name="periode" id="edit_periode" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
                             </div>
                         </div>
-                        
+
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Foto</label>
@@ -150,33 +150,33 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Heading</label>
-                                <input type="text" name="heading" id="slider_heading" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                <input type="text" name="heading" id="slider_heading"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     placeholder="Masukkan heading slider"
                                     autocomplete="off">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Subheading</label>
-                                <input type="text" name="subheading" id="slider_subheading" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                <input type="text" name="subheading" id="slider_subheading"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     placeholder="Masukkan subheading slider"
                                     autocomplete="off">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Tagline</label>
-                                <textarea name="tagline" id="slider_tagline" rows="4" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                <textarea name="tagline" id="slider_tagline" rows="4"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     placeholder="Masukkan tagline slider"
                                     autocomplete="off"></textarea>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
-                                <input type="number" name="order" id="slider_order" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                <input type="number" name="order" id="slider_order"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     value="0">
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" name="is_active" id="slider_is_active" 
+                                <input type="checkbox" name="is_active" id="slider_is_active"
                                     class="w-5 h-5 rounded border-gray-300 text-blue-600" value="1" checked>
                                 <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                             </div>
@@ -187,13 +187,13 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Background Image</label>
                             <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
                                 <div class="mb-4 bg-gray-50 rounded-lg overflow-hidden">
-                                    <img id="preview_image" src="{{ asset('images/placeholder.jpg') }}" 
+                                    <img id="preview_image" src="{{ asset('images/placeholder.jpg') }}"
                                         alt="Preview" class="w-full h-64 object-contain">
                                 </div>
                                 <div class="mt-2">
-                                    <input type="file" name="background_image" id="background_image" 
+                                    <input type="file" name="background_image" id="background_image"
                                         class="hidden" accept="image/*" onchange="previewImage(this)">
-                                    <label for="background_image" 
+                                    <label for="background_image"
                                         class="cursor-pointer bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                         Pilih Gambar
                                     </label>
@@ -226,15 +226,15 @@
 function previewImage(input) {
     const preview = document.getElementById('preview_image');
     const file = input.files[0];
-    
+
     if (file) {
         const reader = new FileReader();
-        
+
         reader.onload = function(e) {
             preview.src = e.target.result;
             preview.style.display = 'block';
         }
-        
+
         reader.readAsDataURL(file);
     } else {
         preview.src = "{{ asset('images/placeholder.jpg') }}";
@@ -252,6 +252,10 @@ function openEditModal(id) {
             document.getElementById('imagePreview').src = `/images/${data.image}`;
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
+        })
+        .catch(error => {
+            console.error('Error fetching sambutan data:', error);
+            alert('Terjadi kesalahan saat mengambil data sambutan');
         });
 }
 
@@ -313,11 +317,11 @@ document.getElementById('sliderForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);
     const sliderId = document.getElementById('slider_id').value;
-    
+
     // Tentukan URL dan method berdasarkan ada tidaknya slider_id
     const url = sliderId ? `/cms/sliders/${sliderId}` : '/cms/sliders';
     const method = sliderId ? 'POST' : 'POST'; // Gunakan POST untuk keduanya
-    
+
     if (!formData.has('is_active')) {
         formData.append('is_active', '0');
     }

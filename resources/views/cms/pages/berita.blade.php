@@ -32,28 +32,28 @@
                                     {!! Str::limit($item->konten, 100) !!}
                                 </td>
                                 <td class="px-3 py-2 md:px-6 md:py-4">
-                                    <button onclick="showPhotosModal(['{{ $item->image }}'])" 
+                                    <button onclick="showPhotosModal(['{{ $item->image }}'])"
                                             class="text-blue-500 hover:text-blue-700 flex items-center">
                                         📷 <span class="ml-1 text-sm">(1)</span>
                                     </button>
                                 </td>
                                 <td class="px-3 py-2 md:px-6 md:py-3">
                                     <div class="flex items-center justify-start space-x-3">
-                                        <button onclick="openEditModal({{ $item->id }})" 
+                                        <button onclick="openEditModal({{ $item->id }})"
                                                 class="text-blue-500 hover:text-blue-700 p-1">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
                                         </button>
                                         <form action="{{ route('berita.destroy', $item->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" 
+                                            <button type="submit"
                                                     onclick="return confirm('Apakah Anda yakin ingin menghapus berita ini?')"
                                                     class="text-red-500 hover:text-red-700 p-1">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
                                             </button>
@@ -66,8 +66,8 @@
                         <tr>
                             <td colspan="5">
                                 <div class="flex flex-col items-center justify-center py-12">
-                                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Loudspeaker.png" 
-                                         alt="No Data" 
+                                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Loudspeaker.png"
+                                         alt="No Data"
                                          class="w-64 h-64 mb-6"
                                     >
                                     <h3 class="text-xl font-medium text-gray-600 mb-2">Belum Ada Berita</h3>
@@ -75,7 +75,7 @@
                                 </div>
                             </td>
                         </tr>
-                    @endif  
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -233,15 +233,15 @@ function closeAddModal() {
 // Handle form submission
 document.getElementById('addForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     // Get form data
     const formData = new FormData(this);
-    
+
     // Get TinyMCE content
     if (tinymce.get('addKonten')) {
         formData.set('konten', tinymce.get('addKonten').getContent());
     }
-    
+
     // Submit form
     fetch(this.action, {
         method: 'POST',
@@ -266,6 +266,41 @@ document.getElementById('addForm').addEventListener('submit', function(e) {
     });
 });
 
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Mencegah form submit default
+
+    // Pastikan konten TinyMCE diambil dan dimasukkan ke textarea
+    if (tinymce.get('editKonten')) {
+        document.getElementById('editKonten').value = tinymce.get('editKonten').getContent();
+    }
+
+    // Buat FormData dari form
+    const formData = new FormData(this);
+
+    // Submit form dengan fetch API
+    fetch(this.action, {
+        method: 'POST', // Tetap gunakan POST karena kita sudah menambahkan _method: PUT
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Berita berhasil diperbarui!');
+            window.location.reload();
+        } else {
+            throw new Error(data.message || 'Terjadi kesalahan saat memperbarui berita');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan: ' + error.message);
+    });
+});
+
 // Inisialisasi TinyMCE untuk form edit
 function initEditEditor() {
     tinymce.init({
@@ -276,34 +311,28 @@ function initEditEditor() {
             'lists', 'link', 'image', 'code'
         ],
         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image | code',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+        setup: function (editor) {
+            editor.on('init', function () {
+                document.getElementById('editKonten').required = false; // Hapus required dari textarea asli
+            });
+        }
     });
 }
 
 function openEditModal(id) {
     // Inisialisasi editor terlebih dahulu
     initEditEditor();
-    
+
     fetch(`/cms/berita/edit/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log('Received data:', data); // Debug log
             document.getElementById('editJudul').value = data.judul;
-            // Tunggu editor selesai diinisialisasi
             setTimeout(() => {
                 if (tinymce.get('editKonten')) {
                     tinymce.get('editKonten').setContent(data.konten);
-                } else {
-                    console.error('TinyMCE editor not initialized');
                 }
             }, 500);
             document.getElementById('editTanggal').value = data.tanggal;
-            // Ubah path image sesuai dengan lokasi di public/images
             document.getElementById('currentImage').src = `/images/${data.image}`;
             document.getElementById('editForm').action = `/cms/berita/${id}`;
             document.getElementById('editModal').classList.remove('hidden');
@@ -327,15 +356,15 @@ function closeEditModal() {
 function showPhotosModal(photos) {
     const modal = document.getElementById('photosModal');
     const container = document.getElementById('photosContainer');
-    
+
     container.innerHTML = '';
-    
+
     photos.forEach(photo => {
         const photoDiv = document.createElement('div');
         photoDiv.className = 'relative pt-[100%]';
         photoDiv.innerHTML = `
             <div class="absolute inset-0 p-1">
-                <img src="/images/${photo}" 
+                <img src="/images/${photo}"
                      class="w-full h-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity object-contain bg-gray-100"
                      onclick="window.open('/images/${photo}', '_blank')"
                      alt="Berita Photo">
@@ -343,7 +372,7 @@ function showPhotosModal(photos) {
         `;
         container.appendChild(photoDiv);
     });
-    
+
     modal.classList.remove('hidden');
 }
 

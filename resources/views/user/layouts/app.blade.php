@@ -77,16 +77,28 @@
                 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex items-center space-x-6">
-                    <div class="relative" id="berandaDropdown">
-                        <button onclick="toggleDropdown('berandaMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                            <i class="fas fa-home w-5"></i>
-                            <span>Beranda</span>
-                            <i class="fas fa-chevron-down ml-1" id="berandaArrow"></i>
+                    <a href="/" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                        <i class="fas fa-home w-5"></i>
+                        <span>Beranda</span>
+                    </a>
+
+                    <a href="{{ url('/aboutdesa') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                        <i class="fas fa-info-circle w-5"></i>
+                        <span>Profile Desa</span>
+                    </a>
+  <!-- Struktural Dropdown -->
+  <div class="relative" id="strukturalDropdown">
+                        <button onclick="toggleDropdown('strukturalMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                            <i class="fas fa-sitemap w-5"></i>
+                            <span>Struktural</span>
+                            <i class="fas fa-chevron-down ml-1" id="strukturalArrow"></i>
                         </button>
-                        <div id="berandaMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div id="strukturalMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
-                                <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
-                                <a href="{{ url('/aboutdesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile Desa</a>
+                                <a href="{{ url('/pamongdesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pamong Desa</a>
+                                <a href="{{ url('/struktural/bpd') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">BPD</a>
+                                <a href="{{ url('/struktural/pkk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">PKK</a>
+                                <a href="{{ url('/struktural/posyandu') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Posyandu</a>
                             </div>
                         </div>
                     </div>
@@ -107,22 +119,7 @@
                         </div>
                     </div>
 
-                    <!-- Struktural Dropdown -->
-                    <div class="relative" id="strukturalDropdown">
-                        <button onclick="toggleDropdown('strukturalMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                            <i class="fas fa-sitemap w-5"></i>
-                            <span>Struktural</span>
-                            <i class="fas fa-chevron-down ml-1" id="strukturalArrow"></i>
-                        </button>
-                        <div id="strukturalMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                            <div class="py-1">
-                                <a href="{{ url('/pamongdesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pamong Desa</a>
-                                <a href="{{ url('/struktural/bpd') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">BPD</a>
-                                <a href="{{ url('/struktural/pkk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">PKK</a>
-                                <a href="{{ url('/struktural/posyandu') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Posyandu</a>
-                            </div>
-                        </div>
-                    </div>
+                  
 
                     <script>
                         function toggleDropdown(menuId) {
@@ -132,7 +129,10 @@
                             
                             allDropdowns.forEach((id) => {
                                 if (id !== menuId) {
-                                    document.getElementById(id).classList.add('hidden');
+                                    const dropdownMenu = document.getElementById(id);
+                                    if (dropdownMenu) {
+                                        dropdownMenu.classList.add('hidden');
+                                    }
                                 }
                             });
                             
@@ -148,30 +148,60 @@
                             const arrowId = menuId.replace('Menu', 'Arrow');
                             const arrow = document.getElementById(arrowId);
                             
-                            menu.classList.toggle('hidden');
+                            if (menu) {
+                                menu.classList.toggle('hidden');
+                            }
                             if (arrow) {
                                 arrow.classList.toggle('rotate-180');
                             }
+
+                            // Prevent the click event from bubbling up
+                            event.stopPropagation();
                         }
 
                         // Close dropdown when clicking outside
                         document.addEventListener('click', function(event) {
-                            const dropdowns = ['beranda', 'infografis', 'struktural', 'layanan', 'galeri'];
+                            const dropdowns = document.querySelectorAll('[id$="Dropdown"]');
+                            let clickedInsideDropdown = false;
                             
-                            dropdowns.forEach((type) => {
-                                const dropdown = document.getElementById(`${type}Dropdown`);
-                                const menu = document.getElementById(`${type}Menu`);
-                                const arrow = document.getElementById(`${type}Arrow`);
-                                
-                                if (dropdown && menu && !dropdown.contains(event.target)) {
-                                    menu.classList.add('hidden');
-                                    if (arrow) {
-                                        arrow.classList.remove('rotate-180');
-                                    }
+                            dropdowns.forEach(dropdown => {
+                                if (dropdown.contains(event.target)) {
+                                    clickedInsideDropdown = true;
                                 }
                             });
+
+                            if (!clickedInsideDropdown) {
+                                const allMenus = document.querySelectorAll('[id$="Menu"]');
+                                const allArrows = document.querySelectorAll('[id$="Arrow"]');
+                                
+                                allMenus.forEach(menu => {
+                                    menu.classList.add('hidden');
+                                });
+                                
+                                allArrows.forEach(arrow => {
+                                    arrow.classList.remove('rotate-180');
+                                });
+                            }
                         });
                     </script>
+
+                  
+                   
+                    <!-- Galeri Dropdown -->
+                    <div class="relative" id="galeriDropdown">
+                        <button onclick="toggleDropdown('galeriMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                            <i class="fas fa-images w-5"></i>
+                            <span>Informasi</span>
+                            <i class="fas fa-chevron-down ml-1" id="galeriArrow"></i>
+                        </button>
+                        <div id="galeriMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="{{ url('/galery') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kegiatan</a>
+                                <a href="{{ url('/berita') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Berita</a>
+                                <a href="{{ url('/produk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Produk Desa</a>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="relative" id="layananDropdown">
                         <button onclick="toggleDropdown('layananMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
@@ -186,22 +216,6 @@
                                 <!-- <a href="{{ url('/informasidesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Informasi Desa</a> -->
                                 <a href="{{ url('/bantuansosial') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Bantuan Sosial</a>
                                 <!-- <a href="{{ url('/danadesa') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dana Desa</a> -->
-                            </div>
-                        </div>
-                    </div>
-                   
-                    <!-- Galeri Dropdown -->
-                    <div class="relative" id="galeriDropdown">
-                        <button onclick="toggleDropdown('galeriMenu')" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
-                            <i class="fas fa-images w-5"></i>
-                            <span>Galeri</span>
-                            <i class="fas fa-chevron-down ml-1" id="galeriArrow"></i>
-                        </button>
-                        <div id="galeriMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                            <div class="py-1">
-                                <a href="{{ url('/galery') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kegiatan</a>
-                                <a href="{{ url('/berita') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Berita</a>
-                                <a href="{{ url('/produk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Produk Desa</a>
                             </div>
                         </div>
                     </div>
@@ -228,19 +242,15 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="hidden lg:hidden pb-4">
                 <div class="flex flex-col space-y-3">
-                    <!-- Beranda Dropdown Mobile -->
-                    <div class="relative">
-                        <button onclick="toggleMobileDropdown('mobileBeranda')" class="w-full text-white hover:text-yellow-300 transition duration-300 flex items-center justify-between text-sm">
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-home w-5"></i><span>Beranda</span>
-                            </div>
-                            <i class="fas fa-chevron-down" id="mobileBerandaArrow"></i>
-                        </button>
-                        <div id="mobileBeranda" class="hidden pl-7 mt-2 space-y-2">
-                            <a href="/" class="block text-blue-200 hover:text-yellow-300">Home</a>
-                            <a href="{{ url('/aboutdesa') }}" class="block text-blue-200 hover:text-yellow-300">Profile Desa</a>
-                        </div>
-                    </div>
+                    <a href="/" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                        <i class="fas fa-home w-5"></i>
+                        <span>Beranda</span>
+                    </a>
+
+                    <a href="{{ url('/aboutdesa') }}" class="text-white hover:text-yellow-300 transition duration-300 flex items-center space-x-2 text-sm">
+                        <i class="fas fa-info-circle w-5"></i>
+                        <span>Profile Desa</span>
+                    </a>
 
                     <!-- Infografis Dropdown Mobile -->
                     <div class="relative">
@@ -293,7 +303,7 @@
                     <div class="relative">
                         <button onclick="toggleMobileDropdown('mobileGaleri')" class="w-full text-white hover:text-yellow-300 transition duration-300 flex items-center justify-between text-sm">
                             <div class="flex items-center space-x-2">
-                                <i class="fas fa-images w-5"></i><span>Galeri</span>
+                                <i class="fas fa-images w-5"></i><span>Informasi</span>
                             </div>
                             <i class="fas fa-chevron-down" id="mobileGaleriArrow"></i>
                         </button>

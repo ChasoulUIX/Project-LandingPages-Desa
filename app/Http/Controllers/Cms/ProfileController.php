@@ -45,16 +45,16 @@ class ProfileController extends Controller
             // Store new photo in public/images directory
             $file = $request->file('photo_profile');
             $filename = time() . '_' . $file->getClientOriginalName();
-            
+
             // Ensure the images directory exists
             $path = public_path('images');
             if (!file_exists($path)) {
                 mkdir($path, 0777, true);
             }
-            
+
             // Move the uploaded file to public/images
             $file->move($path, $filename);
-            
+
             $user->photo_profile = $filename;
         }
 
