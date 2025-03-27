@@ -292,22 +292,18 @@ Route::middleware(['auth:web'])->group(function () {
     Route::put('/profile/{id}', [ProfileController::class, 'updateById'])->name('profile.update.byid');
 });
 
-// Routes untuk user biasa
-Route::middleware(['auth:web'])->group(function () {
-    // Routes dengan akses penuh
-});
+
 
 // Routes untuk struktur
 Route::middleware(['auth:struktur'])->group(function () {
     // Routes dengan akses terbatas
     Route::get('/cms/app/dashboard', 'DashboardController@index');
     Route::get('/cms/app/kependudukan', 'KependudukanController@index');
-    Route::get('/struktur/profile/edit', [StrukturProfileController::class, 'edit'])
+    Route::get('/profile/edit', [StrukturProfileController::class, 'edit'])
         ->name('struktur.profile.edit');
-    Route::put('/struktur/profile/update', [StrukturProfileController::class, 'update'])
-        ->name('struktur.profile.update');
-    Route::put('/struktur/profile/{id}', [StrukturProfileController::class, 'updateById'])
-        ->name('struktur.profile.update.byid');
+    Route::put('/profile/{id}/update', [StrukturProfileController::class, 'updateById'])
+        ->name('struktur.profile.update.byid')
+        ->where('id', '[0-9]+');
 });
 
 // Routes untuk kedua tipe user

@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class StrukturProfileController extends Controller
 {
@@ -18,107 +18,72 @@ class StrukturProfileController extends Controller
      */
     public function edit()
     {
-        return view('cms.pages.editprofile');
-    }
-
-    /**
-     * Update profile struktur yang sedang login
-     */
-    public function update(Request $request)
-    {
-        // Ambil data user yang sedang login
-        $authStruktur = Auth::guard('struktur')->user();
-        if (!$authStruktur) {
-            return back()->with('error', 'User not found or not logged in.');
+        // Tambahkan pengecekan auth
+        if (!Auth::guard('struktur')->check()) {
+            Log::error('User not authenticated as struktur');
+            return redirect()->route('login');
         }
-
-        // Debugging untuk melihat data yang dikirim
-        Log::info('Updating profile for struktur ID: ' . $authStruktur->id);
-        Log::info('Request Data:', $request->all());
-
-        // Validasi input
-        $validated = $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
-            'nik' => [
-                'required',
-                'string',
-                'max:16',
-                Rule::unique('strukturs', 'nik')->ignore($authStruktur->id)
-            ],
-            'jabatan' => ['required', 'string', 'max:255'],
-            'no_wa' => ['required', 'string', 'max:15'],
-            'akses' => ['required', 'string'],
-            'periode_mulai' => ['required', 'date'],
-            'periode_akhir' => ['required', 'date', 'after:periode_mulai'],
-            'status' => ['required', Rule::in(['0', '1'])], // Pastikan hanya menerima '0' atau '1'
-            'password' => ['nullable', 'string', 'min:3', 'confirmed'],
-            'image' => ['nullable', 'image', 'max:2048']
-        ]);
 
         try {
-            // Ambil struktur dari database untuk update
-            $struktur = Struktur::findOrFail($authStruktur->id);
+            // Ambil data terbaru dari database
+            $authUser = Auth::guard('struktur')->user();
+            Log::info('User auth ID: ' . $authUser->id);
 
-            // Update informasi dasar
-            $struktur->nama = $validated['nama'];
-            $struktur->nik = $validated['nik'];
-            $struktur->jabatan = $validated['jabatan'];
-            $struktur->no_wa = $validated['no_wa'];
-            $struktur->akses = $validated['akses'];
-            $struktur->periode_mulai = $validated['periode_mulai'];
-            $struktur->periode_akhir = $validated['periode_akhir'];
-            $struktur->status = (bool) $validated['status'];
+            // Gunakan query builder untuk mendapatkan data terbaru
+            $struktur = DB::table('strukturs')->where('id', $authUser->id)->first();
 
-            // Update password jika diisi
-            if ($request->filled('password')) {
-                $struktur->password = Hash::make($validated['password']);
+            if (!$struktur) {
+                Log::error('Struktur tidak ditemukan untuk ID: ' . $authUser->id);
+                return redirect()->route('login')
+                    ->with('error', 'Data pengguna tidak ditemukan, silakan login ulang.');
             }
 
-            // Handle upload gambar
-            if ($request->hasFile('image')) {
-                // Hapus foto lama jika ada
-                if ($struktur->image) {
-                    $oldPath = public_path('images/' . $struktur->image);
-                    if (file_exists($oldPath)) {
-                        unlink($oldPath);
-                    }
-                }
-
-                // Simpan gambar baru
-                $file = $request->file('image');
-                $filename = time() . '_' . $file->getClientOriginalName();
-
-                // Pastikan direktori images ada
-                $path = public_path('images');
-                if (!file_exists($path)) {
-                    mkdir($path, 0777, true);
-                }
-
-                // Pindahkan file ke direktori public/images
-                $file->move($path, $filename);
-
-                $struktur->image = $filename;
+            // Refresh session dengan data model terbaru (jika ditemukan)
+            $strukturModel = Struktur::where('id', $authUser->id)->first();
+            if ($strukturModel) {
+                Auth::guard('struktur')->login($strukturModel);
+                Log::info('Refreshed auth session with updated struktur data');
             }
 
-            // Simpan perubahan ke database
-            $struktur->update();
+            Log::info('Accessing edit profile for struktur: ' . $struktur->nama);
 
-            // Refresh session user
-            Auth::guard('struktur')->setUser($struktur->fresh());
+            // Convert objek stdClass ke array untuk view
+            $struktur = (array) $struktur;
 
-            return redirect()->route('struktur.profile.edit')->with('success', 'Profile berhasil diperbarui');
+            return view('cms.pages.editprofile', compact('struktur'));
         } catch (\Exception $e) {
-            Log::error('Error updating profile: ' . $e->getMessage());
-            return back()->with('error', 'Terjadi kesalahan saat memperbarui profil: ' . $e->getMessage())
-                         ->withInput();
+            Log::error('Error accessing edit profile: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return redirect()->route('login')
+                ->with('error', 'Terjadi kesalahan saat mengakses profil: ' . $e->getMessage());
         }
     }
+
+    
+
 
     /**
      * Update profile struktur berdasarkan ID (untuk admin)
      */
     public function updateById(Request $request, $id)
     {
+        // Logging untuk debug parameter id yang diterima
+        Log::info('Params updateById - id type: ' . gettype($id) . ', value: ' . $id);
+
+        // Konversi ID ke integer untuk memastikan tidak ada masalah
+        try {
+            $id = (int) $id;
+            if ($id <= 0) {
+                Log::error('Invalid ID: ' . $id);
+                return back()->with('error', 'ID tidak valid.')
+                    ->withInput();
+            }
+        } catch (\Exception $e) {
+            Log::error('Error converting ID to integer: ' . $e->getMessage());
+            return back()->with('error', 'ID tidak valid: ' . $e->getMessage())
+                ->withInput();
+        }
+
         // Pastikan user yang login adalah admin atau operator dengan akses penuh
         $isAdmin = Auth::guard('web')->check();
         $isOperatorFull = Auth::guard('struktur')->check() &&
@@ -129,48 +94,73 @@ class StrukturProfileController extends Controller
             return back()->with('error', 'Anda tidak memiliki izin untuk melakukan tindakan ini.');
         }
 
-        // Validasi input
-        $validated = $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
-            'nik' => [
-                'required',
-                'string',
-                'max:16',
-                Rule::unique('strukturs', 'nik')->ignore($id)
-            ],
-            'jabatan' => ['required', 'string', 'max:255'],
-            'no_wa' => ['required', 'string', 'max:15'],
-            'akses' => ['required', 'string'],
-            'periode_mulai' => ['required', 'date'],
-            'periode_akhir' => ['required', 'date', 'after:periode_mulai'],
-            'status' => ['required', Rule::in(['0', '1'])],
-            'password' => ['nullable', 'string', 'min:3', 'confirmed'],
-            'image' => ['nullable', 'image', 'max:2048']
-        ]);
+        // Logging
+        Log::info('Updating struktur by ID: ' . $id);
+        Log::info('Requested NIK: ' . $request->nik);
 
         try {
-            // Ambil struktur dari database
-            $struktur = Struktur::findOrFail($id);
+            // Cari struktur di database terlebih dahulu dengan query builder
+            $struktur = DB::table('strukturs')->where('id', $id)->first();
 
-            // Update informasi dasar
-            $struktur->nama = $validated['nama'];
-            $struktur->nik = $validated['nik'];
-            $struktur->jabatan = $validated['jabatan'];
-            $struktur->no_wa = $validated['no_wa'];
-            $struktur->akses = $validated['akses'];
-            $struktur->periode_mulai = $validated['periode_mulai'];
-            $struktur->periode_akhir = $validated['periode_akhir'];
-            $struktur->status = (bool) $validated['status'];
+            if (!$struktur) {
+                Log::error('Struktur tidak ditemukan di database dengan ID: ' . $id);
+                return back()->with('error', 'Data struktur tidak ditemukan.')
+                    ->withInput();
+            }
+
+            Log::info('Struktur ditemukan di database dengan ID: ' . $id);
+
+            // Periksa NIK duplikat
+            if ($request->nik != $struktur->nik) {
+                $nikExists = DB::table('strukturs')
+                    ->where('nik', $request->nik)
+                    ->where('id', '!=', $id)
+                    ->exists();
+
+                if ($nikExists) {
+                    return back()->with('error', 'NIK sudah digunakan oleh struktur lain.')
+                        ->withInput();
+                }
+            }
+
+            // Validasi input
+            $validated = $request->validate([
+                'nama' => ['required', 'string', 'max:255'],
+                'nik' => ['required', 'string', 'max:16'],
+                'jabatan' => ['required', 'string', 'max:255'],
+                'no_wa' => ['required', 'string', 'max:15'],
+                'akses' => ['required', 'string'],
+                'periode_mulai' => ['required', 'date'],
+                'periode_akhir' => ['required', 'date', 'after:periode_mulai'],
+                'status' => ['required', Rule::in(['0', '1'])],
+                'password' => ['nullable', 'string', 'min:3', 'confirmed'],
+                'image' => ['nullable', 'image', 'max:2048']
+            ]);
+
+            // Persiapkan data update
+            $updateData = [
+                'nama' => $validated['nama'],
+                'nik' => $validated['nik'],
+                'jabatan' => $validated['jabatan'],
+                'no_wa' => $validated['no_wa'],
+                'akses' => $validated['akses'],
+                'periode_mulai' => $validated['periode_mulai'],
+                'periode_akhir' => $validated['periode_akhir'],
+                'status' => $validated['status'],
+                'updated_at' => now()
+            ];
+
+            Log::info('Data yang akan diupdate: ' . json_encode($updateData));
 
             // Update password jika diisi
-            if ($request->filled('password')) {
-                $struktur->password = Hash::make($validated['password']);
+            if (!empty($validated['password'])) {
+                $updateData['password'] = Hash::make($validated['password']);
             }
 
             // Handle upload gambar
             if ($request->hasFile('image')) {
                 // Hapus foto lama jika ada
-                if ($struktur->image) {
+                if (!empty($struktur->image)) {
                     $oldPath = public_path('images/' . $struktur->image);
                     if (file_exists($oldPath)) {
                         unlink($oldPath);
@@ -187,18 +177,28 @@ class StrukturProfileController extends Controller
                     mkdir($path, 0777, true);
                 }
 
-                // Pindahkan file ke direktori public/images
+                // Pindahkan file
                 $file->move($path, $filename);
-
-                $struktur->image = $filename;
+                $updateData['image'] = $filename;
             }
 
-            // Simpan perubahan ke database
-            $struktur->update();
+            // Update dengan query builder yang lebih reliable
+            $updated = DB::table('strukturs')
+                ->where('id', $id)
+                ->update($updateData);
 
+            if ($updated === false) {
+                Log::error('Gagal update data struktur: ' . $id);
+                return back()->with('error', 'Gagal menyimpan data. Database error.')
+                    ->withInput();
+            }
+
+            Log::info('Berhasil update data struktur by ID: ' . $id);
             return back()->with('success', 'Profile struktur berhasil diperbarui');
+
         } catch (\Exception $e) {
             Log::error('Error updating struktur profile: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
             return back()->with('error', 'Terjadi kesalahan saat memperbarui profil struktur: ' . $e->getMessage())
                          ->withInput();
         }

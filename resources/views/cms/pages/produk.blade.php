@@ -38,15 +38,15 @@
                                 <td class="px-3 py-2 md:px-6 md:py-4">{{ Str::limit($item->deskripsi, 100) }}</td>
                                 <td class="px-3 py-2 md:px-6 md:py-4">Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                                 <td class="px-3 py-2 md:px-6 md:py-4">
-                                    <button onclick="openEditModal({{ $item->id }})" class="text-blue-500 hover:text-blue-700">
-                                        ✏️
+                                    <button onclick="openEditModal({{ $item->id }})" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                     <form action="{{ route('cms.produk.destroy', $item->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2" 
+                                        <button type="submit" class="text-red-600 hover:text-red-800 text-lg" 
                                                 onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
-                                            🗑️
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </td>
@@ -80,7 +80,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('cms.produk.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('cms.produk.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">
@@ -88,25 +88,25 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="nama">
                                 Nama Produk
                             </label>
-                            <input type="text" name="nama" id="nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="nama" id="nama" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="no_wa">
                                 No. WA
                             </label>
-                            <input type="text" name="no_wa" id="no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="no_wa" id="no_wa" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">
                                 Harga
                             </label>
-                            <input type="number" name="harga" id="harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="number" name="harga" id="harga" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">
                                 Deskripsi
                             </label>
-                            <textarea name="deskripsi" id="deskripsi" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                            <textarea name="deskripsi" id="deskripsi" rows="4" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
                         </div>
                     </div>
                     <div class="space-y-4">
@@ -114,7 +114,7 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
                                 Gambar Produk
                             </label>
-                            <input type="file" name="image" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'imagePreview')" required>
+                            <input type="file" name="image" id="image" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'imagePreview')" required>
                             <div id="imagePreview" class="mt-4 hidden">
                                 <img src="" alt="Preview" class="max-w-full h-64 object-contain rounded-lg border">
                             </div>
@@ -139,7 +139,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
+            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
                 @csrf
                 @method('PUT')
                 <div class="grid grid-cols-2 gap-6">
@@ -148,25 +148,25 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_nama">
                                 Nama Produk
                             </label>
-                            <input type="text" name="nama" id="edit_nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="nama" id="edit_nama" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_no_wa">
                                 No. WA
                             </label>
-                            <input type="text" name="no_wa" id="edit_no_wa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="no_wa" id="edit_no_wa" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_harga">
                                 Harga
                             </label>
-                            <input type="number" name="harga" id="edit_harga" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="number" name="harga" id="edit_harga" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_deskripsi">
                                 Deskripsi
                             </label>
-                            <textarea name="deskripsi" id="edit_deskripsi" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                            <textarea name="deskripsi" id="edit_deskripsi" rows="4" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
                         </div>
                     </div>
                     <div class="space-y-4">
@@ -174,7 +174,7 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_image">
                                 Gambar Produk
                             </label>
-                            <input type="file" name="image" id="edit_image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'editImagePreview')">
+                            <input type="file" name="image" id="edit_image" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'editImagePreview')">
                             <div id="editImagePreview" class="mt-4">
                                 <p class="text-sm text-gray-600 mb-2">Gambar Saat Ini:</p>
                                 <img src="" alt="Preview" class="max-w-full h-64 object-contain rounded-lg border">

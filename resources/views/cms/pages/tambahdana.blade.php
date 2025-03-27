@@ -7,19 +7,19 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-md p-6">
-        <form method="POST" action="{{ route('dana.store') }}" class="space-y-6" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('dana.store') }}" class="space-y-6" enctype="multipart/form-data" autocomplete="off">
             @csrf
             
             <div class="grid grid-cols-2 gap-6">
                 <div class="space-y-6"> <!-- Left Column -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Anggaran</label>
-                        <input type="number" name="tahun_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                        <input type="number" name="tahun_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Sumber Anggaran</label>
-                        <select name="sumber_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                        <select name="sumber_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
                             <option value="">Pilih Sumber Anggaran</option>
                             <option value="DANA DESA (DD)">DANA DESA (DD)</option>
                             <option value="ALOKASI DANA DESA (ADD)">ALOKASI DANA DESA (ADD)</option>
@@ -33,32 +33,32 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Nominal</label>
-                        <input type="text" id="nominal_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-                        <input type="hidden" name="nominal" id="nominal_actual">
+                        <input type="text" id="nominal_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
+                        <input type="hidden" name="nominal" id="nominal_actual" autocomplete="off">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pencairan</label>
-                        <input type="date" name="tgl_pencairan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
+                        <input type="date" name="tgl_pencairan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
                     </div>
                 </div>
 
                 <div class="space-y-6"> <!-- Right Column -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Status Pencairan (%)</label>
-                        <input type="number" name="status_pencairan" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required readonly>
+                        <input type="number" name="status_pencairan" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required readonly autocomplete="off">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Dana Masuk</label>
-                        <input type="text" id="dana_masuk_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required>
-                        <input type="hidden" name="dana_masuk" id="dana_masuk_actual">
+                        <input type="text" id="dana_masuk_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
+                        <input type="hidden" name="dana_masuk" id="dana_masuk_actual" autocomplete="off">
                     </div>
 
                     <div class="hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Dana Terpakai</label>
-                        <input type="text" id="dana_terpakai_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" value="Rp 0" readonly>
-                        <input type="hidden" name="dana_terpakai" id="dana_terpakai_actual" value="0">
+                        <input type="text" id="dana_terpakai_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" value="Rp 0" readonly autocomplete="off">
+                        <input type="hidden" name="dana_terpakai" id="dana_terpakai_actual" value="0" autocomplete="off">
                     </div>
                 </div>
             </div>

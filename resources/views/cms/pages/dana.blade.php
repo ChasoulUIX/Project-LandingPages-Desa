@@ -95,35 +95,42 @@
                                         @endif
                                     </td>
                                     <td class="px-2 py-2 whitespace-nowrap">
-                                        <div class="flex items-center space-x-2">
-                                            <button onclick="openEditModal({{ $dana->id }})"
-                                                    class="text-blue-500 hover:text-blue-700">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                </svg>
-                                            </button>
-                                            <button onclick="deleteData({{ $dana->id }})"
-                                                    class="text-red-500 hover:text-red-700">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                </svg>
-                                            </button>
-                                        </div>
+                                        <button onclick="openEditModal({{ $dana->id }})" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button onclick="deleteData({{ $dana->id }})" class="text-red-600 hover:text-red-800 text-lg">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 @endforeach
                             @else
                                 <tr>
                                     <td colspan="9">
-                                        <div class="flex flex-col items-center justify-center py-12">
-                                            <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Money%20Bag.png"
-                                                 alt="No Data"
-                                                 class="w-64 h-64 mb-6"
-                                            >
-                                            <h3 class="text-xl font-medium text-gray-600 mb-2">Data Kosong</h3>
-                                            <p class="text-gray-500">Belum ada data dana desa yang tercatat</p>
+                                        <div class="flex flex-col items-center justify-center py-16">
+                                            <!-- Empty State Icon -->
+                                            <div class="mb-6">
+                                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-400">
+                                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5"/>
+                                                    <path d="M9 9H9.01M15 9H15.01M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+
+                                            <!-- Title -->
+                                            <h3 class="text-[15px] font-medium text-gray-900 mb-1">
+                                                Belum ada dana desa
+                                            </h3>
+
+                                            <!-- Subtitle -->
+                                            <p class="text-[13px] text-gray-500 mb-6">
+                                                Tambahkan dana desa dan akan muncul di sini
+                                            </p>
+
+                                            <!-- Action Button -->
+                                            <a href="{{ route('dana.create') }}" 
+                                               class="px-4 py-2 bg-blue-600 text-white text-[13px] font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                                                Tambah Dana
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

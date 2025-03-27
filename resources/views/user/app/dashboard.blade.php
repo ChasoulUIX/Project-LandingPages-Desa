@@ -821,7 +821,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    @foreach(App\Models\Struktur::all() as $struktur)
+                    @foreach(App\Models\Struktur::paginate(8) as $struktur)
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-500">
                             <div class="relative h-80">
                                 <img src="{{ asset('images/' . $struktur->image) }}" alt="{{ $struktur->jabatan }}" class="w-full h-full object-cover">
@@ -834,6 +834,41 @@
                         </div>
                     @endforeach
                 </div>
+
+                <!-- Pagination -->
+                <div class="mt-8">
+                    <div class="flex justify-center items-center space-x-4">
+                        @if(App\Models\Struktur::count() > 8)
+                            <div class="flex justify-center mt-6">
+                                <div class="flex items-center gap-4">
+                                    @if(App\Models\Struktur::paginate(8)->previousPageUrl())
+                                        <a href="{{ App\Models\Struktur::paginate(8)->previousPageUrl() }}" 
+                                           class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                            Previous
+                                        </a>
+                                    @endif
+
+                                    <div class="flex items-center gap-2">
+                                        @for($i = 1; $i <= App\Models\Struktur::paginate(8)->lastPage(); $i++)
+                                            <a href="{{ App\Models\Struktur::paginate(8)->url($i) }}"
+                                               class="px-4 py-2 text-sm font-medium {{ App\Models\Struktur::paginate(8)->currentPage() == $i ? 'text-white bg-blue-600' : 'text-gray-700 bg-white' }} border border-gray-300 rounded-md hover:bg-gray-50">
+                                                {{ $i }}
+                                            </a>
+                                        @endfor
+                                    </div>
+
+                                    @if(App\Models\Struktur::paginate(8)->nextPageUrl())
+                                        <a href="{{ App\Models\Struktur::paginate(8)->nextPageUrl() }}" 
+                                           class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                            Next
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
                 <div class="flex justify-center items-center mt-8 w-full">
                     <a href="{{ url('/pamongdesa') }}" class="inline-flex items-center text-blue-900 hover:text-yellow-500 font-semibold transition duration-300">
                         <span>Lihat Semua Aparatur Desa</span>

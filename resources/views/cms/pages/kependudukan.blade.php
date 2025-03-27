@@ -65,10 +65,30 @@
                                     <i class="fas fa-sort{{ request()->get('sort') === 'nama_lengkap' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
                                 </div>
                             </th>
-                            <th class="w-[20%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">TTL</th>
-                            <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">JK</th>
-                            <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Agama</th>
-                            <th class="w-[12%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="w-[20%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('tanggal_lahir')">
+                                    TTL
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'tanggal_lahir' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
+                            <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('jenis_kelamin')">
+                                    JK
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'jenis_kelamin' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
+                            <th class="w-[10%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('agama')">
+                                    Agama
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'agama' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
+                            <th class="w-[12%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('status_perkawinan')">
+                                    Status
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'status_perkawinan' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
                             <th class="w-[8%] sticky right-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
@@ -107,8 +127,34 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-4 text-center text-gray-500 text-lg">
-                                Tidak ada data kependudukan
+                            <td colspan="8">
+                                <div class="flex flex-col items-center justify-center py-16">
+                                    <!-- Empty State Icon -->
+                                    <div class="mb-6">
+                                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-400">
+                                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5"/>
+                                            <path d="M9 9H9.01M15 9H15.01M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h3 class="text-[15px] font-medium text-gray-900 mb-1">
+                                        Belum ada data kependudukan
+                                    </h3>
+
+                                    <!-- Subtitle -->
+                                    <p class="text-[13px] text-gray-500 mb-6">
+                                        Tambahkan data kependudukan dan akan muncul di sini
+                                    </p>
+
+                                    <!-- Action Button -->
+                                    @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
+                                        <button onclick="openAddModal()" 
+                                                class="px-4 py-2 bg-blue-600 text-white text-[13px] font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                                            Tambah Data
+                                        </button>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                         @endforelse

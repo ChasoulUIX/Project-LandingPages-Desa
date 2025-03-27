@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 class Struktur extends Authenticatable
 {
-    protected $guard = 'struktur';
+
 
     protected $fillable = [
         'nik',
@@ -31,4 +31,6 @@ class Struktur extends Authenticatable
     {
         return 'nik';
     }
+
+
 }

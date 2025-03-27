@@ -19,6 +19,7 @@
                 <input type="text"
                        id="searchInput"
                        placeholder="Cari kegiatan..."
+                       autocomplete="off"
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
@@ -86,23 +87,14 @@
                             @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
                             <td class="px-3 py-2 md:px-6 md:py-3">
                                 <div class="flex items-center justify-start space-x-3">
-                                    <button onclick="openEditModal({{ $item->id }})"
-                                            class="text-blue-500 hover:text-blue-700 p-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
+                                    <button onclick="openEditModal({{ $item->id }})" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                     <form action="{{ route('cms.kegiatan.destroy', $item->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"
-                                                class="text-red-500 hover:text-red-700 p-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
+                                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')" class="text-red-600 hover:text-red-800 text-lg">
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -144,21 +136,21 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('cms.kegiatan.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('cms.kegiatan.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                            <input type="text" name="judul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="judul" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                            <textarea name="deskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <textarea name="deskripsi" rows="4" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                            <select name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="kategori" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Kategori</option>
                                 <option value="Infrastruktur">Infrastruktur</option>
                                 <option value="Sosial">Sosial</option>
@@ -171,14 +163,14 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
-                            <input type="text" id="anggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            <input type="hidden" name="anggaran" id="anggaran_actual">
+                            <input type="text" id="anggaran_display" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="hidden" name="anggaran" id="anggaran_actual" autocomplete="off">
                         </div>
                     </div>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
-                            <select name="sumber_dana" id="sumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <select name="sumber_dana" id="sumber_dana" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Sumber Dana</option>
                                 @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
                                     <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
@@ -191,23 +183,23 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                <input type="date" name="tgl_mulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_mulai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                                <input type="date" name="tgl_selesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_selesai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
                             <div class="relative">
-                                <input type="number" name="progress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="number" name="progress" min="0" max="100" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <span class="absolute right-3 top-2 text-gray-500">%</span>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                            <input type="file" name="image" required accept="image/*" class="w-full">
+                            <input type="file" name="image" required accept="image/*" autocomplete="off" class="w-full">
                         </div>
                     </div>
                 </div>
@@ -229,22 +221,22 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
+            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
                 @csrf
                 @method('PUT')
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                            <input type="text" name="judul" id="editJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="judul" id="editJudul" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                            <textarea name="deskripsi" id="editDeskripsi" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <textarea name="deskripsi" id="editDeskripsi" rows="4" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                            <select name="kategori" id="editKategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="kategori" id="editKategori" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Kategori</option>
                                 <option value="Infrastruktur">Infrastruktur</option>
                                 <option value="Sosial">Sosial</option>
@@ -257,14 +249,14 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
-                            <input type="text" id="editAnggaran_display" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            <input type="hidden" name="anggaran" id="editAnggaran_actual">
+                            <input type="text" id="editAnggaran_display" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="hidden" name="anggaran" id="editAnggaran_actual" autocomplete="off">
                         </div>
                     </div>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
-                            <select name="sumber_dana" id="editSumber_dana" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <select name="sumber_dana" id="editSumber_dana" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Sumber Dana</option>
                                 @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
                                     <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
@@ -277,17 +269,17 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                <input type="date" name="tgl_mulai" id="editTglMulai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_mulai" id="editTglMulai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                                <input type="date" name="tgl_selesai" id="editTglSelesai" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_selesai" id="editTglSelesai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
                             <div class="relative">
-                                <input type="number" name="progress" id="editProgress" min="0" max="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="number" name="progress" id="editProgress" min="0" max="100" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <span class="absolute right-3 top-2 text-gray-500">%</span>
                             </div>
                         </div>
@@ -299,7 +291,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
-                            <input type="file" name="image" accept="image/*" class="w-full">
+                            <input type="file" name="image" accept="image/*" autocomplete="off" class="w-full">
                         </div>
                     </div>
                 </div>
