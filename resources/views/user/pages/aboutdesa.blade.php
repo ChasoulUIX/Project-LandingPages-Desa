@@ -79,120 +79,156 @@
             </div>
 
             @php
-                $totalPenduduk = \App\Models\Kependudukan::count();
-                $totalLaki = \App\Models\Kependudukan::where('jenis_kelamin', 'Laki-Laki')->count();
-                $totalPerempuan = \App\Models\Kependudukan::where('jenis_kelamin', 'Perempuan')->count();
-                $totalKK = \App\Models\Kependudukan::distinct('no_kk')->count('no_kk');
+                // Inisialisasi default values
+                $totalPenduduk = \App\Models\Kependudukan::count() ?? 0;
+                $totalLaki = \App\Models\Kependudukan::where('jenis_kelamin', 'Laki-Laki')->count() ?? 0;
+                $totalPerempuan = \App\Models\Kependudukan::where('jenis_kelamin', 'Perempuan')->count() ?? 0;
+                $totalKK = \App\Models\Kependudukan::distinct('no_kk')->count('no_kk') ?? 0;
                 
-                // Hitung berdasarkan status perkawinan
-                $kawin = \App\Models\Kependudukan::where('status_perkawinan', 'Kawin')->count();
-                $belumKawin = \App\Models\Kependudukan::where('status_perkawinan', 'Belum Kawin')->count();
+                // Status perkawinan
+                $kawin = \App\Models\Kependudukan::where('status_perkawinan', 'Kawin')->count() ?? 0;
+                $belumKawin = \App\Models\Kependudukan::where('status_perkawinan', 'Belum Kawin')->count() ?? 0;
                 
-                // Hitung berdasarkan agama
+                // Hitung persentase dengan pengecekan pembagian dengan nol
+                $persenKawin = $totalPenduduk > 0 ? ($kawin / $totalPenduduk) * 100 : 0;
+                $persenBelumKawin = $totalPenduduk > 0 ? ($belumKawin / $totalPenduduk) * 100 : 0;
+                
+                // Agama stats dengan pengecekan null
                 $agamaStats = \App\Models\Kependudukan::select('agama', \DB::raw('count(*) as total'))
+                    ->whereNotNull('agama')
                     ->groupBy('agama')
                     ->get();
             @endphp
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-                <!-- Total Penduduk -->
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-white/80 text-sm">Total Penduduk</p>
-                            <h3 class="text-3xl font-bold mt-1">{{ number_format($totalPenduduk) }}</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-users text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Total KK -->
-                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-white/80 text-sm">Total KK</p>
-                            <h3 class="text-3xl font-bold mt-1">{{ number_format($totalKK) }}</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-home text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Laki-laki -->
-                <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-white/80 text-sm">Laki-laki</p>
-                            <h3 class="text-3xl font-bold mt-1">{{ number_format($totalLaki) }}</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-male text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Perempuan -->
-                <div class="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-6 text-white shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-white/80 text-sm">Perempuan</p>
-                            <h3 class="text-3xl font-bold mt-1">{{ number_format($totalPerempuan) }}</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-female text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detail Statistik -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Status Perkawinan -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-xl font-bold text-blue-900 mb-4">Status Perkawinan</h3>
-                    <div class="space-y-4">
+            <!-- Cards Section -->
+            @if($totalPenduduk > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                    <!-- Total Penduduk -->
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Kawin</span>
-                            <div class="flex items-center">
-                                <span class="font-semibold">{{ number_format($kawin) }}</span>
-                                <div class="w-24 h-2 bg-gray-200 rounded-full ml-4">
-                                    <div class="h-2 bg-blue-500 rounded-full" style="width: {{ ($kawin / $totalPenduduk) * 100 }}%"></div>
-                                </div>
+                            <div>
+                                <p class="text-white/80 text-sm">Total Penduduk</p>
+                                <h3 class="text-3xl font-bold mt-1">{{ number_format($totalPenduduk) }}</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-users text-2xl"></i>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Total KK -->
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Belum Kawin</span>
-                            <div class="flex items-center">
-                                <span class="font-semibold">{{ number_format($belumKawin) }}</span>
-                                <div class="w-24 h-2 bg-gray-200 rounded-full ml-4">
-                                    <div class="h-2 bg-green-500 rounded-full" style="width: {{ ($belumKawin / $totalPenduduk) * 100 }}%"></div>
-                                </div>
+                            <div>
+                                <p class="text-white/80 text-sm">Total KK</p>
+                                <h3 class="text-3xl font-bold mt-1">{{ number_format($totalKK) }}</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-home text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laki-laki -->
+                    <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Laki-laki</p>
+                                <h3 class="text-3xl font-bold mt-1">{{ number_format($totalLaki) }}</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-male text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perempuan -->
+                    <div class="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-6 text-white shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Perempuan</p>
+                                <h3 class="text-3xl font-bold mt-1">{{ number_format($totalPerempuan) }}</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-female text-2xl"></i>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Agama -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-xl font-bold text-blue-900 mb-4">Agama</h3>
-                    <div class="space-y-4">
-                        @foreach($agamaStats as $agama)
-                            <div class="flex items-center justify-between">
-                                <span class="text-gray-600">{{ $agama->agama }}</span>
-                                <div class="flex items-center">
-                                    <span class="font-semibold">{{ number_format($agama->total) }}</span>
-                                    <div class="w-24 h-2 bg-gray-200 rounded-full ml-4">
-                                        <div class="h-2 bg-blue-500 rounded-full" style="width: {{ ($agama->total / $totalPenduduk) * 100 }}%"></div>
+                <!-- Detail Statistik -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Status Perkawinan -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-blue-900 mb-4">Status Perkawinan</h3>
+                        <div class="space-y-4">
+                            @if($kawin > 0 || $belumKawin > 0)
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600">Kawin</span>
+                                    <div class="flex items-center">
+                                        <span class="font-semibold">{{ number_format($kawin) }}</span>
+                                        <div class="w-24 h-2 bg-gray-200 rounded-full ml-4">
+                                            <div class="h-2 bg-blue-500 rounded-full" style="width: {{ $persenKawin }}%"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600">Belum Kawin</span>
+                                    <div class="flex items-center">
+                                        <span class="font-semibold">{{ number_format($belumKawin) }}</span>
+                                        <div class="w-24 h-2 bg-gray-200 rounded-full ml-4">
+                                            <div class="h-2 bg-green-500 rounded-full" style="width: {{ $persenBelumKawin }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-info-circle mb-2"></i>
+                                    <p>Data status perkawinan belum tersedia</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Agama -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-blue-900 mb-4">Agama</h3>
+                        <div class="space-y-4">
+                            @if($agamaStats->count() > 0)
+                                @foreach($agamaStats as $agama)
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">{{ $agama->agama ?: 'Tidak Diketahui' }}</span>
+                                        <div class="flex items-center">
+                                            <span class="font-semibold">{{ number_format($agama->total) }}</span>
+                                            <div class="w-24 h-2 bg-gray-200 rounded-full ml-4">
+                                                <div class="h-2 bg-blue-500 rounded-full" 
+                                                     style="width: {{ $totalPenduduk > 0 ? ($agama->total / $totalPenduduk) * 100 : 0 }}%">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-info-circle mb-2"></i>
+                                    <p>Data agama belum tersedia</p>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <!-- Empty State -->
+                <div class="text-center py-12">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-gray-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Belum Ada Data Penduduk</h3>
+                    <p class="text-gray-500 max-w-sm mx-auto">
+                        Data kependudukan belum tersedia. Silakan tambahkan data penduduk terlebih dahulu.
+                    </p>
+                </div>
+            @endif
         </div>
     </div>
 
