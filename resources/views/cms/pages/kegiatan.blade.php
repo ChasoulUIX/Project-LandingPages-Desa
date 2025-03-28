@@ -136,21 +136,23 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('cms.kegiatan.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
+            <form action="{{ route('cms.kegiatan.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off" id="addForm">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                            <input type="text" name="judul" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="judul" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="judul-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                            <textarea name="deskripsi" rows="4" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <textarea name="deskripsi" rows="4" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="deskripsi-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                            <select name="kategori" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="kategori" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Kategori</option>
                                 <option value="Infrastruktur">Infrastruktur</option>
                                 <option value="Sosial">Sosial</option>
@@ -160,17 +162,19 @@
                                 <option value="Kemasyarakatan">Kemasyarakatan</option>
                                 <option value="Keadaan Darurat">Keadaan Darurat</option>
                             </select>
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="kategori-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Anggaran</label>
-                            <input type="text" id="anggaran_display" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="text" id="anggaran_display" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <input type="hidden" name="anggaran" id="anggaran_actual" autocomplete="off">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="anggaran-error"></p>
                         </div>
                     </div>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
-                            <select name="sumber_dana" id="sumber_dana" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="sumber_dana" id="sumber_dana" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Sumber Dana</option>
                                 @foreach(App\Models\DanaDesa::where('tahun_anggaran', date('Y'))->get() as $dana)
                                     <option value="{{ $dana->id }}" data-nominal="{{ $dana->nominal }}" data-terpakai="{{ $dana->dana_terpakai }}">
@@ -178,28 +182,32 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <p id="sisa_dana" class="text-sm text-gray-600 mt-1"></p>
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="sumber_dana-error"></p>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                <input type="date" name="tgl_mulai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_mulai" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <p class="text-red-500 text-sm mt-1 hidden error-message" id="tgl_mulai-error"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                                <input type="date" name="tgl_selesai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_selesai" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <p class="text-red-500 text-sm mt-1 hidden error-message" id="tgl_selesai-error"></p>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
                             <div class="relative">
-                                <input type="number" name="progress" min="0" max="100" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="number" name="progress" min="0" max="100" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <span class="absolute right-3 top-2 text-gray-500">%</span>
                             </div>
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="progress-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                            <input type="file" name="image" required accept="image/*" autocomplete="off" class="w-full">
+                            <input type="file" name="image" accept="image/*" autocomplete="off" class="w-full">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="image-error"></p>
                         </div>
                     </div>
                 </div>
@@ -269,19 +277,22 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                <input type="date" name="tgl_mulai" id="editTglMulai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_mulai" id="editTglMulai" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-tgl_mulai-error"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                                <input type="date" name="tgl_selesai" id="editTglSelesai" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="date" name="tgl_selesai" id="editTglSelesai" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-tgl_selesai-error"></p>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
                             <div class="relative">
-                                <input type="number" name="progress" id="editProgress" min="0" max="100" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="number" name="progress" id="editProgress" min="0" max="100" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <span class="absolute right-3 top-2 text-gray-500">%</span>
                             </div>
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-progress-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini</label>
@@ -292,6 +303,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Baru (Opsional)</label>
                             <input type="file" name="image" accept="image/*" autocomplete="off" class="w-full">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-image-error"></p>
                         </div>
                     </div>
                 </div>
@@ -528,6 +540,96 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', filterTable);
     kategoriFilter.addEventListener('change', filterTable);
     progressFilter.addEventListener('change', filterTable);
+
+    // Form validation for Add Modal
+    const addForm = document.getElementById('addForm');
+    addForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+        
+        let hasError = false;
+        const fields = [
+            { name: 'judul', label: 'Nama Kegiatan' },
+            { name: 'deskripsi', label: 'Deskripsi' },
+            { name: 'kategori', label: 'Kategori' },
+            { name: 'anggaran', label: 'Anggaran' },
+            { name: 'sumber_dana', label: 'Sumber Dana' },
+            { name: 'tgl_mulai', label: 'Tanggal Mulai' },
+            { name: 'tgl_selesai', label: 'Tanggal Selesai' },
+            { name: 'progress', label: 'Progress' },
+            { name: 'image', label: 'Gambar' }
+        ];
+
+        fields.forEach(field => {
+            const input = addForm.querySelector(`[name="${field.name}"]`);
+            if (!input.value) {
+                showError(field.name, `${field.label} harus diisi`);
+                hasError = true;
+            }
+        });
+
+        if (!hasError) {
+            this.submit();
+        }
+    });
+
+    // Form validation for Edit Modal
+    const editForm = document.getElementById('editForm');
+    editForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+        
+        let hasError = false;
+        const fields = [
+            { name: 'judul', label: 'Nama Kegiatan' },
+            { name: 'deskripsi', label: 'Deskripsi' },
+            { name: 'kategori', label: 'Kategori' },
+            { name: 'anggaran', label: 'Anggaran' },
+            { name: 'sumber_dana', label: 'Sumber Dana' },
+            { name: 'tgl_mulai', label: 'Tanggal Mulai' },
+            { name: 'tgl_selesai', label: 'Tanggal Selesai' },
+            { name: 'progress', label: 'Progress' }
+        ];
+
+        fields.forEach(field => {
+            const input = editForm.querySelector(`[name="${field.name}"]`);
+            if (!input.value) {
+                showError(field.name, `${field.label} harus diisi`, 'edit');
+                hasError = true;
+            }
+        });
+
+        if (!hasError) {
+            this.submit();
+        }
+    });
+
+    function showError(fieldName, message, prefix = '') {
+        const errorElement = document.getElementById(`${prefix}${fieldName}-error`);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            
+            // Add red border to input
+            const input = document.querySelector(`[name="${fieldName}"]`);
+            if (input) {
+                input.classList.add('border-red-500');
+            }
+        }
+    }
+
+    function clearErrors() {
+        // Clear all error messages
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.classList.add('hidden');
+            el.textContent = '';
+        });
+        
+        // Remove red borders
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.classList.remove('border-red-500');
+        });
+    }
 });
 </script>
 @endsection

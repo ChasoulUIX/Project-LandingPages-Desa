@@ -80,7 +80,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('cms.produk.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
+            <form action="{{ route('cms.produk.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off" id="addForm">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">
@@ -88,25 +88,29 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="nama">
                                 Nama Produk
                             </label>
-                            <input type="text" name="nama" id="nama" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="nama" id="nama" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="nama-error"></p>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="no_wa">
                                 No. WA
                             </label>
-                            <input type="text" name="no_wa" id="no_wa" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="no_wa" id="no_wa" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="no_wa-error"></p>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="harga">
                                 Harga
                             </label>
-                            <input type="number" name="harga" id="harga" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="number" name="harga" id="harga" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="harga-error"></p>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">
                                 Deskripsi
                             </label>
-                            <textarea name="deskripsi" id="deskripsi" rows="4" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                            <textarea name="deskripsi" id="deskripsi" rows="4" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="deskripsi-error"></p>
                         </div>
                     </div>
                     <div class="space-y-4">
@@ -114,7 +118,8 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
                                 Gambar Produk
                             </label>
-                            <input type="file" name="image" id="image" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'imagePreview')" required>
+                            <input type="file" name="image" id="image" autocomplete="off" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" accept="image/*" onchange="previewImage(this, 'imagePreview')">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="image-error"></p>
                             <div id="imagePreview" class="mt-4 hidden">
                                 <img src="" alt="Preview" class="max-w-full h-64 object-contain rounded-lg border">
                             </div>
@@ -317,5 +322,117 @@ function previewImage(input, previewId) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation for Add Modal
+    const addForm = document.getElementById('addForm');
+    addForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+        
+        let hasError = false;
+        const fields = [
+            { name: 'nama', label: 'Nama Produk' },
+            { name: 'no_wa', label: 'No. WA' },
+            { name: 'harga', label: 'Harga' },
+            { name: 'deskripsi', label: 'Deskripsi' },
+            { name: 'image', label: 'Gambar Produk' }
+        ];
+
+        fields.forEach(field => {
+            const input = addForm.querySelector(`[name="${field.name}"]`);
+            if (!input.value) {
+                showError(field.name, `${field.label} harus diisi`);
+                hasError = true;
+            }
+        });
+
+        // Validasi khusus untuk nomor WA
+        const noWa = addForm.querySelector('[name="no_wa"]').value;
+        if (noWa && !/^\d+$/.test(noWa)) {
+            showError('no_wa', 'Nomor WA hanya boleh berisi angka');
+            hasError = true;
+        }
+
+        // Validasi khusus untuk harga
+        const harga = addForm.querySelector('[name="harga"]').value;
+        if (harga && harga <= 0) {
+            showError('harga', 'Harga harus lebih besar dari 0');
+            hasError = true;
+        }
+
+        if (!hasError) {
+            this.submit();
+        }
+    });
+
+    // Form validation for Edit Modal
+    const editForm = document.getElementById('editForm');
+    editForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+        
+        let hasError = false;
+        const fields = [
+            { name: 'nama', label: 'Nama Produk' },
+            { name: 'no_wa', label: 'No. WA' },
+            { name: 'harga', label: 'Harga' },
+            { name: 'deskripsi', label: 'Deskripsi' }
+        ];
+
+        fields.forEach(field => {
+            const input = editForm.querySelector(`[name="${field.name}"]`);
+            if (!input.value) {
+                showError(field.name, `${field.label} harus diisi`, 'edit_');
+                hasError = true;
+            }
+        });
+
+        // Validasi khusus untuk nomor WA
+        const noWa = editForm.querySelector('[name="no_wa"]').value;
+        if (noWa && !/^\d+$/.test(noWa)) {
+            showError('no_wa', 'Nomor WA hanya boleh berisi angka', 'edit_');
+            hasError = true;
+        }
+
+        // Validasi khusus untuk harga
+        const harga = editForm.querySelector('[name="harga"]').value;
+        if (harga && harga <= 0) {
+            showError('harga', 'Harga harus lebih besar dari 0', 'edit_');
+            hasError = true;
+        }
+
+        if (!hasError) {
+            this.submit();
+        }
+    });
+
+    function showError(fieldName, message, prefix = '') {
+        const errorElement = document.getElementById(`${prefix}${fieldName}-error`);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            
+            // Add red border to input
+            const input = document.querySelector(`[name="${fieldName}"]`);
+            if (input) {
+                input.classList.add('border-red-500');
+            }
+        }
+    }
+
+    function clearErrors() {
+        // Clear all error messages
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.classList.add('hidden');
+            el.textContent = '';
+        });
+        
+        // Remove red borders
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.classList.remove('border-red-500');
+        });
+    }
+});
 </script>
 @endsection

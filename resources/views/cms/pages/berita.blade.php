@@ -86,20 +86,24 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
-                        <input type="text" name="judul" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="judul" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="judul-error"></p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Konten</label>
                         <textarea name="konten" id="addKonten" class="w-full" autocomplete="off"></textarea>
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="konten-error"></p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                            <input type="file" name="image" required accept="image/*" class="w-full" autocomplete="off">
+                            <input type="file" name="image" accept="image/*" class="w-full" autocomplete="off">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="image-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                            <input type="date" name="tanggal" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="date" name="tanggal" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="tanggal-error"></p>
                         </div>
                     </div>
                     <div class="sticky bottom-0 bg-white py-4 border-t">
@@ -127,11 +131,13 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
-                        <input type="text" name="judul" id="editJudul" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="judul" id="editJudul" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-judul-error"></p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Konten</label>
-                        <textarea name="konten" id="editKonten" required autocomplete="off"></textarea>
+                        <textarea name="konten" id="editKonten" autocomplete="off"></textarea>
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-konten-error"></p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -142,7 +148,8 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                            <input type="date" name="tanggal" id="editTanggal" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="date" name="tanggal" id="editTanggal" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-tanggal-error"></p>
                         </div>
                     </div>
                     <div class="sticky bottom-0 bg-white py-4 border-t">
@@ -227,72 +234,63 @@ function closeAddModal() {
 // Handle form submission
 document.getElementById('addForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    clearErrors();
+    
+    let hasError = false;
+    const fields = [
+        { name: 'judul', label: 'Judul Berita' },
+        { name: 'tanggal', label: 'Tanggal' },
+        { name: 'image', label: 'Gambar' }
+    ];
 
-    // Get form data
-    const formData = new FormData(this);
+    fields.forEach(field => {
+        const input = this.querySelector(`[name="${field.name}"]`);
+        if (!input.value) {
+            showError(field.name, `${field.label} harus diisi`);
+            hasError = true;
+        }
+    });
 
-    // Get TinyMCE content
-    if (tinymce.get('addKonten')) {
-        formData.set('konten', tinymce.get('addKonten').getContent());
+    // Khusus validasi konten dari TinyMCE
+    const content = tinymce.get('addKonten').getContent();
+    if (!content) {
+        showError('konten', 'Konten berita harus diisi');
+        hasError = true;
     }
 
-    // Submit form
-    fetch(this.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Berita berhasil disimpan!');
-            window.location.reload();
-        } else {
-            throw new Error(data.message || 'Terjadi kesalahan saat menyimpan berita');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan: ' + error.message);
-    });
+    if (!hasError) {
+        submitForm(this);
+    }
 });
 
 document.getElementById('editForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Mencegah form submit default
+    e.preventDefault();
+    clearErrors();
+    
+    let hasError = false;
+    const fields = [
+        { name: 'judul', label: 'Judul Berita' },
+        { name: 'tanggal', label: 'Tanggal' }
+    ];
 
-    // Pastikan konten TinyMCE diambil dan dimasukkan ke textarea
-    if (tinymce.get('editKonten')) {
-        document.getElementById('editKonten').value = tinymce.get('editKonten').getContent();
+    fields.forEach(field => {
+        const input = this.querySelector(`[name="${field.name}"]`);
+        if (!input.value) {
+            showError(field.name, `${field.label} harus diisi`, 'edit-');
+            hasError = true;
+        }
+    });
+
+    // Khusus validasi konten dari TinyMCE
+    const content = tinymce.get('editKonten').getContent();
+    if (!content) {
+        showError('konten', 'Konten berita harus diisi', 'edit-');
+        hasError = true;
     }
 
-    // Buat FormData dari form
-    const formData = new FormData(this);
-
-    // Submit form dengan fetch API
-    fetch(this.action, {
-        method: 'POST', // Tetap gunakan POST karena kita sudah menambahkan _method: PUT
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Berita berhasil diperbarui!');
-            window.location.reload();
-        } else {
-            throw new Error(data.message || 'Terjadi kesalahan saat memperbarui berita');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan: ' + error.message);
-    });
+    if (!hasError) {
+        submitForm(this);
+    }
 });
 
 // Inisialisasi TinyMCE untuk form edit
@@ -417,5 +415,65 @@ window.addEventListener('load', function() {
     console.log('Form action:', document.getElementById('addForm').action);
     console.log('CSRF token:', document.querySelector('meta[name="csrf-token"]')?.content);
 });
+
+function showError(fieldName, message, prefix = '') {
+    const errorElement = document.getElementById(`${prefix}${fieldName}-error`);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.remove('hidden');
+        
+        // Add red border to input
+        const input = document.querySelector(`[name="${fieldName}"]`);
+        if (input) {
+            input.classList.add('border-red-500');
+        }
+    }
+}
+
+function clearErrors() {
+    // Clear all error messages
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.classList.add('hidden');
+        el.textContent = '';
+    });
+    
+    // Remove red borders
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.classList.remove('border-red-500');
+    });
+}
+
+function submitForm(form) {
+    const formData = new FormData(form);
+    
+    // Add TinyMCE content
+    if (form.id === 'addForm') {
+        formData.set('konten', tinymce.get('addKonten').getContent());
+    } else {
+        formData.set('konten', tinymce.get('editKonten').getContent());
+    }
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(form.id === 'addForm' ? 'Berita berhasil disimpan!' : 'Berita berhasil diperbarui!');
+            window.location.reload();
+        } else {
+            throw new Error(data.message || 'Terjadi kesalahan saat memproses berita');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan: ' + error.message);
+    });
+}
 </script>
 @endsection

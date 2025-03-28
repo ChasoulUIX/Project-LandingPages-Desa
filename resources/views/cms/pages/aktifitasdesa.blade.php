@@ -79,24 +79,28 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('cms.aktifitasdesa.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
+            <form action="{{ route('cms.aktifitasdesa.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off" id="addForm">
                 @csrf
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                        <input type="text" name="judul" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="judul" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="judul-error"></p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <textarea name="deskripsi" rows="4" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea name="deskripsi" rows="4" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="deskripsi-error"></p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                        <input type="file" name="image" required accept="image/*" autocomplete="off" class="w-full">
+                        <input type="file" name="image" accept="image/*" autocomplete="off" class="w-full">
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="image-error"></p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                        <input type="date" name="tgl_mulai" required autocomplete="off" value="{{ date('Y-m-d') }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="date" name="tgl_mulai" autocomplete="off" value="{{ date('Y-m-d') }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <p class="text-red-500 text-sm mt-1 hidden error-message" id="tgl_mulai-error"></p>
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
                         Simpan Aktivitas
@@ -123,15 +127,18 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kegiatan</label>
-                            <input type="text" name="judul" id="editJudul" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="judul" id="editJudul" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-judul-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                            <textarea name="deskripsi" id="editDeskripsi" rows="8" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <textarea name="deskripsi" id="editDeskripsi" rows="8" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-deskripsi-error"></p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                            <input type="date" name="tgl_mulai" id="editTanggal" required autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="date" name="tgl_mulai" id="editTanggal" autocomplete="off" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-red-500 text-sm mt-1 hidden error-message" id="edit-tgl_mulai-error"></p>
                         </div>
                     </div>
 
@@ -242,6 +249,88 @@ function closePhotosModal() {
 document.getElementById('photosModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closePhotosModal();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation for Add Modal
+    const addForm = document.getElementById('addForm');
+    addForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+        
+        let hasError = false;
+        const fields = [
+            { name: 'judul', label: 'Nama Kegiatan' },
+            { name: 'deskripsi', label: 'Deskripsi' },
+            { name: 'image', label: 'Gambar' },
+            { name: 'tgl_mulai', label: 'Tanggal' }
+        ];
+
+        fields.forEach(field => {
+            const input = addForm.querySelector(`[name="${field.name}"]`);
+            if (!input.value) {
+                showError(field.name, `${field.label} harus diisi`);
+                hasError = true;
+            }
+        });
+
+        if (!hasError) {
+            this.submit();
+        }
+    });
+
+    // Form validation for Edit Modal
+    const editForm = document.getElementById('editForm');
+    editForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+        
+        let hasError = false;
+        const fields = [
+            { name: 'judul', label: 'Nama Kegiatan' },
+            { name: 'deskripsi', label: 'Deskripsi' },
+            { name: 'tgl_mulai', label: 'Tanggal' }
+        ];
+
+        fields.forEach(field => {
+            const input = editForm.querySelector(`[name="${field.name}"]`);
+            if (!input.value) {
+                showError(field.name, `${field.label} harus diisi`, 'edit-');
+                hasError = true;
+            }
+        });
+
+        if (!hasError) {
+            this.submit();
+        }
+    });
+
+    function showError(fieldName, message, prefix = '') {
+        const errorElement = document.getElementById(`${prefix}${fieldName}-error`);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            
+            // Add red border to input
+            const input = document.querySelector(`[name="${fieldName}"]`);
+            if (input) {
+                input.classList.add('border-red-500');
+            }
+        }
+    }
+
+    function clearErrors() {
+        // Clear all error messages
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.classList.add('hidden');
+            el.textContent = '';
+        });
+        
+        // Remove red borders
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.classList.remove('border-red-500');
+        });
     }
 });
 </script>
