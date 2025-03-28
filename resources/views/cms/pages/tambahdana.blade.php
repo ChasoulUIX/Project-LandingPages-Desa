@@ -7,19 +7,20 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-md p-6">
-        <form method="POST" action="{{ route('dana.store') }}" class="space-y-6" enctype="multipart/form-data" autocomplete="off">
+        <form method="POST" action="{{ route('dana.store') }}" id="danaForm" class="space-y-6" enctype="multipart/form-data" autocomplete="off">
             @csrf
             
             <div class="grid grid-cols-2 gap-6">
                 <div class="space-y-6"> <!-- Left Column -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Anggaran</label>
-                        <input type="number" name="tahun_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
+                        <input type="number" name="tahun_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" autocomplete="off">
+                        <span id="tahun_anggaran_error" class="text-red-500 text-sm mt-1 hidden">Tahun Anggaran harus diisi</span>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Sumber Anggaran</label>
-                        <select name="sumber_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
+                        <select name="sumber_anggaran" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" autocomplete="off">
                             <option value="">Pilih Sumber Anggaran</option>
                             <option value="DANA DESA (DD)">DANA DESA (DD)</option>
                             <option value="ALOKASI DANA DESA (ADD)">ALOKASI DANA DESA (ADD)</option>
@@ -29,30 +30,35 @@
                             <option value="Pendapatan Asli Desa (PADes)">Pendapatan Asli Desa (PADes)</option>
                             <option value="HIBAH">HIBAH</option>
                         </select>
+                        <span id="sumber_anggaran_error" class="text-red-500 text-sm mt-1 hidden">Sumber Anggaran harus dipilih</span>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Nominal</label>
-                        <input type="text" id="nominal_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
+                        <input type="text" id="nominal_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" autocomplete="off">
                         <input type="hidden" name="nominal" id="nominal_actual" autocomplete="off">
+                        <span id="nominal_display_error" class="text-red-500 text-sm mt-1 hidden">Nominal harus diisi</span>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pencairan</label>
-                        <input type="date" name="tgl_pencairan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
+                        <input type="date" name="tgl_pencairan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" autocomplete="off">
+                        <span id="tgl_pencairan_error" class="text-red-500 text-sm mt-1 hidden">Tanggal Pencairan harus diisi</span>
                     </div>
                 </div>
 
                 <div class="space-y-6"> <!-- Right Column -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Status Pencairan (%)</label>
-                        <input type="number" name="status_pencairan" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required readonly autocomplete="off">
+                        <input type="number" name="status_pencairan" min="0" max="100" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" readonly autocomplete="off">
+                        <span id="status_pencairan_error" class="text-red-500 text-sm mt-1 hidden">Status Pencairan harus diisi</span>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Dana Masuk</label>
-                        <input type="text" id="dana_masuk_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" required autocomplete="off">
+                        <input type="text" id="dana_masuk_display" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" autocomplete="off">
                         <input type="hidden" name="dana_masuk" id="dana_masuk_actual" autocomplete="off">
+                        <span id="dana_masuk_display_error" class="text-red-500 text-sm mt-1 hidden">Dana Masuk harus diisi</span>
                     </div>
 
                     <div class="hidden">
@@ -80,6 +86,7 @@
                         <p class="text-xs text-gray-500">PNG, JPG, JPEG hingga 4 foto</p>
                     </div>
                 </div>
+                <span id="photos_error" class="text-red-500 text-sm mt-1 hidden">Foto dokumentasi harus diunggah</span>
                 <div id="image-preview" class="grid grid-cols-2 gap-4 mt-4"></div>
             </div>
 
@@ -124,6 +131,13 @@
                 if (displayId === 'nominal_display' || displayId === 'dana_masuk_display') {
                     calculateStatusPencairan();
                 }
+                
+                // Hide error message when user starts typing
+                const errorElement = document.getElementById(`${displayId}_error`);
+                if (errorElement) {
+                    errorElement.classList.add('hidden');
+                    this.classList.remove('border-red-500');
+                }
             }
         });
     }
@@ -138,6 +152,74 @@
         }
     }
 
+    // Validate form before submission
+    function validateForm() {
+        const form = document.getElementById('danaForm');
+        let isValid = true;
+        
+        // Reset all error messages
+        const errorElements = form.querySelectorAll('.text-red-500');
+        errorElements.forEach(error => {
+            error.classList.add('hidden');
+        });
+        
+        // Reset all input borders
+        const inputs = form.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.classList.remove('border-red-500');
+        });
+        
+        // Validate tahun anggaran
+        const tahunAnggaran = document.querySelector('input[name="tahun_anggaran"]');
+        if (!tahunAnggaran.value.trim()) {
+            document.getElementById('tahun_anggaran_error').classList.remove('hidden');
+            tahunAnggaran.classList.add('border-red-500');
+            isValid = false;
+        }
+        
+        // Validate sumber anggaran
+        const sumberAnggaran = document.querySelector('select[name="sumber_anggaran"]');
+        if (!sumberAnggaran.value) {
+            document.getElementById('sumber_anggaran_error').classList.remove('hidden');
+            sumberAnggaran.classList.add('border-red-500');
+            isValid = false;
+        }
+        
+        // Validate nominal
+        const nominal = document.getElementById('nominal_actual');
+        if (!nominal.value) {
+            document.getElementById('nominal_display_error').classList.remove('hidden');
+            document.getElementById('nominal_display').classList.add('border-red-500');
+            isValid = false;
+        }
+        
+        // Validate tanggal pencairan
+        const tglPencairan = document.querySelector('input[name="tgl_pencairan"]');
+        if (!tglPencairan.value) {
+            document.getElementById('tgl_pencairan_error').classList.remove('hidden');
+            tglPencairan.classList.add('border-red-500');
+            isValid = false;
+        }
+        
+        // Validate dana masuk
+        const danaMasuk = document.getElementById('dana_masuk_actual');
+        if (!danaMasuk.value) {
+            document.getElementById('dana_masuk_display_error').classList.remove('hidden');
+            document.getElementById('dana_masuk_display').classList.add('border-red-500');
+            isValid = false;
+        }
+        
+        // Validate photos (optional)
+        const photos = document.getElementById('photos');
+        const imagePreview = document.getElementById('image-preview');
+        if (imagePreview.children.length === 0) {
+            document.getElementById('photos_error').classList.remove('hidden');
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+
     // Initialize all money inputs
     document.addEventListener('DOMContentLoaded', function() {
         setupMoneyInput('nominal_display', 'nominal_actual');
@@ -146,11 +228,51 @@
         
         // Make status_pencairan input readonly since it's calculated automatically
         document.querySelector('input[name="status_pencairan"]').readOnly = true;
+        
+        // Form validation on submit
+        document.getElementById('danaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm()) {
+                this.submit();
+            }
+        });
+        
+        // Remove error messages on input
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('input', function() {
+                const name = this.name;
+                const errorId = name === 'nominal' ? 'nominal_display_error' : 
+                               name === 'dana_masuk' ? 'dana_masuk_display_error' : 
+                               `${name}_error`;
+                
+                const errorElement = document.getElementById(errorId);
+                if (errorElement) {
+                    errorElement.classList.add('hidden');
+                    this.classList.remove('border-red-500');
+                }
+            });
+            
+            input.addEventListener('change', function() {
+                const name = this.name;
+                const errorId = name === 'nominal' ? 'nominal_display_error' : 
+                               name === 'dana_masuk' ? 'dana_masuk_display_error' : 
+                               `${name}_error`;
+                
+                const errorElement = document.getElementById(errorId);
+                if (errorElement) {
+                    errorElement.classList.add('hidden');
+                    this.classList.remove('border-red-500');
+                }
+            });
+        });
     });
 
     document.getElementById('photos').addEventListener('change', function(e) {
         const preview = document.getElementById('image-preview');
         preview.innerHTML = ''; // Clear existing previews
+        
+        // Hide error message when photos are selected
+        document.getElementById('photos_error').classList.add('hidden');
         
         // Limit to 4 files
         const files = Array.from(e.target.files).slice(0, 4);
@@ -180,6 +302,11 @@
     document.getElementById('image-preview').addEventListener('click', function(e) {
         if (e.target.closest('.remove-image')) {
             e.target.closest('.relative').remove();
+            
+            // Show error message if all images are removed
+            if (this.children.length === 0) {
+                document.getElementById('photos_error').classList.remove('hidden');
+            }
         }
     });
 </script>

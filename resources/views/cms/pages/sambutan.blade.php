@@ -53,19 +53,23 @@
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nama</label>
-                                <input type="text" name="nama" id="edit_nama" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                                <input type="text" name="nama" id="edit_nama" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300">
+                                <span id="nama_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
-                                <input type="text" name="jabatan" id="edit_jabatan" value="Kepala Desa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 bg-gray-100" readonly required>
+                                <input type="text" name="jabatan" id="edit_jabatan" value="Kepala Desa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 bg-gray-100" readonly>
+                                <span id="jabatan_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Sambutan</label>
-                                <textarea name="sambutan" id="edit_sambutan" rows="6" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required></textarea>
+                                <textarea name="sambutan" id="edit_sambutan" rows="6" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"></textarea>
+                                <span id="sambutan_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Periode</label>
-                                <input type="text" name="periode" id="edit_periode" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" required>
+                                <input type="text" name="periode" id="edit_periode" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300">
+                                <span id="periode_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                         </div>
 
@@ -150,34 +154,26 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Heading</label>
-                                <input type="text" name="heading" id="slider_heading"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Masukkan heading slider"
-                                    autocomplete="off">
+                                <input type="text" name="heading" id="slider_heading" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan heading slider">
+                                <span id="heading_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Subheading</label>
-                                <input type="text" name="subheading" id="slider_subheading"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Masukkan subheading slider"
-                                    autocomplete="off">
+                                <input type="text" name="subheading" id="slider_subheading" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan subheading slider">
+                                <span id="subheading_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Tagline</label>
-                                <textarea name="tagline" id="slider_tagline" rows="4"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Masukkan tagline slider"
-                                    autocomplete="off"></textarea>
+                                <textarea name="tagline" id="slider_tagline" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan tagline slider"></textarea>
+                                <span id="tagline_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
-                                <input type="number" name="order" id="slider_order"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    value="0">
+                                <input type="number" name="order" id="slider_order" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" value="0">
+                                <span id="order_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" name="is_active" id="slider_is_active"
-                                    class="w-5 h-5 rounded border-gray-300 text-blue-600" value="1" checked>
+                                <input type="checkbox" name="is_active" id="slider_is_active" class="w-5 h-5 rounded border-gray-300 text-blue-600" value="1" checked>
                                 <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                             </div>
                         </div>
@@ -191,15 +187,14 @@
                                         alt="Preview" class="w-full h-64 object-contain">
                                 </div>
                                 <div class="mt-2">
-                                    <input type="file" name="background_image" id="background_image"
-                                        class="hidden" accept="image/*" onchange="previewImage(this)">
-                                    <label for="background_image"
-                                        class="cursor-pointer bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <input type="file" name="background_image" id="background_image" class="hidden" accept="image/*" onchange="previewImage(this)">
+                                    <label for="background_image" class="cursor-pointer bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                         Pilih Gambar
                                     </label>
                                     <p class="mt-1 text-sm text-gray-500">
                                         Rekomendasi: Gambar dengan rasio 16:9, maksimal 2MB
                                     </p>
+                                    <span id="background_image_error" class="text-red-500 text-sm mt-1 hidden"></span>
                                 </div>
                             </div>
                         </div>
@@ -312,9 +307,77 @@ function deleteSlider(id) {
     }
 }
 
-// Form submit handler
+// Update the validateForm function to handle both forms
+function validateForm(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input[type="text"], input[type="number"], textarea');
+    let isValid = true;
+
+    // Reset all error messages
+    form.querySelectorAll('.text-red-500').forEach(error => {
+        error.classList.add('hidden');
+        error.textContent = '';
+    });
+
+    // Reset all input borders
+    inputs.forEach(input => {
+        input.classList.remove('border-red-500');
+    });
+
+    // Validate each required input
+    inputs.forEach(input => {
+        if (!input.readOnly && !input.value.trim()) {
+            const errorElement = document.getElementById(`${input.name}_error`);
+            if (errorElement) {
+                let fieldName = input.name.charAt(0).toUpperCase() + input.name.slice(1);
+                // Translate field names to Indonesian
+                switch(input.name) {
+                    case 'heading':
+                        fieldName = 'Heading';
+                        break;
+                    case 'subheading':
+                        fieldName = 'Subheading';
+                        break;
+                    case 'tagline':
+                        fieldName = 'Tagline';
+                        break;
+                    case 'order':
+                        fieldName = 'Urutan';
+                        break;
+                }
+                errorElement.textContent = `${fieldName} harus diisi`;
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                isValid = false;
+            }
+        }
+    });
+
+    // Additional validation for image if it's a new slider
+    if (formId === 'sliderForm' && !document.getElementById('slider_id').value) {
+        const imageInput = form.querySelector('input[type="file"]');
+        if (!imageInput.files.length) {
+            const errorElement = document.getElementById('background_image_error');
+            if (errorElement) {
+                errorElement.textContent = 'Gambar harus dipilih';
+                errorElement.classList.remove('hidden');
+                imageInput.classList.add('border-red-500');
+                isValid = false;
+            }
+        }
+    }
+
+    return isValid;
+}
+
+// Modify the form submit handler
 document.getElementById('sliderForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    
+    if (!validateForm('sliderForm')) {
+        return;
+    }
+
     const formData = new FormData(this);
     const sliderId = document.getElementById('slider_id').value;
 
@@ -351,6 +414,18 @@ document.getElementById('sliderForm').addEventListener('submit', function(e) {
         console.error('Error:', error);
         alert('Terjadi kesalahan saat menyimpan slider');
     });
+});
+
+// Modify the edit form submit handler
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (!validateForm('editForm')) {
+        return;
+    }
+
+    // Continue with form submission
+    this.submit();
 });
 </script>
 @endsection

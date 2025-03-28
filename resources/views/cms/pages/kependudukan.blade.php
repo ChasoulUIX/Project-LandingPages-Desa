@@ -217,72 +217,80 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ route('cms.kependudukan.store') }}" method="POST" class="p-6" autocomplete="off">
+            <form action="{{ route('cms.kependudukan.store') }}" method="POST" id="addForm" class="p-6" autocomplete="off">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">NIK</label>
-                            <input type="text" name="nik" required pattern="[0-9]{16}"
-                                   title="NIK harus 16 digit angka"
+                            <input type="text" name="nik" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
+                            <span id="nik_error" class="text-red-500 text-sm mt-1 hidden">NIK harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">No KK</label>
-                            <input type="text" name="no_kk" required pattern="[0-9]{16}"
-                                   title="No KK harus 16 digit angka"
+                            <input type="text" name="no_kk" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
+                            <span id="no_kk_error" class="text-red-500 text-sm mt-1 hidden">No KK harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                            <input type="text" name="nama_lengkap" required
+                            <input type="text" name="nama_lengkap" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
+                            <span id="nama_lengkap_error" class="text-red-500 text-sm mt-1 hidden">Nama Lengkap harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
-                            <input type="text" name="nomor_hp" required pattern="[0-9]{10,15}"
-                                   title="Nomor HP harus 10-15 digit angka"
+                            <input type="text" name="nomor_hp" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
+                            <span id="nomor_hp_error" class="text-red-500 text-sm mt-1 hidden">Nomor HP harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir</label>
-                            <input type="text" name="tempat_lahir" required
+                            <input type="text" name="tempat_lahir" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
+                            <span id="tempat_lahir_error" class="text-red-500 text-sm mt-1 hidden">Tempat Lahir harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
-                            <input type="date" name="tanggal_lahir" required
+                            <input type="date" name="tanggal_lahir" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    autocomplete="off">
+                            <span id="tanggal_lahir_error" class="text-red-500 text-sm mt-1 hidden">Tanggal Lahir harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
-                            <select name="jenis_kelamin" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="jenis_kelamin" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Jenis Kelamin</option>
                                 <option value="Laki-Laki">Laki-Laki</option>
                                 <option value="Perempuan">Perempuan</option>
                             </select>
+                            <span id="jenis_kelamin_error" class="text-red-500 text-sm mt-1 hidden">Jenis Kelamin harus diisi</span>
                         </div>
                     </div>
 
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Golongan Darah</label>
-                            <select name="golongan_darah" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="golongan_darah" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Golongan Darah</option>
                                 <option value="A">A</option>
                                 <option value="B">B</option>
                                 <option value="AB">AB</option>
                                 <option value="O">O</option>
                                 <option value="-">-</option>
                             </select>
+                            <span id="golongan_darah_error" class="text-red-500 text-sm mt-1 hidden">Golongan Darah harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Agama</label>
-                            <select name="agama" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="agama" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Agama</option>
                                 <option value="Islam">Islam</option>
                                 <option value="Kristen">Kristen</option>
                                 <option value="Katolik">Katolik</option>
@@ -291,19 +299,22 @@
                                 <option value="Konghucu">Konghucu</option>
                                 <option value="Lainnya">Lainnya</option>
                             </select>
+                            <span id="agama_error" class="text-red-500 text-sm mt-1 hidden">Agama harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Perkawinan</label>
-                            <select name="status_perkawinan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="status_perkawinan" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Status Perkawinan</option>
                                 <option value="Belum Kawin">Belum Kawin</option>
                                 <option value="Kawin">Kawin</option>
                                 <option value="Cerai Hidup">Cerai Hidup</option>
                                 <option value="Cerai Mati">Cerai Mati</option>
                             </select>
+                            <span id="status_perkawinan_error" class="text-red-500 text-sm mt-1 hidden">Status Perkawinan harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label>
-                            <select name="pekerjaan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="pekerjaan" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Pekerjaan</option>
                                 <option value="Petani">Petani</option>
                                 <option value="PNS">PNS</option>
@@ -312,10 +323,11 @@
                                 <option value="Pedagang">Pedagang</option>
                                 <option value="Lainnya">Lainnya</option>
                             </select>
+                            <span id="pekerjaan_error" class="text-red-500 text-sm mt-1 hidden">Pekerjaan harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
-                            <select name="pendidikan_terakhir" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="pendidikan_terakhir" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Pendidikan</option>
                                 <option value="SD">SD</option>
                                 <option value="SMP">SMP</option>
@@ -324,10 +336,12 @@
                                 <option value="S1">S1</option>
                                 <option value="S2/S3">S2/S3</option>
                             </select>
+                            <span id="pendidikan_terakhir_error" class="text-red-500 text-sm mt-1 hidden">Pendidikan Terakhir harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status Keluarga</label>
-                            <select name="status_keluarga" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select name="status_keluarga" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Status Keluarga</option>
                                 <option value="Kepala Keluarga">Kepala Keluarga</option>
                                 <option value="Suami">Suami</option>
                                 <option value="Istri">Istri</option>
@@ -335,6 +349,7 @@
                                 <option value="Orang Tua">Orang Tua</option>
                                 <option value="Lainnya">Lainnya</option>
                             </select>
+                            <span id="status_keluarga_error" class="text-red-500 text-sm mt-1 hidden">Status Keluarga harus diisi</span>
                         </div>
                     </div>
                 </div>
@@ -762,6 +777,117 @@ function deleteData(nik) {
         }
     });
 }
+
+// Tambahkan fungsi validasi untuk form kependudukan
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form validation
+    const addForm = document.getElementById('addForm');
+    if (addForm) {
+        addForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm(this)) {
+                this.submit();
+            }
+        });
+    }
+    
+    // Edit form validation
+    const editForm = document.getElementById('editForm');
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm(this)) {
+                this.submit();
+            }
+        });
+    }
+    
+    // Fungsi validasi
+    function validateForm(form) {
+        const inputs = form.querySelectorAll('input, select');
+        let isValid = true;
+        
+        // Reset semua pesan error
+        form.querySelectorAll('.text-red-500').forEach(error => {
+            error.classList.add('hidden');
+        });
+        
+        // Reset semua border input
+        inputs.forEach(input => {
+            input.classList.remove('border-red-500');
+        });
+        
+        // Validasi semua input
+        inputs.forEach(input => {
+            if (input.type === 'hidden' || input.type === 'submit') return;
+            
+            const errorElement = document.getElementById(`${input.name}_error`);
+            if (!errorElement) return;
+            
+            // Cek input kosong
+            if (!input.value.trim()) {
+                let fieldName = input.name;
+                
+                // Format label untuk pesan error
+                switch(input.name) {
+                    case 'nik': fieldName = 'NIK'; break;
+                    case 'no_kk': fieldName = 'No KK'; break;
+                    case 'nama_lengkap': fieldName = 'Nama Lengkap'; break;
+                    case 'nomor_hp': fieldName = 'Nomor HP'; break;
+                    case 'tempat_lahir': fieldName = 'Tempat Lahir'; break;
+                    case 'tanggal_lahir': fieldName = 'Tanggal Lahir'; break;
+                    case 'jenis_kelamin': fieldName = 'Jenis Kelamin'; break;
+                    case 'golongan_darah': fieldName = 'Golongan Darah'; break;
+                    case 'agama': fieldName = 'Agama'; break;
+                    case 'status_perkawinan': fieldName = 'Status Perkawinan'; break;
+                    case 'pekerjaan': fieldName = 'Pekerjaan'; break;
+                    case 'pendidikan_terakhir': fieldName = 'Pendidikan Terakhir'; break;
+                    case 'status_keluarga': fieldName = 'Status Keluarga'; break;
+                    default: fieldName = input.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                }
+                
+                errorElement.textContent = `${fieldName} harus diisi`;
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                isValid = false;
+            }
+            // Validasi khusus untuk NIK
+            else if (input.name === 'nik' && !/^\d{16}$/.test(input.value)) {
+                errorElement.textContent = 'NIK harus 16 digit angka';
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                isValid = false;
+            }
+            // Validasi khusus untuk No KK
+            else if (input.name === 'no_kk' && !/^\d{16}$/.test(input.value)) {
+                errorElement.textContent = 'No KK harus 16 digit angka';
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                isValid = false;
+            }
+            // Validasi khusus untuk Nomor HP
+            else if (input.name === 'nomor_hp' && !/^\d{10,15}$/.test(input.value)) {
+                errorElement.textContent = 'Nomor HP harus 10-15 digit angka';
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                isValid = false;
+            }
+        });
+        
+        return isValid;
+    }
+    
+    // Hapus pesan error saat mengetik
+    document.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('input', function() {
+            const errorElement = document.getElementById(`${this.name}_error`);
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+    });
+});
 </script>
 
 <style>

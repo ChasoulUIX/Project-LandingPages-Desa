@@ -67,7 +67,7 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <form action="{{ route('struktur.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off">
+            <form action="{{ route('struktur.store') }}" method="POST" enctype="multipart/form-data" class="p-6" autocomplete="off" id="addForm">
                 @csrf
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-6">
@@ -75,35 +75,34 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">NIK</label>
                             <input type="text" name="nik" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="nik_error" class="text-red-500 text-sm mt-1 hidden">NIK harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
                             <input type="password" name="password" value="123456" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="new-password">
+                            <span id="password_error" class="text-red-500 text-sm mt-1 hidden">Password harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor WhatsApp</label>
                             <input type="text" name="no_wa" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="no_wa_error" class="text-red-500 text-sm mt-1 hidden">Nomor WhatsApp harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama</label>
                             <input type="text" name="nama" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="nama_error" class="text-red-500 text-sm mt-1 hidden">Nama harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
                             <select name="jabatan" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
                                 <option value="">Pilih Jabatan</option>
                                 <option value="Kepala Desa">Kepala Desa</option>
@@ -117,6 +116,7 @@
                                 <option value="Kasi Pembangunan">Kasi Pembangunan</option>
                                 <option value="Operator Desa">Operator Desa</option>
                             </select>
+                            <span id="jabatan_error" class="text-red-500 text-sm mt-1 hidden">Jabatan harus diisi</span>
                         </div>
                     </div>
                     <div class="space-y-6">
@@ -124,42 +124,44 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Hak Akses</label>
                             <select name="akses" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                                <option value="">Pilih Hak Akses</option>
                                 <option value="full">Full Akses</option>
                                 <option value="view">View Only</option>
                             </select>
+                            <span id="akses_error" class="text-red-500 text-sm mt-1 hidden">Hak Akses harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Mulai</label>
                             <input type="date" name="periode_mulai" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="periode_mulai_error" class="text-red-500 text-sm mt-1 hidden">Periode Mulai harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Akhir</label>
                             <input type="date" name="periode_akhir" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="periode_akhir_error" class="text-red-500 text-sm mt-1 hidden">Periode Akhir harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
                             <select name="status" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                                <option value="">Pilih Status</option>
                                 <option value="aktif">Aktif</option>
                                 <option value="non-aktif">Non-Aktif</option>
                             </select>
+                            <span id="status_error" class="text-red-500 text-sm mt-1 hidden">Status harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Foto</label>
                             <input type="file" name="image" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 autocomplete="off">
+                            <span id="image_error" class="text-red-500 text-sm mt-1 hidden">Foto harus dipilih</span>
                         </div>
                     </div>
                 </div>
@@ -190,32 +192,32 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">NIK</label>
                             <input type="text" name="nik" id="edit_nik" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="edit_nik_error" class="text-red-500 text-sm mt-1 hidden">NIK harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Password (Kosongkan jika tidak ingin mengubah)</label>
                             <input type="password" name="password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" autocomplete="off">
+                            <span id="edit_password_error" class="text-red-500 text-sm mt-1 hidden">Password harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor WhatsApp</label>
                             <input type="text" name="no_wa" id="edit_no_wa" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="edit_no_wa_error" class="text-red-500 text-sm mt-1 hidden">Nomor WhatsApp harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama</label>
                             <input type="text" name="nama" id="edit_nama" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="edit_nama_error" class="text-red-500 text-sm mt-1 hidden">Nama harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Jabatan</label>
                             <select name="jabatan" id="edit_jabatan" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
                                 <option value="">Pilih Jabatan</option>
                                 <option value="Kepala Desa">Kepala Desa</option>
@@ -229,6 +231,7 @@
                                 <option value="Kasi Pembangunan">Kasi Pembangunan</option>
                                 <option value="Operator Desa">Operator Desa</option>
                             </select>
+                            <span id="edit_jabatan_error" class="text-red-500 text-sm mt-1 hidden">Jabatan harus diisi</span>
                         </div>
                     </div>
                     <div class="space-y-6">
@@ -236,41 +239,42 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Hak Akses</label>
                             <select name="akses" id="edit_akses" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
                                 <option value="full">Full Akses</option>
                                 <option value="view">View Only</option>
                             </select>
+                            <span id="edit_akses_error" class="text-red-500 text-sm mt-1 hidden">Hak Akses harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Mulai</label>
                             <input type="date" name="periode_mulai" id="edit_periode_mulai" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="edit_periode_mulai_error" class="text-red-500 text-sm mt-1 hidden">Periode Mulai harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Periode Akhir</label>
                             <input type="date" name="periode_akhir" id="edit_periode_akhir" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
+                            <span id="edit_periode_akhir_error" class="text-red-500 text-sm mt-1 hidden">Periode Akhir harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
                             <select name="status" id="edit_status" 
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300" 
-                                required
                                 autocomplete="off">
                                 <option value="aktif">Aktif</option>
                                 <option value="non-aktif">Non-Aktif</option>
                             </select>
+                            <span id="edit_status_error" class="text-red-500 text-sm mt-1 hidden">Status harus diisi</span>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Saat Ini</label>
                             <img id="current_image" src="" alt="Current Image" class="w-48 h-48 object-contain bg-gray-100 rounded-lg mb-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Baru (Opsional)</label>
                             <input type="file" name="image" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onchange="previewImage(this)" autocomplete="off">
+                            <span id="image_error" class="text-red-500 text-sm mt-1 hidden">Foto harus dipilih</span>
                         </div>
                     </div>
                 </div>
@@ -328,6 +332,114 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+// Fungsi validasi form
+function validateForm(form) {
+    const inputs = form.querySelectorAll('input:not([type="hidden"]), select, textarea');
+    let isValid = true;
+    
+    // Reset semua pesan error
+    form.querySelectorAll('.text-red-500').forEach(error => {
+        error.classList.add('hidden');
+        error.textContent = '';
+    });
+    
+    // Reset semua border input
+    inputs.forEach(input => {
+        input.classList.remove('border-red-500');
+    });
+    
+    // Validasi setiap input
+    inputs.forEach(input => {
+        // Skip password untuk form edit (opsional)
+        if (input.name === 'password' && form.id === 'editForm') return;
+        // Skip file pada form edit jika tidak ada file baru
+        if (input.type === 'file' && form.id === 'editForm' && !input.files.length) return;
+        
+        // Validasi input teks
+        if (input.type !== 'file' && !input.value.trim()) {
+            const errorElement = document.getElementById(`${input.name}_error`);
+            if (errorElement) {
+                let fieldName = input.name;
+                
+                // Format nama field untuk pesan error
+                switch(input.name) {
+                    case 'nik': fieldName = 'NIK'; break;
+                    case 'no_wa': fieldName = 'Nomor WhatsApp'; break;
+                    case 'nama': fieldName = 'Nama'; break;
+                    case 'jabatan': fieldName = 'Jabatan'; break;
+                    case 'akses': fieldName = 'Hak Akses'; break;
+                    case 'periode_mulai': fieldName = 'Periode Mulai'; break;
+                    case 'periode_akhir': fieldName = 'Periode Akhir'; break;
+                    case 'status': fieldName = 'Status'; break;
+                    case 'password': fieldName = 'Password'; break;
+                    default: fieldName = input.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                }
+                
+                errorElement.textContent = `${fieldName} harus diisi`;
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                isValid = false;
+            }
+        }
+        
+        // Validasi file
+        if (input.type === 'file' && form.id === 'addForm' && !input.files.length) {
+            const errorElement = document.getElementById(`${input.name}_error`);
+            if (errorElement) {
+                errorElement.textContent = 'Foto harus dipilih';
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                isValid = false;
+            }
+        }
+    });
+    
+    return isValid;
+}
+
+// Event listener untuk form tambah
+document.addEventListener('DOMContentLoaded', function() {
+    const addForm = document.getElementById('addForm');
+    if (addForm) {
+        addForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm(this)) {
+                this.submit();
+            }
+        });
+    }
+    
+    // Event listener untuk form edit
+    const editForm = document.getElementById('editForm');
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm(this)) {
+                this.submit();
+            }
+        });
+    }
+    
+    // Event listener untuk menghapus pesan error saat user mengubah input
+    document.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('input', function() {
+            const errorElement = document.getElementById(`${this.name}_error`);
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+        
+        input.addEventListener('change', function() {
+            const errorElement = document.getElementById(`${this.name}_error`);
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+    });
+});
 </script>
 
 <style>
