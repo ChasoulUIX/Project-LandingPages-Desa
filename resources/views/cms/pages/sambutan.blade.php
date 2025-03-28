@@ -145,7 +145,7 @@
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form id="sliderForm" class="p-6" enctype="multipart/form-data">
+                <form id="sliderForm" class="p-6" enctype="multipart/form-data" autocomplete="off">
                     @csrf
                     <input type="hidden" name="_method" value="POST">
                     <input type="hidden" id="slider_id" name="slider_id">
@@ -154,26 +154,60 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Heading</label>
-                                <input type="text" name="heading" id="slider_heading" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan heading slider">
+                                <input type="text" 
+                                       name="heading" 
+                                       id="slider_heading" 
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                       placeholder="Masukkan heading slider"
+                                       autocomplete="off"
+                                       autocorrect="off"
+                                       autocapitalize="off"
+                                       spellcheck="false">
                                 <span id="heading_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Subheading</label>
-                                <input type="text" name="subheading" id="slider_subheading" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan subheading slider">
+                                <input type="text" 
+                                       name="subheading" 
+                                       id="slider_subheading" 
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                       placeholder="Masukkan subheading slider"
+                                       autocomplete="off"
+                                       autocorrect="off"
+                                       autocapitalize="off"
+                                       spellcheck="false">
                                 <span id="subheading_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Tagline</label>
-                                <textarea name="tagline" id="slider_tagline" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan tagline slider"></textarea>
+                                <textarea name="tagline" 
+                                          id="slider_tagline" 
+                                          rows="4" 
+                                          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                          placeholder="Masukkan tagline slider"
+                                          autocomplete="off"
+                                          autocorrect="off"
+                                          autocapitalize="off"
+                                          spellcheck="false"></textarea>
                                 <span id="tagline_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
-                                <input type="number" name="order" id="slider_order" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" value="0">
+                                <input type="number" 
+                                       name="order" 
+                                       id="slider_order" 
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                       value="0"
+                                       autocomplete="off">
                                 <span id="order_error" class="text-red-500 text-sm mt-1 hidden"></span>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" name="is_active" id="slider_is_active" class="w-5 h-5 rounded border-gray-300 text-blue-600" value="1" checked>
+                                <input type="checkbox" 
+                                       name="is_active" 
+                                       id="slider_is_active" 
+                                       class="w-5 h-5 rounded border-gray-300 text-blue-600" 
+                                       value="1" 
+                                       checked>
                                 <label class="ml-2 text-sm font-medium text-gray-700">Active</label>
                             </div>
                         </div>
@@ -184,10 +218,16 @@
                             <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
                                 <div class="mb-4 bg-gray-50 rounded-lg overflow-hidden">
                                     <img id="preview_image" src="{{ asset('images/placeholder.jpg') }}"
-                                        alt="Preview" class="w-full h-64 object-contain">
+                                         alt="Preview" class="w-full h-64 object-contain">
                                 </div>
                                 <div class="mt-2">
-                                    <input type="file" name="background_image" id="background_image" class="hidden" accept="image/*" onchange="previewImage(this)">
+                                    <input type="file" 
+                                           name="background_image" 
+                                           id="background_image" 
+                                           class="hidden" 
+                                           accept="image/*" 
+                                           onchange="previewImage(this)"
+                                           autocomplete="off">
                                     <label for="background_image" class="cursor-pointer bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                         Pilih Gambar
                                     </label>
@@ -266,6 +306,27 @@ function openSliderModal() {
     document.getElementById('preview_image').src = "{{ asset('images/placeholder.jpg') }}";
     document.getElementById('sliderModal').classList.remove('hidden');
     document.getElementById('sliderModal').classList.add('flex');
+    
+    // Clear all form fields and reset autocomplete
+    const form = document.getElementById('sliderForm');
+    form.reset();
+    
+    // Clear all input values explicitly
+    const inputs = form.querySelectorAll('input[type="text"], input[type="number"], textarea');
+    inputs.forEach(input => {
+        input.value = '';
+        // Disable autocomplete and suggestions
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('autocorrect', 'off');
+        input.setAttribute('autocapitalize', 'off');
+        input.setAttribute('spellcheck', 'false');
+    });
+
+    // Reset order to 0
+    document.getElementById('slider_order').value = '0';
+    
+    // Reset checkbox to checked
+    document.getElementById('slider_is_active').checked = true;
 }
 
 function closeSliderModal() {
