@@ -333,7 +333,7 @@
                     @endforeach
                    
                   <!-- Aktivitas Card -->
-                    @foreach(App\Models\Aktifitas::latest()->take(1)->get() as $aktivitas)
+                    <!-- @foreach(App\Models\Aktifitas::latest()->take(1)->get() as $aktivitas)
                     <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-500">
                         <div class="relative h-64">
                             <img src="{{ asset('images/' . $aktivitas->image) }}" alt="{{ $aktivitas->judul }}" class="w-full h-full object-cover">
@@ -355,7 +355,7 @@
                             </a>
                         </div>
                     </div>
-                    @endforeach
+                    @endforeach -->
 
                         <!-- Berita Card -->
                         @foreach(App\Models\Berita::latest()->take(1)->get() as $berita)

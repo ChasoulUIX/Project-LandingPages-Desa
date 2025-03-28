@@ -89,6 +89,12 @@
                                     <i class="fas fa-sort{{ request()->get('sort') === 'status_perkawinan' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
                                 </div>
                             </th>
+                            <th class="w-[12%] px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center gap-1 cursor-pointer" onclick="sortTable('pekerjaan')">
+                                    Pekerjaan
+                                    <i class="fas fa-sort{{ request()->get('sort') === 'pekerjaan' ? (request()->get('order') === 'asc' ? '-up' : '-down') : '' }}"></i>
+                                </div>
+                            </th>
                             <th class="w-[8%] sticky right-0 bg-gray-50 px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
@@ -114,6 +120,7 @@
                             </td>
                             <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->agama }}</td>
                             <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->status_perkawinan }}</td>
+                            <td class="px-6 py-4 text-base whitespace-nowrap">{{ $item->pekerjaan }}</td>
                             @if(auth()->guard('web')->check() || (auth()->guard('struktur')->check() && auth()->guard('struktur')->user()->jabatan === 'Operator Desa' && auth()->guard('struktur')->user()->akses === 'full'))
                                 <td class="sticky right-0 bg-white px-6 py-4 text-right text-base font-medium whitespace-nowrap">
                                     <button onclick="openEditModal('{{ $item->nik }}')" class="text-blue-600 hover:text-blue-800 mr-3 text-lg">

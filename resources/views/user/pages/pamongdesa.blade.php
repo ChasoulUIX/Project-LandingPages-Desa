@@ -45,10 +45,26 @@
                         <div class="h-12 w-0.5 bg-gray-300"></div>
 
                         <!-- Third Level -->
-                        <div class="flex justify-center gap-8 flex-wrap">
+                        <div class="flex justify-center gap-8 flex-wrap mb-8">
                             @foreach(App\Models\Struktur::all() as $struktur)
                                 @if(in_array($struktur->jabatan, ['Kaur Umum', 'Kaur Keuangan', 'Kasi Pemerintahan', 'Kasi Kesejahteraan']))
                                     <div class="bg-blue-700 text-white p-4 rounded-lg shadow-lg w-40 text-center">
+                                        <img src="{{ asset('images/'.$struktur->image) }}" alt="{{ $struktur->jabatan }}" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover">
+                                        <h3 class="font-bold text-base">{{ $struktur->jabatan }}</h3>
+                                        <p class="text-sm mt-1">{{ $struktur->nama }}</p>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+
+                        <!-- Vertical Line -->
+                        <div class="h-12 w-0.5 bg-gray-300"></div>
+
+                        <!-- Fourth Level - Operator Desa -->
+                        <div class="flex justify-center gap-8 flex-wrap">
+                            @foreach(App\Models\Struktur::all() as $struktur)
+                                @if($struktur->jabatan == 'Operator Desa')
+                                    <div class="bg-blue-600 text-white p-4 rounded-lg shadow-lg w-40 text-center">
                                         <img src="{{ asset('images/'.$struktur->image) }}" alt="{{ $struktur->jabatan }}" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover">
                                         <h3 class="font-bold text-base">{{ $struktur->jabatan }}</h3>
                                         <p class="text-sm mt-1">{{ $struktur->nama }}</p>
