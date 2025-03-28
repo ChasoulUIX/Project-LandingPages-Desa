@@ -104,6 +104,19 @@
                 <h3 class="text-lg font-semibold mb-3">Lokasi</h3>
                 <div id="map" class="rounded-xl h-[400px] shadow-lg"></div>
             </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold mb-3">Daftar Dusun</h3>
+                @if(isset($profileDesa->dusun) && is_array($profileDesa->dusun))
+                    <ul class="list-disc list-inside text-gray-600">
+                        @foreach($profileDesa->dusun as $dusun)
+                            <li>{{ $dusun }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-gray-600">-</p>
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -242,6 +255,32 @@
                                     <i class="fas fa-plus mr-2"></i>Tambah Misi
                                 </button>
                             </div>
+                            <div class="mb-6">
+                                <label class="block font-bold mb-2">Dusun</label>
+                                <div id="dusun-container">
+                                    @if(isset($profileDesa->dusun) && is_array($profileDesa->dusun))
+                                        @foreach($profileDesa->dusun as $dusun)
+                                            <div class="flex gap-2 mb-2">
+                                                <input type="text" 
+                                                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" 
+                                                       name="dusun[]" 
+                                                       value="{{ $dusun }}" 
+                                                       autocomplete="off">
+                                                <button type="button" 
+                                                        onclick="removeField(this)" 
+                                                        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+                                <button type="button" 
+                                        onclick="addField('dusun')" 
+                                        class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                    <i class="fas fa-plus mr-2"></i>Tambah Dusun
+                                </button>
+                            </div>
                         </div>
 
                         <div class="mb-6">
@@ -354,13 +393,29 @@ label {
         const container = document.getElementById(`${type}-container`);
         const newField = document.createElement('div');
         newField.className = 'flex gap-2 mb-2';
+        
+        let placeholder = '';
+        switch(type) {
+            case 'visi':
+                placeholder = 'Masukkan visi...';
+                break;
+            case 'misi':
+                placeholder = 'Masukkan misi...';
+                break;
+            case 'dusun':
+                placeholder = 'Masukkan nama dusun...';
+                break;
+        }
+        
         newField.innerHTML = `
             <input type="text" 
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200" 
                 name="${type}[]" 
-                placeholder="Masukkan ${type}..."
+                placeholder="${placeholder}"
                 autocomplete="off">
-            <button type="button" onclick="removeField(this)" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            <button type="button" 
+                    onclick="removeField(this)" 
+                    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
                 <i class="fas fa-minus"></i>
             </button>
         `;
@@ -378,6 +433,9 @@ label {
         }
         if (!document.querySelector('#misi-container div')) {
             addField('misi');
+        }
+        if (!document.querySelector('#dusun-container div')) {
+            addField('dusun');
         }
     }
 

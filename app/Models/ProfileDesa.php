@@ -22,6 +22,7 @@ class ProfileDesa extends Model
         'lokasi',
         'visi',
         'misi',
+        'dusun',
         'logo_image',
         'desa',
         'kecamatan',
@@ -30,6 +31,7 @@ class ProfileDesa extends Model
 
     protected $casts = [
         'visi' => 'array',
-        'misi' => 'array'
+        'misi' => 'array',
+        'dusun' => 'array'
     ];
 }

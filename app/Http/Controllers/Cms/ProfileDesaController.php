@@ -32,6 +32,8 @@ class ProfileDesaController extends Controller
             'visi.*' => 'string',
             'misi' => 'nullable|array',
             'misi.*' => 'string',
+            'dusun' => 'nullable|array',
+            'dusun.*' => 'string',
             'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'desa' => 'nullable|string|max:255',
             'kecamatan' => 'nullable|string|max:255',
@@ -46,12 +48,15 @@ class ProfileDesaController extends Controller
             $data['logo_image'] = $imageName;
         }
 
-        // Filter out empty values from visi and misi arrays
+        // Filter out empty values from visi, misi, and dusun arrays
         if (isset($data['visi'])) {
-            $data['visi'] = array_filter($data['visi'], fn($item) => !empty($item));
+            $data['visi'] = array_filter($data['visi'], fn($item) => !empty(trim($item)));
         }
         if (isset($data['misi'])) {
-            $data['misi'] = array_filter($data['misi'], fn($item) => !empty($item));
+            $data['misi'] = array_filter($data['misi'], fn($item) => !empty(trim($item)));
+        }
+        if (isset($data['dusun'])) {
+            $data['dusun'] = array_filter($data['dusun'], fn($item) => !empty(trim($item)));
         }
 
         // Update or create profile
@@ -75,7 +80,11 @@ class ProfileDesaController extends Controller
             'alamat' => 'nullable|string',
             'lokasi' => 'nullable|string',
             'visi' => 'nullable|array',
+            'visi.*' => 'string',
             'misi' => 'nullable|array',
+            'misi.*' => 'string',
+            'dusun' => 'nullable|array',
+            'dusun.*' => 'string',
             'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'desa' => 'nullable|string|max:255',
             'kecamatan' => 'nullable|string|max:255',
@@ -86,11 +95,24 @@ class ProfileDesaController extends Controller
 
         // Handle logo upload
         if ($request->hasFile('logo_image')) {
+            // Hapus logo lama jika ada
+            if ($profileDesa->logo_image) {
+                $oldLogoPath = public_path('images/' . $profileDesa->logo_image);
+                if (file_exists($oldLogoPath)) {
+                    unlink($oldLogoPath);
+                }
+            }
+            
             $logoImage = $request->file('logo_image');
             $logoName = time() . '_logo.' . $logoImage->getClientOriginalExtension();
             $logoImage->move(public_path('images'), $logoName);
             $profileDesa->logo_image = $logoName;
         }
+
+        // Filter arrays sebelum update
+        $visi = $request->visi ? array_filter($request->visi, fn($item) => !empty(trim($item))) : [];
+        $misi = $request->misi ? array_filter($request->misi, fn($item) => !empty(trim($item))) : [];
+        $dusun = $request->dusun ? array_filter($request->dusun, fn($item) => !empty(trim($item))) : [];
 
         // Update all fields
         $profileDesa->fill([
@@ -102,8 +124,9 @@ class ProfileDesaController extends Controller
             'deskripsi' => $request->deskripsi,
             'alamat' => $request->alamat,
             'lokasi' => $request->lokasi,
-            'visi' => $request->visi,
-            'misi' => $request->misi,
+            'visi' => $visi,
+            'misi' => $misi,
+            'dusun' => $dusun,
             'desa' => $request->desa,
             'kecamatan' => $request->kecamatan,
             'kabupaten' => $request->kabupaten,
@@ -116,9 +139,7 @@ class ProfileDesaController extends Controller
 
     public function sambutan()
     {
-        // Ambil data sambutan jika ada
         $sambutan = Sambutan::first();
-
         return view('cms.pages.sambutan', compact('sambutan'));
     }
 
@@ -138,7 +159,6 @@ class ProfileDesaController extends Controller
         $validated = $request->validate([
             'nama_desa' => 'required',
             'deskripsi' => 'required',
-            // ... validasi field lainnya
         ]);
 
         // ... logika update profile desa ...
